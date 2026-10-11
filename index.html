@@ -2,89 +2,45 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="CLTW 中文长文本识别基准：模型排名、长文本表现与测试进度。">
-<meta name="theme-color" content="#f3f5f4">
-<title>CLTW Benchmark · 模型表现</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="cltw2831页test">
+<title>cltw2831页test</title>
 <style>
-:root{color-scheme:light;--bg:#f3f5f4;--surface:#fff;--muted:#f2f5f3;--text:#18312b;--secondary:#697971;--border:#e0e7e3;--brand:#147454;--bar:#43ac81;--blue:#567bc4;--violet:#9b78b6;--gold:#b18c4b;--font:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
-:root[data-theme=dark]{color-scheme:dark;--bg:#101a17;--surface:#18231f;--muted:#202e28;--text:#e5eee8;--secondary:#a0b2a8;--border:#304039;--brand:#75d5ac;--bar:#48b98b;--blue:#94b4f1;--violet:#c7a5dd;--gold:#d5b47a}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 var(--font)}button,input,select{font:inherit;color:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}p,h1,h2,h3{margin:0}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--brand);outline-offset:4px}[hidden]{display:none!important}
-.topbar{height:76px;border-bottom:1px solid var(--border);background:var(--surface)}.top-inner{max-width:1336px;height:100%;margin:auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:12px;font-weight:650;letter-spacing:.02em}.brand-mark{display:grid;place-items:center;width:34px;height:34px;background:var(--brand);color:var(--surface);border-radius:9px}.brand-mark svg{width:20px;height:20px}.nav{display:flex;gap:28px;font-size:13px;color:var(--secondary);align-items:center}.nav a:hover{color:var(--brand)}.icon-button{display:grid;place-items:center;width:34px;height:34px;background:var(--muted);border:1px solid var(--border);border-radius:50%}
-main{max-width:1336px;margin:auto;padding:48px 32px 40px}.eyebrow{color:var(--brand);font-size:11px;letter-spacing:.18em;font-weight:700;text-transform:uppercase;display:flex;align-items:center;gap:8px}.eyebrow:before{content:"";width:6px;height:6px;background:var(--bar);border-radius:50%}.hero{display:flex;justify-content:space-between;gap:24px;align-items:center;margin-bottom:32px}h1{font-size:38px;line-height:1.25;letter-spacing:-.04em;font-weight:650;margin:10px 0 12px}.subtitle{color:var(--secondary);font-size:14px}.snapshot{display:flex;flex-direction:column;align-items:flex-end;gap:4px;color:var(--secondary);font-size:12px}.snapshot strong{font-weight:500;font-size:13px;color:var(--text)}.status-dot{display:inline-block;width:6px;height:6px;background:var(--bar);border-radius:50%;margin-right:6px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}.stat{padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:14px}.stat-label{font-size:12px;color:var(--secondary);display:flex;justify-content:space-between;align-items:center}.stat-value{font-variant-numeric:tabular-nums;font-size:32px;font-weight:600;letter-spacing:-.04em;line-height:1.2;margin:12px 0 10px}.stat-value small{font-size:13px;margin-left:5px;color:var(--secondary);letter-spacing:0;font-weight:400}.stat-foot{font-size:11px;color:var(--secondary)}.stat-foot strong{font-weight:500;color:var(--brand)}.stat-mini{display:flex;align-items:flex-end;height:24px;gap:3px;float:right}.stat-mini i{display:block;width:5px;border-radius:2px 2px 0 0;background:var(--bar);opacity:.65}
-.tabs{display:flex;gap:28px;border-bottom:1px solid var(--border);margin-bottom:24px}.tabs button{background:transparent;border:0;border-bottom:2px solid transparent;padding:0 0 14px;color:var(--secondary);font-size:13px}.tabs button[aria-selected=true]{color:var(--brand);border-bottom-color:var(--brand);font-weight:600}.count-chip{background:var(--muted);border:1px solid var(--border);padding:1px 6px;border-radius:5px;font-size:10px;margin-left:5px}
-.panel{border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:24px}.panel-header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:20px}h2{font-size:17px;font-weight:600;letter-spacing:-.02em}.panel-subtitle{font-size:12px;color:var(--secondary);margin-top:4px}.section-no{font-size:10px;color:var(--secondary);letter-spacing:.14em;margin-bottom:5px}.segmented{display:flex;padding:3px;border:1px solid var(--border);border-radius:8px;background:var(--muted);gap:2px}.segmented button{font-size:11px;border:0;background:transparent;border-radius:5px;padding:6px 10px;color:var(--secondary);white-space:nowrap}.segmented button[aria-pressed=true]{background:var(--surface);color:var(--brand);font-weight:600}
-.visual-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px;align-items:stretch}.ranking-panel{grid-row:span 2}.legend{display:flex;gap:16px;color:var(--secondary);font-size:11px;align-items:center}.legend span{display:inline-flex;gap:6px;align-items:center}.legend i{width:7px;height:7px;border-radius:50%;display:inline-block;background:var(--bar)}.legend .closed{background:var(--blue)}
-.chart-tools{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}.search{width:100%;max-width:270px;position:relative}.search svg{position:absolute;left:12px;top:11px;width:14px;height:14px;color:var(--secondary)}.search input{width:100%;padding:8px 12px 8px 34px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px}.chart-tools select{font-size:12px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
-.ranking-axis{display:grid;grid-template-columns:200px minmax(0,1fr) 64px;gap:12px;color:var(--secondary);font-size:10px;padding:0 0 10px}.axis-ticks{display:flex;justify-content:space-between}.rank-row{display:grid;grid-template-columns:200px minmax(0,1fr) 64px;gap:12px;align-items:center;min-height:32px;margin-bottom:5px;width:100%;border:0;padding:3px 0;background:transparent;text-align:left;border-radius:5px}.rank-row:hover,.rank-row:focus-visible{background:var(--muted)}.rank-label{display:flex;gap:10px;align-items:center;min-width:0;font-size:11px}.rank-number{width:18px;flex:none;color:var(--secondary);font-variant-numeric:tabular-nums;font-size:10px}.rank-name{white-space:nowrap;font-weight:450}.rank-row:first-child .rank-name{font-weight:650}.track{position:relative;height:13px;background:var(--muted);border-radius:3px}.fill{position:absolute;inset:0 auto 0 0;border-radius:3px;background:var(--bar)}.rank-row[data-kind="闭源"] .fill{background:var(--blue)}.whisker{position:absolute;top:5px;height:3px;border-left:1px solid var(--text);border-right:1px solid var(--text);background:var(--text);opacity:.45}.rank-value{font-variant-numeric:tabular-nums;text-align:right;font-size:12px;font-weight:550}.chart-footer{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;color:var(--secondary);font-size:11px}.detail{margin-top:12px;padding:12px;border-radius:8px;background:var(--muted);font-size:12px;display:flex;gap:8px;flex-wrap:wrap}.detail strong{font-weight:600;color:var(--brand)}.empty{padding:32px 12px;color:var(--secondary);text-align:center;font-size:13px}
-.length-chart svg{width:100%;height:auto;display:block}.grid-line{stroke:var(--border);stroke-dasharray:3 5}.axis-text{fill:var(--secondary);font-size:10px}.line-1{stroke:var(--brand);color:var(--brand)}.line-2{stroke:var(--blue);color:var(--blue)}.line-3{stroke:var(--violet);color:var(--violet)}.line-4{stroke:var(--gold);color:var(--gold)}.length-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:8px}.length-legend button{border:0;padding:0;background:transparent;font-size:10px;display:flex;align-items:center;gap:6px}.length-legend i{width:12px;height:2px;background:currentColor}.length-legend button[aria-pressed=false]{opacity:.35}.length-caption{font-size:10px;color:var(--secondary);margin-top:12px}
-.progress-summary{display:flex;align-items:center;gap:24px;margin:10px 0 24px}.donut{width:108px;height:108px;flex:none}.donut .ring{stroke:var(--muted);fill:none;stroke-width:10}.donut .portion{stroke:var(--bar);fill:none;stroke-width:10;stroke-linecap:round}.donut text{fill:var(--text);text-anchor:middle;font-size:24px;font-weight:600}.donut .ring-label{font-size:10px;font-weight:400;fill:var(--secondary)}.progress-summary strong{font-size:20px;letter-spacing:-.02em;font-weight:600}.progress-summary p{font-size:12px;color:var(--secondary);margin-top:3px}.progress-item{border-top:1px solid var(--border);padding:12px 0}.progress-top{display:flex;justify-content:space-between;gap:8px;font-size:11px;align-items:center}.progress-top strong{font-weight:500}.progress-top span{color:var(--secondary);white-space:nowrap}.progress-track{height:5px;background:var(--muted);border-radius:3px;margin:8px 0 4px}.progress-track i{display:block;height:100%;background:var(--bar);border-radius:3px}.progress-item small{font-size:10px;color:var(--secondary)}
-.table-panel{margin-top:20px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:750px}th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--border)}th{font-size:10px;color:var(--secondary);font-weight:500;background:var(--muted)}td{font-size:12px}.numeric{text-align:right;font-variant-numeric:tabular-nums}.model strong{font-weight:500}.model small{display:block;font-size:10px;color:var(--secondary);margin-top:2px}.interval{font-size:10px;display:block;color:var(--secondary)}.best td:first-child{color:var(--brand);font-weight:600}.tag{display:inline-block;font-size:10px;padding:2px 7px;border:1px solid var(--border);border-radius:5px;color:var(--secondary)}.sources{font-size:11px;white-space:nowrap}.sources a{color:var(--brand);text-decoration:underline;text-underline-offset:3px}.table-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}.table-heading button{background:transparent;color:var(--brand);border:0;padding:0;font-size:12px}
-.notice{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:12px 16px;margin-top:20px;font-size:11px;color:var(--secondary)}.notice svg{width:16px;height:16px;flex:none;color:var(--brand)}.notes{margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:28px;color:var(--secondary);font-size:11px}.notes h3{font-size:12px;font-weight:550;color:var(--text);margin-bottom:6px}.notes p+p{margin-top:5px}.notes details{margin-top:12px}.notes summary{cursor:pointer;color:var(--text)}.definition{margin-top:10px}footer{border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:16px;padding-top:20px;margin-top:32px;color:var(--secondary);font-size:10px}.footer-mark{letter-spacing:.12em;font-weight:600;color:var(--text)}.pending-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.pending-card h3{font-size:16px;font-weight:550;margin-bottom:8px}.pending-card .progress-track{margin-top:20px}.pending-card p{color:var(--secondary);font-size:12px}.pending-card .pending-count{font-size:32px;font-weight:600;margin:18px 0 6px;font-variant-numeric:tabular-nums}.pending-count small{font-size:14px;font-weight:400;color:var(--secondary)}.pending-card .tag{margin-bottom:16px}
-@media(min-width:1500px){main{padding-top:60px}}
-@media(max-width:1120px){.visual-grid{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}.rank-row,.ranking-axis{grid-template-columns:170px minmax(0,1fr) 52px;gap:8px}.rank-name{font-size:10px}.panel{padding:20px}.rank-label{gap:5px}.segmented button{padding:6px 8px}.stats{gap:12px}.stat{padding:18px}}
-@media(max-width:900px){.visual-grid{grid-template-columns:1fr 1fr}.ranking-panel{grid-column:1/-1;grid-row:auto}.rank-row,.ranking-axis{grid-template-columns:210px minmax(0,1fr) 64px;gap:12px}.rank-name{font-size:12px}.rank-row{min-height:35px}.hero{align-items:flex-start}.snapshot{padding-top:8px}.pending-grid{grid-template-columns:1fr}}
-@media(max-width:620px){.topbar{height:64px}.top-inner{padding:0 20px}.nav{gap:16px}.nav .optional{display:none}main{padding:32px 16px}.hero{display:block;margin-bottom:24px}h1{font-size:32px}.snapshot{align-items:flex-start;margin-top:16px}.stats{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px}.stat{padding:16px}.stat-value{font-size:28px}.stat-foot{font-size:10px}.visual-grid{display:flex;flex-direction:column}.panel{padding:18px}.panel-header{gap:12px;flex-wrap:wrap}.panel h2{font-size:16px}.ranking-axis,.rank-row{grid-template-columns:155px minmax(0,1fr) 48px;gap:8px}.rank-name{font-size:10px}.rank-label{gap:4px}.rank-number{width:14px}.rank-value{font-size:11px}.track{height:12px}.chart-tools{flex-wrap:wrap}.search{max-width:none;flex:1;min-width:180px}.chart-tools select{max-width:110px}.chart-footer{font-size:10px}.tabs{gap:20px}.tabs button{font-size:12px}.notes{grid-template-columns:1fr;gap:16px}.table-panel{padding:18px}.table-heading{flex-wrap:wrap}.progress-summary{justify-content:center}footer{flex-wrap:wrap}.notice{align-items:flex-start}.subtitle{font-size:13px}}
-@media(prefers-reduced-motion:no-preference){.fill{animation:grow .3s ease-out;transform-origin:left}.line-path{animation:fade .4s ease-out}.panel{animation:fade .25s ease-out}@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes fade{from{opacity:0}to{opacity:1}}}
-@media print{.topbar,.chart-tools,.segmented,.tabs,button{display:none}body{background:white}main{max-width:none;padding:0}.panel{break-inside:avoid}.visual-grid{display:block}.panel{margin-bottom:16px}.stats{grid-template-columns:repeat(4,1fr)}.table-wrap{overflow:visible}}
+:root{color-scheme:light;--bg:#f5f7f6;--surface:#fff;--muted:#f0f4f2;--text:#213b30;--secondary:#708077;--border:#dde6e0;--green:#36956d;--blue:#577ac4;--purple:#9570b6;--gold:#b18b47;--font:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+:root[data-theme=dark]{color-scheme:dark;--bg:#121b17;--surface:#19251f;--muted:#24332a;--text:#e0eee5;--secondary:#a0b2a7;--border:#33483c;--green:#6acc9c;--blue:#93b4f3;--purple:#c7a0e0;--gold:#d9b871}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 var(--font);height:100dvh;overflow:hidden}button,input,select{font:inherit;color:inherit}button{cursor:pointer}button,input,select{border:1px solid var(--border);background:var(--surface);border-radius:7px;padding:6px 10px}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:3px}[hidden]{display:none!important}
+.app{max-width:1440px;height:100%;margin:auto;padding:20px 28px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:36px}header p{margin:0;font-size:18px;font-weight:550;letter-spacing:-.02em}nav{display:flex;gap:4px;background:var(--muted);border:1px solid var(--border);padding:3px;border-radius:9px}nav button{border:0;background:transparent;font-size:12px;padding:6px 16px;color:var(--secondary)}nav button[aria-selected=true]{background:var(--surface);color:var(--text)}
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tools select,.tools input,.tools button{font-size:12px;min-height:32px}.tools input{width:210px}.spacer{flex:1}.view{flex:1;min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;padding:16px 20px}.table-wrap{flex:1;min-height:0;overflow:auto}table{width:100%;border-collapse:collapse;table-layout:fixed;font-variant-numeric:tabular-nums}th{font-size:11px;color:var(--secondary);font-weight:450;text-align:left;white-space:nowrap;padding:8px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}td{font-size:13px;font-weight:400;padding:5px 10px;border-bottom:1px solid var(--border);vertical-align:middle}tbody tr:last-child td{border-bottom:0}.num{text-align:right}.rank{width:5%;color:var(--secondary)}.model{width:29%}.kind{width:9%}.score{width:19%}.loops{width:10%}.cap{width:9%}.model span{display:block;font-size:10px;color:var(--secondary)}.ci{display:block;font-size:10px;color:var(--secondary)}tbody tr:hover{background:var(--muted)}
+.chart-meta{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:12px;color:var(--secondary);margin-bottom:12px}.legend{display:flex;gap:16px}.legend span{display:flex;gap:6px;align-items:center}.legend i{display:block;width:8px;height:8px;border-radius:50%;background:var(--green)}.legend .closed{background:var(--blue)}
+#ranking-chart{flex:1;min-height:0;display:flex;flex-direction:column;gap:3px}.axis,.rank-row{display:grid;grid-template-columns:240px minmax(0,1fr) 78px;gap:16px;align-items:center}.axis{font-size:10px;color:var(--secondary);height:25px;flex:none}.ticks{display:flex;justify-content:space-between}.rank-row{flex:1;min-height:23px;border:0;background:transparent;border-radius:4px;padding:3px 0;text-align:left}.rank-row:hover{background:var(--muted)}.rank-label{font-size:12px;white-space:nowrap;display:flex;gap:12px}.rank-number{width:20px;font-size:10px;color:var(--secondary);font-variant-numeric:tabular-nums}.track{height:12px;background:var(--muted);position:relative;border-radius:3px}.fill{position:absolute;top:0;bottom:0;left:0;background:var(--green);border-radius:3px}.rank-row[data-kind="闭源"] .fill{background:var(--blue)}.whisker{position:absolute;top:4px;height:4px;background:var(--text);border-left:1px solid var(--text);border-right:1px solid var(--text);opacity:.45}.value{font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
+.chart-area{flex:1;min-height:0;display:flex;justify-content:center;align-items:center}.chart-area svg{width:100%;height:100%;display:block}.grid-line{stroke:var(--border);stroke-dasharray:3 6}.axis-text{fill:var(--secondary);font-size:12px}.line-path{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.line-1{stroke:var(--green);color:var(--green)}.line-2{stroke:var(--blue);color:var(--blue)}.line-3{stroke:var(--purple);color:var(--purple)}.line-4{stroke:var(--gold);color:var(--gold)}.line-legend{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:14px}.line-legend button{border:0;background:transparent;font-size:12px;display:flex;align-items:center;gap:8px;padding:2px}.line-legend i{width:16px;height:2px;background:currentColor}.line-legend button[aria-pressed=false]{opacity:.3}
+.example-shell{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(340px,.65fr);gap:18px}.example-image{min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;background:var(--muted);border-radius:8px;overflow:hidden}.example-image a{width:100%;height:100%;display:flex;align-items:center;justify-content:center}.example-image img{display:block;max-width:100%;max-height:100%;object-fit:contain}.example-copy{min-height:0;display:flex;flex-direction:column;gap:12px}.example-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.example-head strong{font-size:15px;font-weight:550}.example-head span{display:block;color:var(--secondary);font-size:10px;margin-top:3px}.example-nav{display:flex;gap:4px}.example-nav button{font-size:11px;padding:4px 8px}.errors{margin:0;padding:0;list-style:none;display:grid;gap:7px}.errors li{font-size:12px;padding:8px 10px;background:var(--muted);border-left:3px solid var(--gold);border-radius:4px}.errors b{font-weight:600}.output-title{font-size:10px;color:var(--secondary);letter-spacing:.08em}.output{flex:1;min-height:0;overflow:auto;margin:0;padding:12px;background:var(--muted);border-radius:7px;white-space:pre-wrap;font:12px/1.65 ui-monospace,"SFMono-Regular",Menlo,monospace}.example-counts{display:flex;gap:12px;font-size:10px;color:var(--secondary)}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:20px;font-size:10px;color:var(--secondary)}.empty{margin:auto;color:var(--secondary);font-size:13px}.tooltip{position:absolute;left:50%;bottom:48px;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:12px;box-shadow:0 4px 20px #0000000a;max-width:calc(100% - 32px);z-index:3}.popover{position:absolute;right:28px;bottom:50px;width:450px;max-width:calc(100% - 32px);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:12px;z-index:5;box-shadow:0 4px 20px #0000000a}.popover p{margin:0 0 10px}.popover p:last-child{margin-bottom:0}.popover button{float:right;margin-left:12px;font-size:11px}.foot button{border:0;padding:0;background:transparent;font-size:10px;color:var(--secondary)}
+.ci{display:inline;margin-left:10px;white-space:nowrap}.ci:before{content:"["}.ci:after{content:"]"}tbody tr{height:calc((100dvh - 245px)/16)}td{padding-top:3px;padding-bottom:3px}
+@media(min-height:1000px){.app{padding-top:28px;padding-bottom:28px;gap:18px}tbody tr{height:calc((100dvh - 285px)/16)}}
+@media(max-width:900px){.app{padding:16px;gap:10px}.view{padding:12px}.model{width:32%}.kind{width:8%}.score{width:20%}.loops{width:8%}.cap{width:7%}td{font-size:11px;padding:5px 6px}th{padding:7px 6px}.ci{font-size:9px}.axis,.rank-row{grid-template-columns:185px minmax(0,1fr) 62px;gap:10px}.rank-label{font-size:11px}.example-shell{grid-template-columns:minmax(0,1fr) minmax(300px,.7fr)}}
+@media(max-width:600px){header{gap:12px;flex-wrap:wrap}header p{font-size:16px}nav button{font-size:11px;padding:5px 9px}.tools{gap:6px}.tools input{width:140px;flex:1}.tools select,.tools button{font-size:11px;padding:5px 7px}.spacer{display:none}.view{padding:10px}.table-wrap table{min-width:660px}.axis,.rank-row{grid-template-columns:143px minmax(0,1fr) 50px;gap:8px}.rank-label{font-size:10px;gap:5px}.rank-number{width:16px}.value{font-size:10px}.rank-row{min-height:22px}.chart-meta{font-size:10px}.line-legend{gap:10px;margin-top:8px}.line-legend button{font-size:10px}.foot{font-size:9px}.foot button{font-size:9px}.legend{gap:10px}.example-shell{grid-template-columns:1fr;grid-template-rows:minmax(220px,44%) minmax(0,56%);gap:10px}.example-copy{gap:8px}.errors{gap:4px}.errors li{padding:5px 8px;font-size:11px}.output{font-size:11px;padding:8px}}
+@media(max-height:650px){.app{padding-top:10px;padding-bottom:10px;gap:8px}#ranking-chart{overflow:auto}.rank-row{flex:none;height:26px}td{padding-top:4px;padding-bottom:4px}}
+@media print{body{height:auto;overflow:visible}.app{height:auto}.tools,nav,.foot button{display:none}.view{min-height:650px}.table-wrap{overflow:visible}th{position:static}}
 </style>
 </head>
 <body>
-<header class="topbar"><div class="top-inner"><a class="brand" href="#overview"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4M8 9h8M8 12h8M8 15h5"/></svg></span><span>CLTW <span style="font-weight:400;color:var(--secondary)">/ Benchmark</span></span></a><nav class="nav"><a href="#rankings">模型榜单</a><a class="optional" href="#protocol">评测说明</a><button class="icon-button" id="theme" aria-label="切换深浅主题" title="切换深浅主题">◐</button></nav></div></header>
-<main>
-<section class="hero" id="overview"><div><p class="eyebrow">Chinese long text in the wild</p><h1>中文长文本，模型读得如何？</h1><p class="subtitle">CLTW 中文长文本识别基准 · 看懂模型的准确率、长文本表现与测试进度</p></div><div class="snapshot"><strong><span class="status-dot"></span>已核对的测试快照</strong><span>2026.10.11 · 20:49</span><span>2,831 张图像 / 686 个同源组</span></div></section>
-<div class="stats">
-<article class="stat"><p class="stat-label">统一评测模型 <span>↗</span></p><div class="stat-value">16<small>个</small></div><p class="stat-foot">13 个开源 <span style="margin:0 4px">/</span> 3 个闭源</p></article>
-<article class="stat"><p class="stat-label">测试集覆盖 <span>◎</span></p><div class="stat-value">2,831<small>页</small></div><p class="stat-foot"><strong>100%</strong> · 每个主榜模型均全量完成</p></article>
-<article class="stat"><p class="stat-label">最低字符错误率 <span>↓</span></p><div class="stat-value">2.06<small>%</small><span class="stat-mini" aria-hidden="true"><i style="height:22px"></i><i style="height:18px"></i><i style="height:14px"></i><i style="height:10px"></i><i style="height:6px"></i></span></div><p class="stat-foot"><strong>豆包 Turbo</strong> · 越低越好</p></article>
-<article class="stat"><p class="stat-label">最高整页全对率 <span>↑</span></p><div class="stat-value">77.64<small>%</small><span class="stat-mini" aria-hidden="true"><i style="height:6px"></i><i style="height:10px"></i><i style="height:14px"></i><i style="height:18px"></i><i style="height:22px"></i></span></div><p class="stat-foot"><strong>豆包 Lite</strong> · 越高越好</p></article>
-</div>
-<nav class="tabs" aria-label="结果批次" role="tablist"><button type="button" data-scope="current" role="tab" aria-selected="true">统一榜单 <span class="count-chip">16</span></button><button type="button" data-scope="historical" role="tab" aria-selected="false">历史批次 <span class="count-chip">9</span></button><button type="button" data-scope="pending" role="tab" aria-selected="false">测试进度 <span class="count-chip">3</span></button></nav>
-<section class="visual-grid" id="rankings">
-<article class="panel ranking-panel"><div class="panel-header"><div><p class="section-no">01 / MODEL RANKING</p><h2 id="ranking-title">模型表现排名</h2><p class="panel-subtitle" id="ranking-subtitle">整页全文正确的页面占比，越高越好</p></div><div class="segmented" aria-label="排名指标"><button type="button" data-metric="exact" aria-pressed="true">整页全对率</button><button type="button" data-metric="cer" aria-pressed="false">字符错误率</button></div></div>
-<div class="chart-tools"><label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="search" type="search" placeholder="搜索模型名称或 ID" aria-label="搜索模型"></label><select id="kind" aria-label="模型类型"><option value="all">全部模型</option><option value="开源">开源模型</option><option value="闭源">闭源模型</option></select></div>
-<div class="legend"><span><i></i>开源模型</span><span><i class="closed"></i>闭源模型</span></div>
-<div id="ranking-chart" style="margin-top:16px" aria-label="模型排名条形图"></div>
-<div class="chart-footer"><span id="result-count" aria-live="polite">16 个模型</span><span>线段：95% 置信区间 · 点击查看数值</span></div>
-<div class="detail" id="selected-detail" aria-live="polite" hidden></div>
-</article>
-<article class="panel" id="length-panel"><div class="panel-header"><div><p class="section-no">02 / TEXT LENGTH</p><h2>文字越长，模型还能读对吗？</h2><p class="panel-subtitle">各文字长度区间的整页全对率</p></div></div><div id="length-chart" class="length-chart" aria-label="长文本全对率折线图"></div><div id="length-legend" class="length-legend"></div><p class="length-caption">横轴：每页计分字数 · 各区间 283 / 775 / 1,035 / 615 / 123 页</p></article>
-<article class="panel" id="progress-panel"><div class="panel-header"><div><p class="section-no">03 / EVALUATION STATUS</p><h2>测试进度</h2><p class="panel-subtitle">模型配置去重统计，含历史测试</p></div><span class="tag">快照</span></div><div class="progress-summary"><svg class="donut" viewBox="0 0 120 120" role="img" aria-label="19 个已有输出模型中 17 个全量完成"><circle class="ring" cx="60" cy="60" r="48"/><circle class="portion" cx="60" cy="60" r="48" stroke-dasharray="269.85 301.59" transform="rotate(-90 60 60)"/><text x="60" y="59">17<tspan style="font-size:12px;font-weight:400">/19</tspan></text><text x="60" y="77" class="ring-label">全量完成</text></svg><div><strong>89.5% 已完成</strong><p>16 个统一口径 + PP-OCRv6</p><p>2 个模型已有部分输出</p></div></div><div id="progress-list"></div></article>
-</section>
-<section class="pending-grid" id="pending-cards" hidden aria-label="未完成模型进度"></section>
-<section class="panel table-panel" id="details"><div class="table-heading"><div><h2 id="table-title">完整成绩</h2><p class="panel-subtitle" id="scope-note">统一口径 · 全部测试图</p></div><button type="button" id="download">下载汇总数据 ↓</button></div><div class="table-wrap">
-<table aria-label="模型测试结果">
-<thead id="head"><tr><th>名次</th><th>模型</th><th class="numeric">测试页数</th><th>字符错误率 ↓</th><th>整页全对率 ↑</th><th class="numeric">循环候选</th><th class="numeric">触顶页</th><th>批次</th></tr></thead>
-<tbody id="rows">
-<tr><td>1</td><td>豆包 Seed 2.1 Turbo</td><td>2,831</td><td>2.06%</td><td>76.05%</td><td>0</td><td>0</td><td>统一评测</td></tr>
-<tr><td>2</td><td>豆包 Seed 2.1 Lite</td><td>2,831</td><td>2.30%</td><td>77.64%</td><td>0</td><td>0</td><td>统一评测</td></tr>
-<tr><td>3</td><td>GLM-OCR</td><td>2,831</td><td>2.72%</td><td>69.55%</td><td>3</td><td>0</td><td>统一评测</td></tr>
-<tr><td>4</td><td>GLM-5.3 Flash</td><td>2,831</td><td>3.24%</td><td>71.03%</td><td>1</td><td>0</td><td>统一评测</td></tr>
-<tr><td>5</td><td>Qwen3-VL-8B-Instruct</td><td>2,831</td><td>5.30%</td><td>72.34%</td><td>5</td><td>4</td><td>统一评测</td></tr>
-<tr><td>6</td><td>Qwen3-VL-4B-Instruct</td><td>2,831</td><td>5.65%</td><td>64.01%</td><td>7</td><td>4</td><td>统一评测</td></tr>
-<tr><td>7</td><td>PP-OCRv4 Server</td><td>2,831</td><td>7.70%</td><td>36.24%</td><td>5</td><td>0</td><td>统一评测</td></tr>
-<tr><td>8</td><td>PP-OCRv4 Mobile</td><td>2,831</td><td>9.43%</td><td>28.86%</td><td>3</td><td>0</td><td>统一评测</td></tr>
-<tr><td>9</td><td>PP-OCRv2</td><td>2,831</td><td>10.13%</td><td>23.53%</td><td>5</td><td>0</td><td>统一评测</td></tr>
-<tr><td>10</td><td>HunyuanOCR-1.5</td><td>2,831</td><td>12.84%</td><td>65.49%</td><td>2</td><td>0</td><td>统一评测</td></tr>
-<tr><td>11</td><td>PaddleOCR-VL-1.6</td><td>2,831</td><td>13.70%</td><td>65.21%</td><td>17</td><td>14</td><td>统一评测</td></tr>
-<tr><td>12</td><td>FireRed-OCR</td><td>2,831</td><td>13.88%</td><td>62.98%</td><td>27</td><td>16</td><td>统一评测</td></tr>
-<tr><td>13</td><td>Qwen2.5-VL-3B-Instruct</td><td>2,831</td><td>18.20%</td><td>62.06%</td><td>20</td><td>17</td><td>统一评测</td></tr>
-<tr><td>14</td><td>Qwen3-VL-2B-Instruct</td><td>2,831</td><td>23.49%</td><td>59.70%</td><td>28</td><td>23</td><td>统一评测</td></tr>
-<tr><td>15</td><td>GOT-OCR-2.0</td><td>2,831</td><td>44.90%</td><td>41.22%</td><td>70</td><td>59</td><td>统一评测</td></tr>
-<tr><td>16</td><td>DeepSeek-OCR-2</td><td>2,831</td><td>82.51%</td><td>30.84%</td><td>90</td><td>74</td><td>统一评测</td></tr>
-</tbody>
-</table>
-</div>
-</section>
-<noscript><p class="notice">启用 JavaScript 后可查看交互图表、搜索模型与切换指标。上表保留 16 个模型的已核对成绩。</p></noscript>
-<p class="notice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v1"/></svg>当前标签的人工签名复核尚未完成。本页展示现有标签下的自动评分；进度为固定快照。</p>
-<section class="notes" id="protocol"><div><h3>读懂两个指标</h3><p>字符错误率 = 错字、漏字、多字总数 ÷ 参考字数，越低越好。重复生成计入多字，错误率可以超过 100%。</p><p>整页全对率 = 归一化后全文与参考一致的页面比例，越高越好。图表按点估计排序，线段展示 95% 置信区间。</p></div><div><h3>评测范围</h3><p>主榜包含全部 2,831 张测试图：1,258 张退化图、1,242 张正常对照图、331 张单图。16 个模型均已核对页面覆盖和结果哈希。</p><p>三个闭源模型各有 2 页内容过滤拒答，按空文本计分。循环候选为自动筛查命中数，仍需逐图确认。</p><details><summary>展开完整评分口径</summary><div class="definition"><p>统一字符形式，清理输出格式、英文字母和规定标点，按标签原顺序比较；困难区域沿用既有评分规则。共 489,885 个计分字符；95% 区间按 686 个同源图像组重采样。</p><p>历史批次保留英文字母，使用当前标签全文参考并去句子标点。提示词、生成长度和参考处理可能与主榜不同，历史结果独立展示。</p><p>PP-OCRv2 使用公开推理权重，原论文微调权重尚未定位；闭源模型内部解码由服务端控制。</p></div></details></div></section>
-<footer><a class="footer-mark" href="https://github.com/laoshan-song/cltw-leaderboard" target="_blank" rel="noopener">CLTW / BENCHMARK ↗</a><span>中文长文本识别 · 2026.10.11 测试快照</span><span>19 个配置已有输出 · 17 全量 / 2 部分完成</span></footer>
+<main class="app">
+<header><p>cltw2831页test</p><nav role="tablist" aria-label="视图"><button data-view="table" role="tab" aria-selected="true">榜单</button><button data-view="line" role="tab" aria-selected="false">折线图</button><button data-view="bar" role="tab" aria-selected="false">柱状图</button><button data-view="examples" role="tab" aria-selected="false">例子</button></nav></header>
+<div class="tools"><select id="scope" aria-label="测试批次"><option value="current">统一口径</option><option value="historical">历史批次</option></select><select id="kind" aria-label="模型类型"><option value="all">全部模型</option><option value="开源">开源</option><option value="闭源">闭源</option></select><select id="metric" aria-label="排序指标"><option value="cer">字符错误率 ↑ 排序</option><option value="exact">整页全对率 ↓ 排序</option></select><input id="search" type="search" placeholder="模型名称 / ID" aria-label="搜索模型"><span class="spacer"></span><button id="download">下载数据</button><button id="theme" aria-label="切换深浅主题">◐</button></div>
+<section class="view" id="table-view" aria-label="模型榜单"><div class="table-wrap"><table><thead><tr><th class="rank">排名</th><th class="model">模型</th><th class="kind">类型</th><th class="score num">字符错误率 %</th><th class="score num">整页全对率 %</th><th class="loops num">循环候选</th><th class="cap num">触顶页</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+<section class="view" id="line-view" hidden aria-label="模型长文本折线图"><div class="chart-meta"><span>纵轴：整页全对率 %</span><span>横轴：每页计分字数</span></div><div class="chart-area" id="length-chart"></div><div class="line-legend" id="line-legend"></div></section>
+<section class="view" id="bar-view" hidden aria-label="模型指标柱状图"><div class="chart-meta"><span id="bar-label">字符错误率 %</span><div class="legend"><span><i></i>开源</span><span><i class="closed"></i>闭源</span></div></div><div id="ranking-chart"></div></section>
+<section class="view" id="examples-view" hidden aria-label="豆包明显错误例子"><div class="example-shell"><div class="example-image"><a id="example-link" target="_blank" rel="noopener" title="打开原图"><img id="example-img" alt=""></a></div><div class="example-copy"><div class="example-head"><div><strong id="example-name"></strong><span id="example-model"></span></div><div class="example-nav"><button id="example-prev" aria-label="上一个例子">←</button><button id="example-next" aria-label="下一个例子">→</button></div></div><ul class="errors" id="example-errors"></ul><div class="example-counts" id="example-counts"></div><span class="output-title">模型识别片段</span><pre class="output" id="example-output"></pre></div></div></section>
+<div class="foot"><span id="scope-note">全部 2,831 页 · 95% 置信区间</span><span>2026.10.11 <button id="protocol" aria-expanded="false">· 评分口径</button></span></div>
+<div class="tooltip" id="detail" role="status" hidden></div>
+<aside class="popover" id="protocol-note" hidden><button id="close-note" aria-label="关闭评分说明">关闭</button><p>当前标签的人工签名复核尚未完成。结果基于现有标签；每个主榜模型均覆盖全部 2,831 页。</p><p>字符错误率 = 错字、漏字、多字总数 ÷ 参考字数，越低越好；整页全对率 = 归一化后全文与参考一致的页数占比，越高越好。95% 区间按 686 个同源组重采样。</p><p>统一口径清理英文字母、规定标点和输出格式，并沿用困难区域规则。测试图包含 1,258 张退化图、1,242 张正常图和 331 张单图。三个闭源模型各有 2 页拒答，按空文本计分。</p><p>历史批次保留英文字母，配置和参考处理与主榜不同。循环候选仍需逐图确认。</p></aside>
+<noscript>启用 JavaScript 后显示榜单和图表。</noscript>
 </main>
 <script id="leaderboard-data" type="application/json">
 {
-  "current": [
+  "current":[
     {"id":"doubao_seed21_turbo","name":"豆包 Seed 2.1 Turbo","kind":"闭源","pages":2831,"cer":2.0564009920695674,"exact":76.05086541858,"cerCI":[1.6223853528373018,2.53880329847665],"exactCI":[74.14469033668648,77.88332319187721],"loops":0,"cap":0},
     {"id":"doubao_seed21_lite","name":"豆包 Seed 2.1 Lite","kind":"闭源","pages":2831,"cer":2.299111015850659,"exact":77.64040974920523,"cerCI":[1.7946419192620295,2.831844246216733],"exactCI":[75.84022730932317,79.44007932875667],"loops":0,"cap":0},
     {"id":"glmocr","name":"GLM-OCR","kind":"开源","pages":2831,"cer":2.718801351337559,"exact":69.55139526669022,"cerCI":[2.1951539614145736,3.2499239584488095],"exactCI":[67.65450792367929,71.7383818020855],"loops":3,"cap":0},
@@ -102,7 +58,7 @@ main{max-width:1336px;margin:auto;padding:48px 32px 40px}.eyebrow{color:var(--br
     {"id":"gotocr","name":"GOT-OCR-2.0","kind":"开源","pages":2831,"cer":44.897271808689794,"exact":41.222182974214064,"cerCI":[33.1151929649044,57.709569505087124],"exactCI":[38.81169473201639,43.74566897654584],"loops":70,"cap":59},
     {"id":"deepseekocr","name":"DeepSeek-OCR-2","kind":"开源","pages":2831,"cer":82.51079334945956,"exact":30.83716001412928,"cerCI":[65.64956163236143,99.21347969663763],"exactCI":[28.65726607493021,33.128239410203406],"loops":90,"cap":74}
   ],
-  "historical": [
+  "historical":[
     {"id":"firered","name":"FireRed-OCR","kind":"开源","pages":2831,"cer":8.975385,"exact":34.934652,"batch":"历史全量归档"},
     {"id":"glm","name":"GLM-OCR","kind":"开源","pages":2831,"cer":5.243925,"exact":67.820558,"batch":"历史全量归档"},
     {"id":"got","name":"GOT-OCR-2.0","kind":"开源","pages":2831,"cer":17.86018,"exact":39.420699,"batch":"历史全量归档"},
@@ -113,142 +69,103 @@ main{max-width:1336px;margin:auto;padding:48px 32px 40px}.eyebrow{color:var(--br
     {"id":"paddleocrvl_16","name":"PaddleOCR-VL-1.6","kind":"开源","pages":2831,"cer":7.005945,"exact":63.263864,"batch":"早期 1024-token 测试"},
     {"id":"ppocrv4_mobile","name":"PP-OCRv4 Mobile","kind":"开源","pages":2831,"cer":11.044993,"exact":27.022254,"batch":"早期测试"}
   ],
-  "pending": [
-    {"id":"qwen3vl_32b_nf4","name":"Qwen3-VL-32B-Instruct · 4-bit","kind":"开源","success":449,"errors":2,"rows":451,"status":"运行中","description":"451 页已有记录；2 页显存不足报错，尚无全量评分。"},
-    {"id":"gemma3_4b_it","name":"Gemma3-4B-IT · 4-bit","kind":"开源","success":76,"errors":0,"rows":76,"status":"历史试跑","description":"76 张测试图成功；早期 1024-token 配置，尚无评分。"},
-    {"id":"qwen3vl_32b_thinking","name":"Qwen3-VL-32B-Thinking","kind":"开源","success":0,"errors":0,"rows":0,"status":"已启动 · 尚无输出","description":"推理进程已启动；尚无 test 输出，未计入 19 个已有输出模型。"}
-  ],
-  "lengths": {
-    "bins":["0–50","51–100","101–200","201–500",">500"],
-    "pages":[283,775,1035,615,123],
+  "lengths":{
+    "bins":["0–50","51–100","101–200","201–500",">500"],"pages":[283,775,1035,615,123],
     "series":[
       {"id":"doubao_seed21_lite","name":"豆包 Lite","values":[84.80565371024736,85.41935483870968,78.93719806763285,68.78048780487805,45.52845528455284]},
       {"id":"doubao_seed21_turbo","name":"豆包 Turbo","values":[85.86572438162544,83.48387096774194,78.16425120772948,66.5040650406504,36.58536585365854]},
       {"id":"glmocr","name":"GLM-OCR","values":[75.26501766784452,79.2258064516129,70.53140096618358,60.32520325203252,33.33333333333333]},
       {"id":"qwen3vl_8b","name":"Qwen3-VL-8B","values":[83.03886925795054,81.29032258064515,73.62318840579711,61.951219512195124,32.52032520325203]}
     ]
-  }
+  },
+  "examples":[
+    {"image":"examples/j0577.jpg","name":"禁毒时间轴","page":"J0577小图_1.jpg","model":"豆包 Seed 2.1 Lite","counts":{"sub":285,"del":218,"ins":196},"errors":["<b>阅读顺序：</b>模型输出 2021 → 2024 → 2022 → 2023；图中时间轴为 2021 → 2022 → 2023 → 2024。","<b>错字：</b>图中为“凶手飘沙”，模型识别为“凶手沙螺”。","<b>漏读：</b>漏掉独立标题“全国禁毒示范城市”和部分小图文字。"],"output":"2021 年\n……\n2021 年 6 月 22 日，国家毒品实验室……\n2024 年\n2024年5月28日，中共中央总书记……\n2022 年\n2022 年 12 月 12 日，我与老挝公安部联合工作组……在老挝南塔省勐新县龙门村击毙杀害缉毒英雄蔡晓东的凶手沙螺……\n2023 年\n2023 年 11 月 15 日，习近平主席与美国总统拜登……"},
+    {"image":"examples/j0289.jpg","name":"过敏性鼻炎科普图","page":"J0289原图_1.jpg","model":"豆包 Seed 2.1 Turbo","counts":{"sub":32,"del":102,"ins":108},"errors":["<b>局部错字：</b>图中为“引发过敏性鼻窦炎”，模型识别为“引发病应性鼻窦炎”。","<b>图文混排：</b>正文基本正确，鼻部示意图周围的小标签被插入正文阅读流。","<b>错误位置：</b>主要集中在小字号图示，长段正文没有明显连续漏读。"],"output":"02 过敏性鼻炎有哪些危害\n……\n引发过敏\n性咽喉炎\n引发病应\n性鼻窦炎\n引发分泌\n性中耳炎\n引发头痛影响\n学习和工作\n导致\n肺气肿\n肺心病\n……\n03 过敏性鼻炎如何预防"},
+    {"image":"examples/j0389.jpg","name":"实验室安全预案","page":"J0389斜图_1.jpg","model":"豆包 Seed 2.1 Lite","counts":{"sub":4,"del":68,"ins":81},"errors":["<b>漏读顶部单位：</b>原图左上角有“中国人民大学信息学院”，模型直接从正文标题开始。","<b>透视页面：</b>主体长文识别较完整，顶部和边缘信息更容易被忽略。","<b>排版变化：</b>“第一条 / 预防”等被拆成两行，和标签连续阅读顺序不同。"],"output":"信息学院实验室安全事故应急预案（试行）\n第一条\n预防：各实验室应做好安全管理工作，认真贯彻落实各项安全管理规章制度，有效预防安全事故发生。\n第二条\n预测：信息学院实验室可能发生的安全事故包括火灾、触电事故……\n第三条\n应急报告：一旦有安全事故发生……\n第四条\n火灾事故应急处置：\n……"}
+  ]
 }
 </script>
 <script>
 (() => {
   "use strict";
-  const data = JSON.parse(document.getElementById("leaderboard-data").textContent);
-  const root = document.querySelector("main");
-  const query = selector => document.querySelector(selector);
-  const tbody = query("#rows"), head = query("#head"), search = query("#search");
-  const kind = query("#kind");
-  let scope = "current", metric = "exact", selected = null;
-  const activeLines = new Set(data.lengths.series.map(row => row.id));
-  const escape = value => String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
-  const number = value => value.toLocaleString("zh-CN");
-  const percentage = value => `${value.toFixed(2)}%`;
-  const shortName = row => row.name.replace("Seed 2.1 ","").replace("-Instruct","").replace(" · 4-bit"," 4-bit");
-  const download = (value, filename) => {
-    const url = URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:"application/json;charset=utf-8"}));
-    const link = document.createElement("a");
-    link.href = url; link.download = filename; link.click();
-    setTimeout(() => URL.revokeObjectURL(url),1000);
-  };
-  const exportRow = row => ({snapshot:"2026-10-11 20:49",batch:scope,reference_review_complete:false,...row});
-  const metricCell = (row, key) => {
-    const value = row[key], ci = row[`${key}CI`];
-    return `<td class="numeric">${percentage(value)}${ci ? `<small class="interval" title="95% 置信区间">${ci[0].toFixed(2)}–${ci[1].toFixed(2)}%</small>` : ""}</td>`;
-  };
-  function detail(row) {
-    selected = row.id;
-    const node = query("#selected-detail"), ci = row[`${metric}CI`];
-    node.hidden = false;
-    node.innerHTML = `<strong>${escape(row.name)}</strong><span>${metric === "exact" ? "整页全对率" : "字符错误率"} ${percentage(row[metric])}</span>${ci ? `<span>95% 区间 ${percentage(ci[0])}–${percentage(ci[1])}</span>` : ""}<span>· ${number(row.pages)} 页</span>`;
+  const data=JSON.parse(document.getElementById("leaderboard-data").textContent);
+  const q=selector=>document.querySelector(selector);
+  let view="table",exampleIndex=0;
+  const active=new Set(data.lengths.series.map(row=>row.id));
+  const escape=value=>String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+  const shortName=row=>row.name.replace("Seed 2.1 ","").replace("-Instruct","");
+  const value=n=>n.toFixed(2);
+  const cell=(row,key)=>`${value(row[key])}${row[key+"CI"]?`<span class="ci">${row[key+"CI"].map(value).join("–")}</span>`:""}`;
+  function filtered(){
+    const term=q("#search").value.trim().toLowerCase(),kind=q("#kind").value,metric=q("#metric").value;
+    return data[q("#scope").value].filter(row=>(kind==="all"||row.kind===kind)&&`${row.name} ${row.id}`.toLowerCase().includes(term))
+      .sort(metric==="cer"?(a,b)=>a.cer-b.cer:(a,b)=>b.exact-a.exact);
   }
-  function rankings(rows) {
-    const maximum = metric === "exact" ? 100 : Math.max(20,Math.ceil(Math.max(...rows.map(row => row.cerCI?.[1] ?? row.cer),0)/20)*20);
-    const chart = query("#ranking-chart");
-    const ticks = [0,1,2,3,4].map(i => `<span>${(maximum*i/4).toFixed(0)}${i === 4 ? "%" : ""}</span>`).join("");
-    chart.innerHTML = `<div class="ranking-axis"><span>模型</span><div class="axis-ticks">${ticks}</div><span style="text-align:right">数值</span></div>` + rows.map((row,index) => {
-      const ci = row[`${metric}CI`], width = row[metric]/maximum*100;
-      const whisker = ci ? `<span class="whisker" style="left:${ci[0]/maximum*100}%;width:${(ci[1]-ci[0])/maximum*100}%"></span>` : "";
-      return `<button type="button" class="rank-row" data-id="${escape(row.id)}" data-kind="${escape(row.kind)}" aria-label="${escape(row.name)}，${metric === "exact" ? "整页全对率" : "字符错误率"} ${percentage(row[metric])}"><span class="rank-label"><span class="rank-number">${String(index+1).padStart(2,"0")}</span><span class="rank-name">${escape(shortName(row))}</span></span><span class="track"><span class="fill" style="width:${width}%"></span>${whisker}</span><span class="rank-value">${percentage(row[metric])}</span></button>`;
-    }).join("") || "";
-    if (!rows.length) chart.innerHTML = '<p class="empty">没有匹配的模型</p>';
-    chart.querySelectorAll("[data-id]").forEach(button => button.addEventListener("click",() => detail(rows.find(row => row.id === button.dataset.id))));
-    query("#ranking-subtitle").textContent = metric === "exact" ? "整页全文正确的页面占比，越高越好" : "错字、漏字、多字占参考字数的比例，越低越好";
-    if (selected && rows.some(row => row.id === selected)) detail(rows.find(row => row.id === selected));
-    else query("#selected-detail").hidden = true;
-  }
-  function lengths() {
-    const width = 430, height = 234, left = 34, right = 14, top = 18, bottom = 32;
-    const x = index => left + index*(width-left-right)/4;
-    const y = value => top + (100-value)/100*(height-top-bottom);
-    const grid = [0,25,50,75,100].map(value => `<line x1="${left}" x2="${width-right}" y1="${y(value)}" y2="${y(value)}" class="grid-line"/><text x="${left-8}" y="${y(value)+3}" text-anchor="end" class="axis-text">${value}${value === 100 ? "%" : ""}</text>`).join("");
-    const labels = data.lengths.bins.map((label,index) => `<text x="${x(index)}" y="${height-8}" text-anchor="middle" class="axis-text">${escape(label)}</text>`).join("");
-    const lines = data.lengths.series.map((row,index) => {
-      if (!activeLines.has(row.id)) return "";
-      const path = row.values.map((value,i) => `${i === 0 ? "M" : "L"} ${x(i)} ${y(value)}`).join(" ");
-      return `<g class="line-${index+1}"><path class="line-path" d="${path}" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>${row.values.map((value,i) => `<circle cx="${x(i)}" cy="${y(value)}" r="3.1" fill="var(--surface)" stroke-width="1.8"><title>${escape(row.name)} · ${escape(data.lengths.bins[i])} 字 · 全对率 ${percentage(value)} · ${data.lengths.pages[i]} 页</title></circle>`).join("")}</g>`;
+  function line(){
+    const width=1080,height=500,left=62,right=34,top=24,bottom=60;
+    const x=i=>left+i*(width-left-right)/4,y=v=>top+(100-v)/100*(height-top-bottom);
+    const grid=[0,20,40,60,80,100].map(v=>`<line x1="${left}" x2="${width-right}" y1="${y(v)}" y2="${y(v)}" class="grid-line"/><text class="axis-text" x="${left-15}" y="${y(v)+4}" text-anchor="end">${v}</text>`).join("");
+    const labels=data.lengths.bins.map((label,i)=>`<text class="axis-text" x="${x(i)}" y="${height-28}" text-anchor="middle">${escape(label)}<tspan x="${x(i)}" dy="20">${data.lengths.pages[i]} 页</tspan></text>`).join("");
+    const lines=data.lengths.series.map((row,index)=>{
+      if(!active.has(row.id))return "";
+      const path=row.values.map((v,i)=>`${i?"L":"M"}${x(i)} ${y(v)}`).join(" ");
+      return `<g class="line-${index+1}"><path class="line-path" d="${path}"/>${row.values.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="var(--surface)" stroke-width="2"><title>${escape(row.name)} · ${escape(data.lengths.bins[i])} 字 · ${value(v)}%</title></circle>`).join("")}</g>`;
     }).join("");
-    query("#length-chart").innerHTML = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="四个模型随每页字数增加的整页全对率，纵轴 0 到 100%">${grid}${labels}${lines}</svg>`;
-    query("#length-legend").innerHTML = data.lengths.series.map((row,index) => `<button type="button" class="line-${index+1}" data-line="${row.id}" aria-pressed="${activeLines.has(row.id)}"><i></i>${escape(row.name)}</button>`).join("");
-    query("#length-legend").querySelectorAll("button").forEach(button => button.addEventListener("click",() => {
-      activeLines.has(button.dataset.line) ? activeLines.delete(button.dataset.line) : activeLines.add(button.dataset.line);
-      lengths();
+    q("#length-chart").innerHTML=`<svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="每页计分字数与整页全对率">${grid}${labels}${lines}</svg>`;
+    q("#line-legend").innerHTML=data.lengths.series.map((row,index)=>`<button class="line-${index+1}" data-line="${row.id}" aria-pressed="${active.has(row.id)}"><i></i>${escape(row.name)}</button>`).join("");
+    q("#line-legend").querySelectorAll("button").forEach(button=>button.addEventListener("click",()=>{
+      active.has(button.dataset.line)?active.delete(button.dataset.line):active.add(button.dataset.line);line();
     }));
   }
-  function progress() {
-    query("#progress-list").innerHTML = data.pending.map(row => `<div class="progress-item"><div class="progress-top"><strong>${escape(shortName(row))}</strong><span>${number(row.success)} / 2,831</span></div><div class="progress-track"><i style="width:${row.success/2831*100}%"></i></div><small>${escape(row.status)}${row.errors ? ` · ${row.errors} 页报错` : ""}</small></div>`).join("");
-    query("#pending-cards").innerHTML = data.pending.map(row => `<article class="panel pending-card"><span class="tag">${escape(row.status)}</span><h3>${escape(row.name)}</h3><p>${escape(row.id)}</p><div class="pending-count">${number(row.success)}<small> / 2,831 页</small></div><div class="progress-track"><i style="width:${row.success/2831*100}%"></i></div><p>${escape(row.description)}</p></article>`).join("");
+  function example(){
+    const row=data.examples[exampleIndex];
+    q("#example-img").src=row.image;
+    q("#example-img").alt=row.name+"原图";
+    q("#example-link").href=row.image;
+    q("#example-name").textContent=`${exampleIndex+1}/${data.examples.length} · ${row.name}`;
+    q("#example-model").textContent=`${row.model} · ${row.page}`;
+    q("#example-errors").innerHTML=row.errors.map(error=>`<li>${error}</li>`).join("");
+    q("#example-counts").innerHTML=`<span>替换 ${row.counts.sub}</span><span>漏字 ${row.counts.del}</span><span>多字 ${row.counts.ins}</span>`;
+    q("#example-output").textContent=row.output;
   }
-  function filtered() {
-    const term = search.value.trim().toLocaleLowerCase();
-    return data[scope].filter(row => (kind.value === "all" || row.kind === kind.value) && `${row.name} ${row.id}`.toLocaleLowerCase().includes(term))
-      .sort(scope === "pending" ? (a,b) => b.success-a.success : metric === "cer" ? (a,b) => a.cer-b.cer : (a,b) => b.exact-a.exact);
-  };
-  function render() {
-    const rows = filtered();
-    const pending = scope === "pending";
-    query("#rankings").hidden = pending;
-    query("#pending-cards").hidden = !pending;
-    query("#length-panel").hidden = scope !== "current";
-    query("#result-count").textContent = `${rows.length} / ${data[scope].length} 个模型`;
-    query("#ranking-title").textContent = scope === "historical" ? "历史批次表现" : "模型表现排名";
-    query("#table-title").textContent = pending ? "未完成模型" : "完整成绩";
-    query("#scope-note").textContent = scope === "current"
-      ? "统一口径 · 全部 2,831 张测试图 · 95% 置信区间"
-      : scope === "historical"
-      ? "6 个历史归档 + 3 个早期测试 · 同一模型可重复出现 · 与主榜口径不同"
-      : "成功页数与报错记录 · 2026-10-11 20:49 快照";
-    head.innerHTML = pending
-      ? "<tr><th>状态</th><th>模型</th><th class='numeric'>成功 / 总页数</th><th class='numeric'>已有记录</th><th class='numeric'>报错页</th><th>说明</th></tr>"
-      : "<tr><th>排名</th><th>模型</th><th>类型</th><th class='numeric'>字符错误率 ↓</th><th class='numeric'>整页全对率 ↑</th><th class='numeric'>循环候选</th><th class='numeric'>触顶页</th><th>数据</th></tr>";
-    tbody.innerHTML = rows.map((row,index) => {
-      if (pending) return `<tr><td><span class="tag">${escape(row.status)}</span></td><td class="model"><strong>${escape(row.name)}</strong><small>${escape(row.id)}</small></td><td class="numeric">${number(row.success)} / 2,831</td><td class="numeric">${number(row.rows)}</td><td class="numeric">${row.errors}</td><td>${escape(row.description)}</td></tr>`;
-      return `<tr class="${index === 0 ? "best" : ""}"><td class="numeric" style="text-align:left">${String(index+1).padStart(2,"0")}</td><td class="model"><strong>${escape(row.name)}</strong><small>${escape(row.batch || row.id)}</small></td><td><span class="tag">${escape(row.kind)}</span></td>${metricCell(row,"cer")}${metricCell(row,"exact")}<td class="numeric">${row.loops ?? "—"}</td><td class="numeric">${row.cap ?? "—"}</td><td class="sources"><a href="#details" data-export="${escape(row.id)}" aria-label="下载 ${escape(row.name)} 汇总数据">JSON ↗</a></td></tr>`;
-    }).join("") || `<tr><td class="empty" colspan="${pending ? 6 : 8}">没有匹配的模型</td></tr>`;
-    tbody.querySelectorAll("[data-export]").forEach(link => link.addEventListener("click",event => {
-      event.preventDefault();
-      download(exportRow(rows.find(row => row.id === link.dataset.export)),`cltw-${scope}-${link.dataset.export}.json`);
+  function render(){
+    const rows=filtered(),metric=q("#metric").value;
+    ["table","line","bar","examples"].forEach(name=>q("#"+name+"-view").hidden=name!==view);
+    document.querySelectorAll("[data-view]").forEach(button=>button.setAttribute("aria-selected",String(button.dataset.view===view)));
+    ["#scope","#kind","#metric","#search"].forEach(id=>q(id).disabled=view==="line"||view==="examples");
+    q("#detail").hidden=true;
+    q("#scope-note").textContent=view==="line"?"全部 2,831 页 · 各文字长度区间的整页全对率":view==="examples"?"3 张长页样本 · 点击原图放大 · 识别片段保留原始顺序":`${rows.length} 个${q("#scope").value==="historical"?"历史批次":"模型"} · 全部 2,831 页 · ${q("#scope").value==="current"?"95% 置信区间":"与主榜口径不同"}`;
+    q("#rows").innerHTML=rows.map((row,i)=>`<tr><td>${i+1}</td><td class="model">${escape(row.name)}${row.batch?`<span>${escape(row.batch)}</span>`:""}</td><td>${escape(row.kind)}</td><td class="num">${cell(row,"cer")}</td><td class="num">${cell(row,"exact")}</td><td class="num">${row.loops??"—"}</td><td class="num">${row.cap??"—"}</td></tr>`).join("")||'<tr><td colspan="7">没有匹配的模型</td></tr>';
+    const max=metric==="exact"?100:Math.max(20,Math.ceil(Math.max(...rows.map(row=>row.cerCI?.[1]??row.cer),0)/20)*20);
+    q("#bar-label").textContent=(metric==="cer"?"字符错误率":"整页全对率")+" % · 线段为 95% 置信区间";
+    q("#ranking-chart").innerHTML=`<div class="axis"><span>模型</span><div class="ticks">${[0,1,2,3,4].map(i=>`<span>${max*i/4}</span>`).join("")}</div><span style="text-align:right">%</span></div>`+rows.map((row,i)=>{
+      const ci=row[metric+"CI"],whisker=ci?`<span class="whisker" style="left:${ci[0]/max*100}%;width:${(ci[1]-ci[0])/max*100}%"></span>`:"";
+      return `<button class="rank-row" data-id="${row.id}" data-kind="${row.kind}" aria-label="${escape(row.name)} ${value(row[metric])}%"><span class="rank-label"><span class="rank-number">${i+1}</span>${escape(shortName(row))}</span><span class="track"><span class="fill" style="width:${row[metric]/max*100}%"></span>${whisker}</span><span class="value">${value(row[metric])}</span></button>`;
+    }).join("");
+    if(!rows.length)q("#ranking-chart").innerHTML='<p class="empty">没有匹配的模型</p>';
+    q("#ranking-chart").querySelectorAll("button").forEach(button=>button.addEventListener("click",()=>{
+      const row=rows.find(row=>row.id===button.dataset.id),ci=row[metric+"CI"];
+      q("#detail").textContent=`${row.name} · ${value(row[metric])}%${ci?" · 95% 区间 "+ci.map(value).join("–")+"%":""}`;
+      q("#detail").hidden=false;
     }));
-    if (!pending) rankings(rows);
   }
-  root.querySelectorAll("[data-scope]").forEach(button => button.addEventListener("click", () => {
-    scope = button.dataset.scope; selected = null; search.value = ""; kind.value = "all";
-    root.querySelectorAll("[data-scope]").forEach(tab => tab.setAttribute("aria-selected", String(tab === button)));
-    render();
-  }));
-  root.querySelectorAll("[data-metric]").forEach(button => button.addEventListener("click",() => {
-    metric = button.dataset.metric;
-    root.querySelectorAll("[data-metric]").forEach(tab => tab.setAttribute("aria-pressed",String(tab === button)));
-    render();
-  }));
-  search.addEventListener("input",render);
-  kind.addEventListener("change",render);
-  query("#download").addEventListener("click",() => download(filtered().map(exportRow),`cltw-${scope}-20261011.json`));
-  query("#theme").addEventListener("click",() => {
-    const html = document.documentElement;
-    html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
-    query("#theme").setAttribute("aria-pressed",String(html.dataset.theme === "dark"));
+  document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>{view=button.dataset.view;render()}));
+  ["scope","kind","metric"].forEach(id=>q("#"+id).addEventListener("change",render));
+  q("#search").addEventListener("input",render);
+  q("#theme").addEventListener("click",()=>document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark");
+  q("#protocol").addEventListener("click",()=>{
+    const node=q("#protocol-note");node.hidden=!node.hidden;q("#protocol").setAttribute("aria-expanded",String(!node.hidden));
   });
-  progress(); lengths(); render();
+  q("#close-note").addEventListener("click",()=>{q("#protocol-note").hidden=true;q("#protocol").setAttribute("aria-expanded","false")});
+  q("#example-prev").addEventListener("click",()=>{exampleIndex=(exampleIndex+data.examples.length-1)%data.examples.length;example()});
+  q("#example-next").addEventListener("click",()=>{exampleIndex=(exampleIndex+1)%data.examples.length;example()});
+  q("#download").addEventListener("click",()=>{
+    const payload={snapshot:"2026-10-11 20:49",reference_review_complete:false,...(view==="line"?{lengths:data.lengths}:view==="examples"?{examples:data.examples}:{batch:q("#scope").value,models:filtered()})};
+    const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:"application/json"})),link=document.createElement("a");
+    link.href=url;link.download="cltw2831-test.json";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  document.addEventListener("keydown",event=>{if(event.key==="Escape"){q("#detail").hidden=true;q("#protocol-note").hidden=true;q("#protocol").setAttribute("aria-expanded","false")}});
+  line();example();render();
 })();
 </script>
 </body>
