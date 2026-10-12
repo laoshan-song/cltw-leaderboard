@@ -36,6 +36,34 @@
       </div>
     </section>
 
+    <section class="prompt-overview" aria-labelledby="primary-prompt-title">
+      <div class="section-inner prompt-overview-inner">
+        <div>
+          <p class="eyebrow">PRIMARY PROMPT</p>
+          <h2 id="primary-prompt-title">标准提示词</h2>
+        </div>
+        <pre id="primary-prompt"></pre>
+      </div>
+    </section>
+
+    <section class="section chart-section" aria-labelledby="chart-title">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">PAGE RELIABILITY</p>
+            <h2 id="chart-title">PagePass@5</h2>
+          </div>
+          <div class="chart-legend" aria-label="模型类型图例">
+            <span data-type="OCR pipeline">流水线</span>
+            <span data-type="OCR model">OCR 模型</span>
+            <span data-type="General model">通用模型</span>
+            <span data-type="Closed model">闭源模型</span>
+          </div>
+        </div>
+        <div class="reliability-chart" id="reliability-chart"></div>
+      </div>
+    </section>
+
     <section class="section" id="leaderboard" aria-labelledby="leaderboard-title">
       <div class="section-inner">
         <div class="section-heading">
@@ -97,11 +125,7 @@
             <h3>评分协议</h3>
             <dl id="scoring-config" class="definition-list"></dl>
           </article>
-          <article class="prompt-panel">
-            <h3>标准提示词</h3>
-            <pre id="primary-prompt"></pre>
-          </article>
-          <article>
+          <article class="prompt-exceptions-panel">
             <h3>原生提示词例外</h3>
             <div class="compact-table-shell">
               <table class="compact-table">

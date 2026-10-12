@@ -145,6 +145,42 @@
     ].forEach(([label, value]) => addStat(stats, label, value));
   }
 
+  function renderReliabilityChart() {
+    const chart = $("#reliability-chart");
+    chart.innerHTML = "";
+    [...state.data.models]
+      .sort((left, right) => (
+        right.overall.metrics.pass5 - left.overall.metrics.pass5
+      ))
+      .forEach((model) => {
+        const row = document.createElement("a");
+        row.className = "reliability-row";
+        row.dataset.type = model.type;
+        row.href = modelUrl(model.id);
+        row.setAttribute(
+          "aria-label",
+          `${model.name} PagePass@5 ${percent(model.overall.metrics.pass5)}`,
+        );
+
+        const label = document.createElement("span");
+        label.className = "reliability-label";
+        label.textContent = model.name;
+
+        const track = document.createElement("span");
+        track.className = "reliability-track";
+        const fill = document.createElement("span");
+        fill.className = "reliability-fill";
+        fill.style.width = `${100 * model.overall.metrics.pass5}%`;
+        track.append(fill);
+
+        const value = document.createElement("span");
+        value.className = "reliability-value";
+        value.textContent = percent(model.overall.metrics.pass5);
+        row.append(label, track, value);
+        chart.append(row);
+      });
+  }
+
   function renderConfiguration() {
     const { dataset, protocol, models } = state.data;
     addDefinitions($("#generation-config"), [
@@ -326,6 +362,7 @@
       return;
     }
     renderSnapshot();
+    renderReliabilityChart();
     renderConfiguration();
     bindControls();
     renderLeaderboard();
