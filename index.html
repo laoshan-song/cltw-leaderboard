@@ -1,175 +1,222 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="cltw2831页test">
-<title>cltw2831页test</title>
-<style>
-:root{color-scheme:light;--bg:#f5f7f6;--surface:#fff;--muted:#f0f4f2;--text:#213b30;--secondary:#708077;--border:#dde6e0;--green:#36956d;--blue:#577ac4;--purple:#9570b6;--gold:#b18b47;--font:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
-:root[data-theme=dark]{color-scheme:dark;--bg:#121b17;--surface:#19251f;--muted:#24332a;--text:#e0eee5;--secondary:#a0b2a7;--border:#33483c;--green:#6acc9c;--blue:#93b4f3;--purple:#c7a0e0;--gold:#d9b871}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 var(--font);height:100dvh;overflow:hidden}button,input,select{font:inherit;color:inherit}button{cursor:pointer}button,input,select{border:1px solid var(--border);background:var(--surface);border-radius:7px;padding:6px 10px}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:3px}[hidden]{display:none!important}
-.app{max-width:1440px;height:100%;margin:auto;padding:20px 28px;display:flex;flex-direction:column;gap:14px}
-header{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:36px}header p{margin:0;font-size:18px;font-weight:550;letter-spacing:-.02em}nav{display:flex;gap:4px;background:var(--muted);border:1px solid var(--border);padding:3px;border-radius:9px}nav button{border:0;background:transparent;font-size:12px;padding:6px 16px;color:var(--secondary)}nav button[aria-selected=true]{background:var(--surface);color:var(--text)}
-.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tools select,.tools input,.tools button{font-size:12px;min-height:32px}.tools input{width:210px}.spacer{flex:1}.view{flex:1;min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;padding:16px 20px}.table-wrap{flex:1;min-height:0;overflow:auto}table{width:100%;border-collapse:collapse;table-layout:fixed;font-variant-numeric:tabular-nums}th{font-size:11px;color:var(--secondary);font-weight:450;text-align:left;white-space:nowrap;padding:8px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}td{font-size:13px;font-weight:400;padding:5px 10px;border-bottom:1px solid var(--border);vertical-align:middle}tbody tr:last-child td{border-bottom:0}.num{text-align:right}.rank{width:5%;color:var(--secondary)}.model{width:29%}.kind{width:9%}.score{width:19%}.loops{width:10%}.cap{width:9%}.model span{display:block;font-size:10px;color:var(--secondary)}.ci{display:block;font-size:10px;color:var(--secondary)}tbody tr:hover{background:var(--muted)}
-.chart-meta{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:12px;color:var(--secondary);margin-bottom:12px}.legend{display:flex;gap:16px}.legend span{display:flex;gap:6px;align-items:center}.legend i{display:block;width:8px;height:8px;border-radius:50%;background:var(--green)}.legend .closed{background:var(--blue)}
-#ranking-chart{flex:1;min-height:0;display:flex;flex-direction:column;gap:3px}.axis,.rank-row{display:grid;grid-template-columns:240px minmax(0,1fr) 78px;gap:16px;align-items:center}.axis{font-size:10px;color:var(--secondary);height:25px;flex:none}.ticks{display:flex;justify-content:space-between}.rank-row{flex:1;min-height:23px;border:0;background:transparent;border-radius:4px;padding:3px 0;text-align:left}.rank-row:hover{background:var(--muted)}.rank-label{font-size:12px;white-space:nowrap;display:flex;gap:12px}.rank-number{width:20px;font-size:10px;color:var(--secondary);font-variant-numeric:tabular-nums}.track{height:12px;background:var(--muted);position:relative;border-radius:3px}.fill{position:absolute;top:0;bottom:0;left:0;background:var(--green);border-radius:3px}.rank-row[data-kind="闭源"] .fill{background:var(--blue)}.whisker{position:absolute;top:4px;height:4px;background:var(--text);border-left:1px solid var(--text);border-right:1px solid var(--text);opacity:.45}.value{font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
-.chart-area{flex:1;min-height:0;display:flex;justify-content:center;align-items:center}.chart-area svg{width:100%;height:100%;display:block}.grid-line{stroke:var(--border);stroke-dasharray:3 6}.axis-text{fill:var(--secondary);font-size:12px}.line-path{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.line-1{stroke:var(--green);color:var(--green)}.line-2{stroke:var(--blue);color:var(--blue)}.line-3{stroke:var(--purple);color:var(--purple)}.line-4{stroke:var(--gold);color:var(--gold)}.line-legend{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:14px}.line-legend button{border:0;background:transparent;font-size:12px;display:flex;align-items:center;gap:8px;padding:2px}.line-legend i{width:16px;height:2px;background:currentColor}.line-legend button[aria-pressed=false]{opacity:.3}
-.example-shell{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(340px,.65fr);gap:18px}.example-image{min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;background:var(--muted);border-radius:8px;overflow:hidden}.example-image a{width:100%;height:100%;display:flex;align-items:center;justify-content:center}.example-image img{display:block;max-width:100%;max-height:100%;object-fit:contain}.example-copy{min-height:0;display:flex;flex-direction:column;gap:12px}.example-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.example-head strong{font-size:15px;font-weight:550}.example-head span{display:block;color:var(--secondary);font-size:10px;margin-top:3px}.example-nav{display:flex;gap:4px}.example-nav button{font-size:11px;padding:4px 8px}.errors{margin:0;padding:0;list-style:none;display:grid;gap:7px}.errors li{font-size:12px;padding:8px 10px;background:var(--muted);border-left:3px solid var(--gold);border-radius:4px}.errors b{font-weight:600}.output-title{font-size:10px;color:var(--secondary);letter-spacing:.08em}.output{flex:1;min-height:0;overflow:auto;margin:0;padding:12px;background:var(--muted);border-radius:7px;white-space:pre-wrap;font:12px/1.65 ui-monospace,"SFMono-Regular",Menlo,monospace}.example-counts{display:flex;gap:12px;font-size:10px;color:var(--secondary)}
-.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:20px;font-size:10px;color:var(--secondary)}.empty{margin:auto;color:var(--secondary);font-size:13px}.tooltip{position:absolute;left:50%;bottom:48px;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:12px;box-shadow:0 4px 20px #0000000a;max-width:calc(100% - 32px);z-index:3}.popover{position:absolute;right:28px;bottom:50px;width:450px;max-width:calc(100% - 32px);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:12px;z-index:5;box-shadow:0 4px 20px #0000000a}.popover p{margin:0 0 10px}.popover p:last-child{margin-bottom:0}.popover button{float:right;margin-left:12px;font-size:11px}.foot button{border:0;padding:0;background:transparent;font-size:10px;color:var(--secondary)}
-.ci{display:inline;margin-left:10px;white-space:nowrap}.ci:before{content:"["}.ci:after{content:"]"}tbody tr{height:calc((100dvh - 245px)/16)}td{padding-top:3px;padding-bottom:3px}
-@media(min-height:1000px){.app{padding-top:28px;padding-bottom:28px;gap:18px}tbody tr{height:calc((100dvh - 285px)/16)}}
-@media(max-width:900px){.app{padding:16px;gap:10px}.view{padding:12px}.model{width:32%}.kind{width:8%}.score{width:20%}.loops{width:8%}.cap{width:7%}td{font-size:11px;padding:5px 6px}th{padding:7px 6px}.ci{font-size:9px}.axis,.rank-row{grid-template-columns:185px minmax(0,1fr) 62px;gap:10px}.rank-label{font-size:11px}.example-shell{grid-template-columns:minmax(0,1fr) minmax(300px,.7fr)}}
-@media(max-width:600px){header{gap:12px;flex-wrap:wrap}header p{font-size:16px}nav button{font-size:11px;padding:5px 9px}.tools{gap:6px}.tools input{width:140px;flex:1}.tools select,.tools button{font-size:11px;padding:5px 7px}.spacer{display:none}.view{padding:10px}.table-wrap table{min-width:660px}.axis,.rank-row{grid-template-columns:143px minmax(0,1fr) 50px;gap:8px}.rank-label{font-size:10px;gap:5px}.rank-number{width:16px}.value{font-size:10px}.rank-row{min-height:22px}.chart-meta{font-size:10px}.line-legend{gap:10px;margin-top:8px}.line-legend button{font-size:10px}.foot{font-size:9px}.foot button{font-size:9px}.legend{gap:10px}.example-shell{grid-template-columns:1fr;grid-template-rows:minmax(220px,44%) minmax(0,56%);gap:10px}.example-copy{gap:8px}.errors{gap:4px}.errors li{padding:5px 8px;font-size:11px}.output{font-size:11px;padding:8px}}
-@media(max-height:650px){.app{padding-top:10px;padding-bottom:10px;gap:8px}#ranking-chart{overflow:auto}.rank-row{flex:none;height:26px}td{padding-top:4px;padding-bottom:4px}}
-@media print{body{height:auto;overflow:visible}.app{height:auto}.tools,nav,.foot button{display:none}.view{min-height:650px}.table-wrap{overflow:visible}th{position:static}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CLTW 中文长文本识别完整测试集榜单与评测配置">
+  <title>CLTW Leaderboard</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-<main class="app">
-<header><p>cltw2831页test</p><nav role="tablist" aria-label="视图"><button data-view="table" role="tab" aria-selected="true">榜单</button><button data-view="line" role="tab" aria-selected="false">折线图</button><button data-view="bar" role="tab" aria-selected="false">柱状图</button><button data-view="examples" role="tab" aria-selected="false">例子</button></nav></header>
-<div class="tools"><select id="scope" aria-label="测试批次"><option value="current">统一口径</option><option value="historical">历史批次</option></select><select id="kind" aria-label="模型类型"><option value="all">全部模型</option><option value="开源">开源</option><option value="闭源">闭源</option></select><select id="metric" aria-label="排序指标"><option value="cer">字符错误率 ↑ 排序</option><option value="exact">整页全对率 ↓ 排序</option></select><input id="search" type="search" placeholder="模型名称 / ID" aria-label="搜索模型"><span class="spacer"></span><button id="download">下载数据</button><button id="theme" aria-label="切换深浅主题">◐</button></div>
-<section class="view" id="table-view" aria-label="模型榜单"><div class="table-wrap"><table><thead><tr><th class="rank">排名</th><th class="model">模型</th><th class="kind">类型</th><th class="score num">字符错误率 %</th><th class="score num">整页全对率 %</th><th class="loops num">循环候选</th><th class="cap num">触顶页</th></tr></thead><tbody id="rows"></tbody></table></div></section>
-<section class="view" id="line-view" hidden aria-label="模型长文本折线图"><div class="chart-meta"><span>纵轴：整页全对率 %</span><span>横轴：每页计分字数</span></div><div class="chart-area" id="length-chart"></div><div class="line-legend" id="line-legend"></div></section>
-<section class="view" id="bar-view" hidden aria-label="模型指标柱状图"><div class="chart-meta"><span id="bar-label">字符错误率 %</span><div class="legend"><span><i></i>开源</span><span><i class="closed"></i>闭源</span></div></div><div id="ranking-chart"></div></section>
-<section class="view" id="examples-view" hidden aria-label="豆包明显错误例子"><div class="example-shell"><div class="example-image"><a id="example-link" target="_blank" rel="noopener" title="打开原图"><img id="example-img" alt=""></a></div><div class="example-copy"><div class="example-head"><div><strong id="example-name"></strong><span id="example-model"></span></div><div class="example-nav"><button id="example-prev" aria-label="上一个例子">←</button><button id="example-next" aria-label="下一个例子">→</button></div></div><ul class="errors" id="example-errors"></ul><div class="example-counts" id="example-counts"></div><span class="output-title">模型识别片段</span><pre class="output" id="example-output"></pre></div></div></section>
-<div class="foot"><span id="scope-note">全部 2,831 页 · 95% 置信区间</span><span>2026.10.11 <button id="protocol" aria-expanded="false">· 评分口径</button></span></div>
-<div class="tooltip" id="detail" role="status" hidden></div>
-<aside class="popover" id="protocol-note" hidden><button id="close-note" aria-label="关闭评分说明">关闭</button><p>当前标签的人工签名复核尚未完成。结果基于现有标签；每个主榜模型均覆盖全部 2,831 页。</p><p>字符错误率 = 错字、漏字、多字总数 ÷ 参考字数，越低越好；整页全对率 = 归一化后全文与参考一致的页数占比，越高越好。95% 区间按 686 个同源组重采样。</p><p>统一口径清理英文字母、规定标点和输出格式，并沿用困难区域规则。测试图包含 1,258 张退化图、1,242 张正常图和 331 张单图。三个闭源模型各有 2 页拒答，按空文本计分。</p><p>历史批次保留英文字母，配置和参考处理与主榜不同。循环候选仍需逐图确认。</p></aside>
-<noscript>启用 JavaScript 后显示榜单和图表。</noscript>
-</main>
-<script id="leaderboard-data" type="application/json">
-{
-  "current":[
-    {"id":"doubao_seed21_turbo","name":"豆包 Seed 2.1 Turbo","kind":"闭源","pages":2831,"cer":2.0564009920695674,"exact":76.05086541858,"cerCI":[1.6223853528373018,2.53880329847665],"exactCI":[74.14469033668648,77.88332319187721],"loops":0,"cap":0},
-    {"id":"doubao_seed21_lite","name":"豆包 Seed 2.1 Lite","kind":"闭源","pages":2831,"cer":2.299111015850659,"exact":77.64040974920523,"cerCI":[1.7946419192620295,2.831844246216733],"exactCI":[75.84022730932317,79.44007932875667],"loops":0,"cap":0},
-    {"id":"glmocr","name":"GLM-OCR","kind":"开源","pages":2831,"cer":2.718801351337559,"exact":69.55139526669022,"cerCI":[2.1951539614145736,3.2499239584488095],"exactCI":[67.65450792367929,71.7383818020855],"loops":3,"cap":0},
-    {"id":"glm53_flash","name":"GLM-5.3 Flash","kind":"闭源","pages":2831,"cer":3.242597752533758,"exact":71.03496997527375,"cerCI":[2.5674055152951483,3.966735731194748],"exactCI":[69.00310842538457,72.98128453473224],"loops":1,"cap":0},
-    {"id":"qwen3vl_8b","name":"Qwen3-VL-8B-Instruct","kind":"开源","pages":2831,"cer":5.3004276513875705,"exact":72.34192864712115,"cerCI":[2.5389410996887785,8.901321908545821],"exactCI":[70.38775374935696,74.50939971504651],"loops":5,"cap":4},
-    {"id":"qwen3vl_4b","name":"Qwen3-VL-4B-Instruct","kind":"开源","pages":2831,"cer":5.652346979393123,"exact":64.00565171317555,"cerCI":[3.1692388978918737,8.933031251029302],"exactCI":[61.95253279243636,66.09816141087113],"loops":7,"cap":4},
-    {"id":"ppocrv4_server","name":"PP-OCRv4 Server","kind":"开源","pages":2831,"cer":7.697520846729335,"exact":36.241610738255034,"cerCI":[6.51172897089542,8.965922591191086],"exactCI":[34.01503335456895,38.645781767550744],"loops":5,"cap":0},
-    {"id":"ppocrv4_mobile","name":"PP-OCRv4 Mobile","kind":"开源","pages":2831,"cer":9.434254978209172,"exact":28.859060402684566,"cerCI":[8.040367139155356,10.890009596852735],"exactCI":[26.708002119766828,31.28334217686175],"loops":3,"cap":0},
-    {"id":"ppocrv2","name":"PP-OCRv2","kind":"开源","pages":2831,"cer":10.133194525245722,"exact":23.525256093253265,"cerCI":[8.759920811962436,11.564714459192116],"exactCI":[21.4560500021617,25.7259788155313],"loops":5,"cap":0},
-    {"id":"hunyuanocr","name":"HunyuanOCR-1.5","kind":"开源","pages":2831,"cer":12.838319197362647,"exact":65.4892264217591,"cerCI":[10.94024608447475,14.871993431315056],"exactCI":[63.32827831240565,67.57613114981358],"loops":2,"cap":0},
-    {"id":"paddleocrvl","name":"PaddleOCR-VL-1.6","kind":"开源","pages":2831,"cer":13.700970635965584,"exact":65.20664076298128,"cerCI":[6.864037742370761,21.356310361335726],"exactCI":[62.98702559288859,67.45765338282673],"loops":17,"cap":14},
-    {"id":"fireredocr","name":"FireRed-OCR","kind":"开源","pages":2831,"cer":13.87754268859018,"exact":62.98127870010597,"cerCI":[8.207373412468716,20.489841029349304],"exactCI":[60.911211734427916,65.01153719440057],"loops":27,"cap":16},
-    {"id":"qwen25vl_3b","name":"Qwen2.5-VL-3B-Instruct","kind":"开源","pages":2831,"cer":18.204884819906713,"exact":62.062875309078066,"cerCI":[10.357287458612278,27.76359725322236],"exactCI":[59.96182511600825,64.37180835630349],"loops":20,"cap":17},
-    {"id":"qwen3vl_2b","name":"Qwen3-VL-2B-Instruct","kind":"开源","pages":2831,"cer":23.48816558988334,"exact":59.69622041681385,"cerCI":[14.988749286647707,33.06963696442769],"exactCI":[57.57121414303291,61.963884169580254],"loops":28,"cap":23},
-    {"id":"gotocr","name":"GOT-OCR-2.0","kind":"开源","pages":2831,"cer":44.897271808689794,"exact":41.222182974214064,"cerCI":[33.1151929649044,57.709569505087124],"exactCI":[38.81169473201639,43.74566897654584],"loops":70,"cap":59},
-    {"id":"deepseekocr","name":"DeepSeek-OCR-2","kind":"开源","pages":2831,"cer":82.51079334945956,"exact":30.83716001412928,"cerCI":[65.64956163236143,99.21347969663763],"exactCI":[28.65726607493021,33.128239410203406],"loops":90,"cap":74}
-  ],
-  "historical":[
-    {"id":"firered","name":"FireRed-OCR","kind":"开源","pages":2831,"cer":8.975385,"exact":34.934652,"batch":"历史全量归档"},
-    {"id":"glm","name":"GLM-OCR","kind":"开源","pages":2831,"cer":5.243925,"exact":67.820558,"batch":"历史全量归档"},
-    {"id":"got","name":"GOT-OCR-2.0","kind":"开源","pages":2831,"cer":17.86018,"exact":39.420699,"batch":"历史全量归档"},
-    {"id":"hunyuan","name":"HunyuanOCR-1.5","kind":"开源","pages":2831,"cer":3.687218,"exact":72.483221,"batch":"历史全量归档"},
-    {"id":"qwen25","name":"Qwen2.5-VL-3B","kind":"开源","pages":2831,"cer":5.763529,"exact":61.321088,"batch":"历史全量归档"},
-    {"id":"ppocrv6","name":"PP-OCRv6","kind":"开源","pages":2831,"cer":7.099792,"exact":51.819145,"batch":"历史全量归档"},
-    {"id":"hunyuanocr_15","name":"HunyuanOCR-1.5","kind":"开源","pages":2831,"cer":3.484586,"exact":72.518545,"batch":"早期 1024-token 测试"},
-    {"id":"paddleocrvl_16","name":"PaddleOCR-VL-1.6","kind":"开源","pages":2831,"cer":7.005945,"exact":63.263864,"batch":"早期 1024-token 测试"},
-    {"id":"ppocrv4_mobile","name":"PP-OCRv4 Mobile","kind":"开源","pages":2831,"cer":11.044993,"exact":27.022254,"batch":"早期测试"}
-  ],
-  "lengths":{
-    "bins":["0–50","51–100","101–200","201–500",">500"],"pages":[283,775,1035,615,123],
-    "series":[
-      {"id":"doubao_seed21_lite","name":"豆包 Lite","values":[84.80565371024736,85.41935483870968,78.93719806763285,68.78048780487805,45.52845528455284]},
-      {"id":"doubao_seed21_turbo","name":"豆包 Turbo","values":[85.86572438162544,83.48387096774194,78.16425120772948,66.5040650406504,36.58536585365854]},
-      {"id":"glmocr","name":"GLM-OCR","values":[75.26501766784452,79.2258064516129,70.53140096618358,60.32520325203252,33.33333333333333]},
-      {"id":"qwen3vl_8b","name":"Qwen3-VL-8B","values":[83.03886925795054,81.29032258064515,73.62318840579711,61.951219512195124,32.52032520325203]}
-    ]
-  },
-  "examples":[
-    {"image":"examples/occluded_12jy0010.jpg","name":"遮挡：左右片段顺序错","page":"12JY0010 遮挡_1.jpg","model":"豆包 Seed 2.1 Lite","counts":{"sub":79,"del":59,"ins":48},"errors":["<b>顺序错误：</b>遮挡物把每行切成左右两段，模型先读完全部左侧，再读全部右侧。","<b>对照：</b>Lite 的字符错误率为 76.23%，Turbo 按左右片段交替输出后为 5.33%。","<b>不可见字符：</b>中央被完全挡住的字没有可靠视觉证据，不能靠语义补全。"],"output":"据佛经记载，辅\n有八大菩萨，按《八\n观世音菩萨、弥勒菩萨\n金刚手菩萨、文殊菩萨\n……\n释迦牟尼佛教化众生的\n菩萨曼荼罗经》分别是\n虚空藏菩萨、普贤菩萨、\n除盖障菩萨、地藏菩萨。"},
-    {"image":"examples/occluded_z038.jpg","name":"遮挡：年份和句子被截断","page":"Z038遮图_cr.jpg","model":"豆包 Seed 2.1 Lite / Turbo","counts":{"sub":84,"del":26,"ins":15},"errors":["<b>年份截断：</b>原标签为“1923年12月”，首位数字被立柱挡住，模型只能输出“923年12月”。","<b>句子碎裂：</b>每一行中部都被遮挡，左右可见片段被分开输出，无法组成完整句子。","<b>评分边界：</b>这是物理信息缺失；完整标签评分会把不可见文字计为错误。"],"output":"我国资深媒体人、学者\n1944年毕业于西南联大，1\n硕士学位，1950年在哈佛大\n1980年第一个获哈佛大学\n……\n923年12月出生于苏州，\n年获美国范德堡大学经济系\n经济系通过博士学位考试，\n基金的中国学者。"},
-    {"image":"examples/occluded_z049.jpg","name":"遮挡：关键步骤整段漏失","page":"Z049遮图_1.jpg","model":"豆包 Seed 2.1 Turbo","counts":{"sub":0,"del":19,"ins":0},"errors":["<b>整段漏失：</b>方向盘遮住每一行中部，模型只保留左右边缘的可见片段。","<b>句子断裂：</b>“转盘缺口对准”“外侧转”“锁扣，拉动锁”无法恢复成连续操作步骤。","<b>风险：</b>这类说明文字依赖精确步骤，碎片化输出不能作为可执行指令。"],"output":"开锁小诀窍\n将密码转盘逆时针转动，直到最内侧转\n盘缺口对准锁扣，再顺时针转动，直到中间\n转盘缺口对准 直到最\n外侧转 锁扣，拉动锁 完\n成。 码拨错了，请重新开始！"},
-    {"image":"examples/j0577.jpg","name":"禁毒时间轴","page":"J0577小图_1.jpg","model":"豆包 Seed 2.1 Lite","counts":{"sub":285,"del":218,"ins":196},"errors":["<b>阅读顺序：</b>模型输出 2021 → 2024 → 2022 → 2023；图中时间轴为 2021 → 2022 → 2023 → 2024。","<b>错字：</b>图中为“凶手飘沙”，模型识别为“凶手沙螺”。","<b>漏读：</b>漏掉独立标题“全国禁毒示范城市”和部分小图文字。"],"output":"2021 年\n……\n2021 年 6 月 22 日，国家毒品实验室……\n2024 年\n2024年5月28日，中共中央总书记……\n2022 年\n2022 年 12 月 12 日，我与老挝公安部联合工作组……在老挝南塔省勐新县龙门村击毙杀害缉毒英雄蔡晓东的凶手沙螺……\n2023 年\n2023 年 11 月 15 日，习近平主席与美国总统拜登……"},
-    {"image":"examples/j0289.jpg","name":"过敏性鼻炎科普图","page":"J0289原图_1.jpg","model":"豆包 Seed 2.1 Turbo","counts":{"sub":32,"del":102,"ins":108},"errors":["<b>局部错字：</b>图中为“引发过敏性鼻窦炎”，模型识别为“引发病应性鼻窦炎”。","<b>图文混排：</b>正文基本正确，鼻部示意图周围的小标签被插入正文阅读流。","<b>错误位置：</b>主要集中在小字号图示，长段正文没有明显连续漏读。"],"output":"02 过敏性鼻炎有哪些危害\n……\n引发过敏\n性咽喉炎\n引发病应\n性鼻窦炎\n引发分泌\n性中耳炎\n引发头痛影响\n学习和工作\n导致\n肺气肿\n肺心病\n……\n03 过敏性鼻炎如何预防"},
-    {"image":"examples/j0389.jpg","name":"实验室安全预案","page":"J0389斜图_1.jpg","model":"豆包 Seed 2.1 Lite","counts":{"sub":4,"del":68,"ins":81},"errors":["<b>漏读顶部单位：</b>原图左上角有“中国人民大学信息学院”，模型直接从正文标题开始。","<b>透视页面：</b>主体长文识别较完整，顶部和边缘信息更容易被忽略。","<b>排版变化：</b>“第一条 / 预防”等被拆成两行，和标签连续阅读顺序不同。"],"output":"信息学院实验室安全事故应急预案（试行）\n第一条\n预防：各实验室应做好安全管理工作，认真贯彻落实各项安全管理规章制度，有效预防安全事故发生。\n第二条\n预测：信息学院实验室可能发生的安全事故包括火灾、触电事故……\n第三条\n应急报告：一旦有安全事故发生……\n第四条\n火灾事故应急处置：\n……"}
-  ]
-}
-</script>
-<script>
-(() => {
-  "use strict";
-  const data=JSON.parse(document.getElementById("leaderboard-data").textContent);
-  const q=selector=>document.querySelector(selector);
-  let view="table",exampleIndex=0;
-  const active=new Set(data.lengths.series.map(row=>row.id));
-  const escape=value=>String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
-  const shortName=row=>row.name.replace("Seed 2.1 ","").replace("-Instruct","");
-  const value=n=>n.toFixed(2);
-  const cell=(row,key)=>`${value(row[key])}${row[key+"CI"]?`<span class="ci">${row[key+"CI"].map(value).join("–")}</span>`:""}`;
-  function filtered(){
-    const term=q("#search").value.trim().toLowerCase(),kind=q("#kind").value,metric=q("#metric").value;
-    return data[q("#scope").value].filter(row=>(kind==="all"||row.kind===kind)&&`${row.name} ${row.id}`.toLowerCase().includes(term))
-      .sort(metric==="cer"?(a,b)=>a.cer-b.cer:(a,b)=>b.exact-a.exact);
-  }
-  function line(){
-    const width=1080,height=500,left=62,right=34,top=24,bottom=60;
-    const x=i=>left+i*(width-left-right)/4,y=v=>top+(100-v)/100*(height-top-bottom);
-    const grid=[0,20,40,60,80,100].map(v=>`<line x1="${left}" x2="${width-right}" y1="${y(v)}" y2="${y(v)}" class="grid-line"/><text class="axis-text" x="${left-15}" y="${y(v)+4}" text-anchor="end">${v}</text>`).join("");
-    const labels=data.lengths.bins.map((label,i)=>`<text class="axis-text" x="${x(i)}" y="${height-28}" text-anchor="middle">${escape(label)}<tspan x="${x(i)}" dy="20">${data.lengths.pages[i]} 页</tspan></text>`).join("");
-    const lines=data.lengths.series.map((row,index)=>{
-      if(!active.has(row.id))return "";
-      const path=row.values.map((v,i)=>`${i?"L":"M"}${x(i)} ${y(v)}`).join(" ");
-      return `<g class="line-${index+1}"><path class="line-path" d="${path}"/>${row.values.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="var(--surface)" stroke-width="2"><title>${escape(row.name)} · ${escape(data.lengths.bins[i])} 字 · ${value(v)}%</title></circle>`).join("")}</g>`;
-    }).join("");
-    q("#length-chart").innerHTML=`<svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="每页计分字数与整页全对率">${grid}${labels}${lines}</svg>`;
-    q("#line-legend").innerHTML=data.lengths.series.map((row,index)=>`<button class="line-${index+1}" data-line="${row.id}" aria-pressed="${active.has(row.id)}"><i></i>${escape(row.name)}</button>`).join("");
-    q("#line-legend").querySelectorAll("button").forEach(button=>button.addEventListener("click",()=>{
-      active.has(button.dataset.line)?active.delete(button.dataset.line):active.add(button.dataset.line);line();
-    }));
-  }
-  function example(){
-    const row=data.examples[exampleIndex];
-    q("#example-img").src=row.image;
-    q("#example-img").alt=row.name+"原图";
-    q("#example-link").href=row.image;
-    q("#example-name").textContent=`${exampleIndex+1}/${data.examples.length} · ${row.name}`;
-    q("#example-model").textContent=`${row.model} · ${row.page}`;
-    q("#example-errors").innerHTML=row.errors.map(error=>`<li>${error}</li>`).join("");
-    q("#example-counts").innerHTML=`<span>替换 ${row.counts.sub}</span><span>漏字 ${row.counts.del}</span><span>多字 ${row.counts.ins}</span>`;
-    q("#example-output").textContent=row.output;
-  }
-  function render(){
-    const rows=filtered(),metric=q("#metric").value;
-    ["table","line","bar","examples"].forEach(name=>q("#"+name+"-view").hidden=name!==view);
-    document.querySelectorAll("[data-view]").forEach(button=>button.setAttribute("aria-selected",String(button.dataset.view===view)));
-    ["#scope","#kind","#metric","#search"].forEach(id=>q(id).disabled=view==="line"||view==="examples");
-    q("#detail").hidden=true;
-    q("#scope-note").textContent=view==="line"?"全部 2,831 页 · 各文字长度区间的整页全对率":view==="examples"?`${data.examples.length} 张样本 · 前 3 张为遮挡错误 · 点击原图放大`:`${rows.length} 个${q("#scope").value==="historical"?"历史批次":"模型"} · 全部 2,831 页 · ${q("#scope").value==="current"?"95% 置信区间":"与主榜口径不同"}`;
-    q("#rows").innerHTML=rows.map((row,i)=>`<tr><td>${i+1}</td><td class="model">${escape(row.name)}${row.batch?`<span>${escape(row.batch)}</span>`:""}</td><td>${escape(row.kind)}</td><td class="num">${cell(row,"cer")}</td><td class="num">${cell(row,"exact")}</td><td class="num">${row.loops??"—"}</td><td class="num">${row.cap??"—"}</td></tr>`).join("")||'<tr><td colspan="7">没有匹配的模型</td></tr>';
-    const max=metric==="exact"?100:Math.max(20,Math.ceil(Math.max(...rows.map(row=>row.cerCI?.[1]??row.cer),0)/20)*20);
-    q("#bar-label").textContent=(metric==="cer"?"字符错误率":"整页全对率")+" % · 线段为 95% 置信区间";
-    q("#ranking-chart").innerHTML=`<div class="axis"><span>模型</span><div class="ticks">${[0,1,2,3,4].map(i=>`<span>${max*i/4}</span>`).join("")}</div><span style="text-align:right">%</span></div>`+rows.map((row,i)=>{
-      const ci=row[metric+"CI"],whisker=ci?`<span class="whisker" style="left:${ci[0]/max*100}%;width:${(ci[1]-ci[0])/max*100}%"></span>`:"";
-      return `<button class="rank-row" data-id="${row.id}" data-kind="${row.kind}" aria-label="${escape(row.name)} ${value(row[metric])}%"><span class="rank-label"><span class="rank-number">${i+1}</span>${escape(shortName(row))}</span><span class="track"><span class="fill" style="width:${row[metric]/max*100}%"></span>${whisker}</span><span class="value">${value(row[metric])}</span></button>`;
-    }).join("");
-    if(!rows.length)q("#ranking-chart").innerHTML='<p class="empty">没有匹配的模型</p>';
-    q("#ranking-chart").querySelectorAll("button").forEach(button=>button.addEventListener("click",()=>{
-      const row=rows.find(row=>row.id===button.dataset.id),ci=row[metric+"CI"];
-      q("#detail").textContent=`${row.name} · ${value(row[metric])}%${ci?" · 95% 区间 "+ci.map(value).join("–")+"%":""}`;
-      q("#detail").hidden=false;
-    }));
-  }
-  document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>{view=button.dataset.view;render()}));
-  ["scope","kind","metric"].forEach(id=>q("#"+id).addEventListener("change",render));
-  q("#search").addEventListener("input",render);
-  q("#theme").addEventListener("click",()=>document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark");
-  q("#protocol").addEventListener("click",()=>{
-    const node=q("#protocol-note");node.hidden=!node.hidden;q("#protocol").setAttribute("aria-expanded",String(!node.hidden));
-  });
-  q("#close-note").addEventListener("click",()=>{q("#protocol-note").hidden=true;q("#protocol").setAttribute("aria-expanded","false")});
-  q("#example-prev").addEventListener("click",()=>{exampleIndex=(exampleIndex+data.examples.length-1)%data.examples.length;example()});
-  q("#example-next").addEventListener("click",()=>{exampleIndex=(exampleIndex+1)%data.examples.length;example()});
-  q("#download").addEventListener("click",()=>{
-    const payload={snapshot:"2026-10-11 20:49",reference_review_complete:false,...(view==="line"?{lengths:data.lengths}:view==="examples"?{examples:data.examples}:{batch:q("#scope").value,models:filtered()})};
-    const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:"application/json"})),link=document.createElement("a");
-    link.href=url;link.download="cltw2831-test.json";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  });
-  document.addEventListener("keydown",event=>{if(event.key==="Escape"){q("#detail").hidden=true;q("#protocol-note").hidden=true;q("#protocol").setAttribute("aria-expanded","false")}});
-  line();example();render();
-})();
-</script>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./" aria-label="CLTW Leaderboard 首页">
+        <strong>CLTW</strong>
+        <span>Leaderboard</span>
+      </a>
+      <nav aria-label="主导航">
+        <a href="#leaderboard">完整榜单</a>
+        <a href="#configuration">评测配置</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home-view">
+    <section class="snapshot" aria-labelledby="snapshot-title">
+      <div class="section-inner">
+        <div class="snapshot-title">
+          <div>
+            <p class="eyebrow">CLTW FULL TEST</p>
+            <h1 id="snapshot-title">中文长文本整页识别榜单</h1>
+          </div>
+          <span class="status">Complete</span>
+        </div>
+        <dl class="snapshot-stats" id="snapshot-stats"></dl>
+      </div>
+    </section>
+
+    <section class="section" id="leaderboard" aria-labelledby="leaderboard-title">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">17 MODELS · 2,832 PAGES EACH</p>
+            <h2 id="leaderboard-title">完整榜单</h2>
+          </div>
+          <div class="controls">
+            <label class="search">
+              <span class="sr-only">搜索模型</span>
+              <input id="model-search" type="search" placeholder="搜索模型">
+            </label>
+            <div class="segments" id="type-filter" aria-label="模型类型">
+              <button type="button" data-type="all" aria-pressed="true">全部</button>
+              <button type="button" data-type="OCR pipeline" aria-pressed="false">流水线</button>
+              <button type="button" data-type="OCR model" aria-pressed="false">OCR 模型</button>
+              <button type="button" data-type="General model" aria-pressed="false">通用模型</button>
+              <button type="button" data-type="Closed model" aria-pressed="false">闭源模型</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-shell">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th class="rank-column">#</th>
+                <th class="model-column">模型</th>
+                <th>类型</th>
+                <th><button type="button" data-sort="content_cer">CER ↓</button></th>
+                <th><button type="button" data-sort="exact">Page Exact ↑</button></th>
+                <th><button type="button" data-sort="pass1">Pass@1 ↑</button></th>
+                <th><button type="button" data-sort="pass3">Pass@3 ↑</button></th>
+                <th><button type="button" data-sort="pass5">Pass@5 ↑</button></th>
+                <th><button type="button" data-sort="tail">Worst 1% ↓</button></th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-rows"></tbody>
+          </table>
+        </div>
+        <p class="table-note" id="table-note"></p>
+      </div>
+    </section>
+
+    <section class="section config-section" id="configuration" aria-labelledby="configuration-title">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">FROZEN EVALUATION SETUP</p>
+            <h2 id="configuration-title">评测配置</h2>
+          </div>
+        </div>
+        <div class="config-grid">
+          <article>
+            <h3>输入与生成</h3>
+            <dl id="generation-config" class="definition-list"></dl>
+          </article>
+          <article>
+            <h3>评分协议</h3>
+            <dl id="scoring-config" class="definition-list"></dl>
+          </article>
+          <article class="prompt-panel">
+            <h3>标准提示词</h3>
+            <pre id="primary-prompt"></pre>
+          </article>
+          <article>
+            <h3>原生提示词例外</h3>
+            <div class="compact-table-shell">
+              <table class="compact-table">
+                <thead>
+                  <tr><th>模型</th><th>实际提示词</th></tr>
+                </thead>
+                <tbody id="prompt-exceptions"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <main id="model-view" hidden>
+    <section class="model-header">
+      <div class="section-inner">
+        <a class="back-link" href="./">← 返回完整榜单</a>
+        <div class="model-title-row">
+          <div>
+            <p class="eyebrow" id="model-type"></p>
+            <h1 id="model-name"></h1>
+            <p class="model-checkpoint" id="model-checkpoint"></p>
+          </div>
+        </div>
+        <dl class="snapshot-stats model-stats" id="model-stats"></dl>
+      </div>
+    </section>
+
+    <section class="section model-config-section" aria-labelledby="model-config-title">
+      <div class="section-inner detail-grid">
+        <article>
+          <h2 id="model-config-title">模型配置</h2>
+          <dl class="definition-list" id="model-config"></dl>
+        </article>
+        <article>
+          <h2>实际提示词</h2>
+          <pre id="model-prompt"></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="length-title">
+      <div class="section-inner">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="eyebrow">PAGE LENGTH</p>
+            <h2 id="length-title">按计分字数</h2>
+          </div>
+        </div>
+        <div class="table-shell">
+          <table class="detail-table">
+            <thead>
+              <tr><th>字数区间</th><th>页面数</th><th>CER ↓</th><th>Page Exact ↑</th><th>Pass@5 ↑</th></tr>
+            </thead>
+            <tbody id="length-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="region-title">
+      <div class="section-inner">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="eyebrow">LAYOUT COMPLEXITY</p>
+            <h2 id="region-title">按文本区域数</h2>
+          </div>
+        </div>
+        <div class="table-shell">
+          <table class="detail-table">
+            <thead>
+              <tr><th>区域数</th><th>页面数</th><th>CER ↓</th><th>Page Exact ↑</th><th>Pass@5 ↑</th></tr>
+            </thead>
+            <tbody id="region-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="condition-title">
+      <div class="section-inner">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="eyebrow">EXACT-CONTENT PAIRS</p>
+            <h2 id="condition-title">按物理退化类型</h2>
+          </div>
+        </div>
+        <div class="table-shell">
+          <table class="detail-table condition-table">
+            <thead>
+              <tr>
+                <th>退化类型</th>
+                <th>配对数</th>
+                <th>正常图 Exact</th>
+                <th>退化图 Exact</th>
+                <th>Exact 变化</th>
+                <th>页面 CER 变化</th>
+              </tr>
+            </thead>
+            <tbody id="condition-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="section-inner">
+      <span>CLTW benchmark snapshot · 2026-10-12</span>
+      <a href="data/benchmark.json">Machine-readable results</a>
+    </div>
+  </footer>
+
+  <script src="assets/app.js" defer></script>
 </body>
 </html>
