@@ -214,7 +214,7 @@ h3 {
 
 .snapshot-stats {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   margin: 32px 0 0;
   border-top: 1px solid var(--border);
 }
@@ -303,6 +303,13 @@ h3 {
 
 .chart-section {
   background: var(--surface);
+}
+
+.metric-description {
+  max-width: 680px;
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .chart-legend {
@@ -510,7 +517,7 @@ th button[data-active="true"] {
 }
 
 .leaderboard-table {
-  min-width: 1000px;
+  min-width: 1100px;
 }
 
 .leaderboard-table td {
@@ -686,7 +693,7 @@ pre {
 }
 
 .model-stats {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
 .model-stats dd {
@@ -828,14 +835,23 @@ footer a {
 
   .topbar-inner {
     min-height: 52px;
+    gap: 12px;
+  }
+
+  .brand span {
+    display: none;
   }
 
   nav {
-    gap: 14px;
+    min-width: 0;
+    flex: 1;
+    justify-content: flex-end;
+    gap: 10px;
   }
 
   nav a {
-    font-size: 12px;
+    font-size: 11px;
+    white-space: nowrap;
   }
 
   .snapshot,
@@ -878,7 +894,8 @@ footer a {
   }
 
   .reliability-row {
-    grid-template-columns: 112px minmax(100px, 1fr) 52px;
+    width: 100%;
+    grid-template-columns: minmax(88px, 112px) minmax(0, 1fr) 52px;
     gap: 9px;
     padding-left: 0;
     padding-right: 0;

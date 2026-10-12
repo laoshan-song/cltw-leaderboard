@@ -16,6 +16,7 @@
         <span>Leaderboard</span>
       </a>
       <nav aria-label="主导航">
+        <a href="#rgs">退化泛化</a>
         <a href="#leaderboard">完整榜单</a>
         <a href="#configuration">评测配置</a>
       </nav>
@@ -43,6 +44,27 @@
           <h2 id="primary-prompt-title">标准提示词</h2>
         </div>
         <pre id="primary-prompt"></pre>
+      </div>
+    </section>
+
+    <section class="section chart-section" id="rgs" aria-labelledby="rgs-title">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">DEGRADATION GENERALIZATION</p>
+            <h2 id="rgs-title">RGS 退化保持率</h2>
+            <p class="metric-description">
+              模型在正常图上全对的页面，换成同内容退化图后仍保持全对的比例。
+            </p>
+          </div>
+          <div class="chart-legend" aria-label="模型类型图例">
+            <span data-type="OCR pipeline">流水线</span>
+            <span data-type="OCR model">OCR 模型</span>
+            <span data-type="General model">通用模型</span>
+            <span data-type="Closed model">闭源模型</span>
+          </div>
+        </div>
+        <div class="reliability-chart" id="rgs-chart"></div>
       </div>
     </section>
 
@@ -98,6 +120,7 @@
                 <th><button type="button" data-sort="pass1">Pass@1 ↑</button></th>
                 <th><button type="button" data-sort="pass3">Pass@3 ↑</button></th>
                 <th><button type="button" data-sort="pass5">Pass@5 ↑</button></th>
+                <th><button type="button" data-sort="rgs" title="正常图全对后，退化图仍全对的比例">RGS ↑</button></th>
                 <th><button type="button" data-sort="tail">Worst 1% ↓</button></th>
               </tr>
             </thead>

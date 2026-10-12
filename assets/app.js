@@ -50,6 +50,7 @@
 
   function modelMetric(model, key) {
     if (key === "tail") return model.worst_one_percent_edit_share;
+    if (key === "rgs") return model.rgs.all_conditions.rgs;
     return model.overall.metrics[key];
   }
 
@@ -112,6 +113,7 @@
         ["pass1", false],
         ["pass3", false],
         ["pass5", false],
+        ["rgs", false],
         ["tail", false],
       ].map(([key, primary]) => {
         const cell = document.createElement("td");
@@ -124,7 +126,7 @@
     });
 
     $("#table-note").textContent = models.length
-      ? `显示 ${models.length} / ${state.data.models.length} 个模型；每个模型覆盖完整 2,832 页测试集。`
+      ? `显示 ${models.length} / ${state.data.models.length} 个模型；RGS 使用 ${integer(state.data.dataset.rgs_common_pairs)} 个公共配对。`
       : "没有匹配的模型。";
 
     document.querySelectorAll("[data-sort]").forEach((button) => {
@@ -141,6 +143,7 @@
       ["模型", integer(state.data.models.length)],
       ["计分字符", integer(dataset.test_reference_characters)],
       ["同文配对", integer(dataset.exact_content_pairs)],
+      ["RGS 配对", integer(dataset.rgs_common_pairs)],
       ["物理条件", integer(Object.keys(dataset.conditions).length)],
     ].forEach(([label, value]) => addStat(stats, label, value));
   }
@@ -176,6 +179,44 @@
         const value = document.createElement("span");
         value.className = "reliability-value";
         value.textContent = percent(model.overall.metrics.pass5);
+        row.append(label, track, value);
+        chart.append(row);
+      });
+  }
+
+  function renderRgsChart() {
+    const chart = $("#rgs-chart");
+    chart.innerHTML = "";
+    [...state.data.models]
+      .sort((left, right) => (
+        right.rgs.all_conditions.rgs - left.rgs.all_conditions.rgs
+      ))
+      .forEach((model) => {
+        const metric = model.rgs.all_conditions;
+        const row = document.createElement("a");
+        row.className = "reliability-row";
+        row.dataset.type = model.type;
+        row.href = modelUrl(model.id);
+        row.title = `95% CI ${percent(metric.ci95[0])}–${percent(metric.ci95[1])}`;
+        row.setAttribute(
+          "aria-label",
+          `${model.name} RGS ${percent(metric.rgs)}，95% 置信区间 ${percent(metric.ci95[0])} 至 ${percent(metric.ci95[1])}`,
+        );
+
+        const label = document.createElement("span");
+        label.className = "reliability-label";
+        label.textContent = model.name;
+
+        const track = document.createElement("span");
+        track.className = "reliability-track";
+        const fill = document.createElement("span");
+        fill.className = "reliability-fill";
+        fill.style.width = `${100 * metric.rgs}%`;
+        track.append(fill);
+
+        const value = document.createElement("span");
+        value.className = "reliability-value";
+        value.textContent = percent(metric.rgs);
         row.append(label, track, value);
         chart.append(row);
       });
@@ -302,6 +343,7 @@
       ["Page Exact", percent(model.overall.metrics.exact)],
       ["PagePass@1", percent(model.overall.metrics.pass1)],
       ["PagePass@5", percent(model.overall.metrics.pass5)],
+      ["RGS", percent(model.rgs.all_conditions.rgs)],
       ["Worst 1% errors", percent(model.worst_one_percent_edit_share)],
     ].forEach(([label, value]) => addStat(stats, label, value));
 
@@ -315,6 +357,14 @@
       ["Beam", inference.num_beams == null ? "Model default" : String(inference.num_beams)],
       ["Temperature", inference.temperature == null ? "Model default" : String(inference.temperature)],
       ["Thinking", inference.thinking || "Not applicable"],
+      [
+        "RGS 95% 区间",
+        `${percent(model.rgs.all_conditions.ci95[0])}–${percent(model.rgs.all_conditions.ci95[1])}`,
+      ],
+      [
+        "RGS 样本",
+        `${integer(model.rgs.all_conditions.retained_pairs)} / ${integer(model.rgs.all_conditions.normal_correct_pairs)} 个正常图正确配对保持全对`,
+      ],
     ]);
 
     renderGroupedRows(
@@ -362,6 +412,7 @@
       return;
     }
     renderSnapshot();
+    renderRgsChart();
     renderReliabilityChart();
     renderConfiguration();
     bindControls();
