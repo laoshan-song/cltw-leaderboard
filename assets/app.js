@@ -125,8 +125,10 @@
       tbody.append(row);
     });
 
+    const pending = state.data.dataset.excluded_revised_image_pages;
     $("#table-note").textContent = models.length
-      ? `显示 ${models.length} / ${state.data.models.length} 个模型；RGS 使用 ${integer(state.data.dataset.rgs_common_pairs)} 个公共配对。`
+      ? `显示 ${models.length} / ${state.data.models.length} 个模型；RGS 使用 ${integer(state.data.dataset.rgs_common_pairs)} 个公共配对。` +
+        (pending ? `${pending} 张换图页待补推理。` : "测试集全部计分。")
       : "没有匹配的模型。";
 
     document.querySelectorAll("[data-sort]").forEach((button) => {
@@ -137,9 +139,11 @@
   function renderSnapshot() {
     const dataset = state.data.dataset;
     const stats = $("#snapshot-stats");
+    $("#leaderboard-scope").textContent =
+      `${state.data.models.length} MODELS · ${integer(dataset.scored_test_pages)} PAGES EACH`;
     stats.innerHTML = "";
     [
-      ["测试页", integer(dataset.splits.test)],
+      ["计分页", integer(dataset.scored_test_pages)],
       ["模型", integer(state.data.models.length)],
       ["计分字符", integer(dataset.test_reference_characters)],
       ["同文配对", integer(dataset.exact_content_pairs)],
@@ -225,7 +229,7 @@
   function renderConfiguration() {
     const { dataset, protocol, models } = state.data;
     addDefinitions($("#generation-config"), [
-      ["测试输入", `${integer(dataset.splits.test)} 张原始分辨率页面图像`],
+      ["测试输入", `${integer(dataset.canonical_test_pages)} 页；当前共同计分 ${integer(dataset.scored_test_pages)} 页`],
       ["生成上限", `${integer(protocol.max_new_tokens)} tokens`],
       ["解码", protocol.decoding],
       ["预测缺失", protocol.prediction_policy],
