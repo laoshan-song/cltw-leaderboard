@@ -239,6 +239,8 @@
       ["辅助指标", "Content CER、Worst 1% error share"],
       ["文本处理", protocol.scoring],
       ["置信区间", protocol.confidence_intervals],
+      ["标签审计", protocol.reference_audit],
+      ["配对审计", protocol.pairing_audit],
     ]);
     $("#primary-prompt").textContent = protocol.primary_prompt;
 
