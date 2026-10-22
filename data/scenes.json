@@ -1,0 +1,58 @@
+[
+  {
+    "src": "assets/images/scene-01.webp",
+    "label": "特殊材质",
+    "page_id": "test/Special-material Scene Text/Special-material Scene Text/12J0035 特殊材质_1.jpg",
+    "condition": "Special-material Scene Text",
+    "image_sha256": "5e18803780901b3bb75ab34ebe6937d7dd33967bb29373a5f0f59f231e73332e"
+  },
+  {
+    "src": "assets/images/scene-02.webp",
+    "label": "透视变形",
+    "page_id": "test/Perspective-distorted Scene Text/Perspective-distorted Scene Text/G0076斜角度_cr.jpg",
+    "condition": "Perspective-distorted Scene Text",
+    "image_sha256": "febf43656236ed463e00d86a26e2f7a44f05be3b3b36869f570943f6cf25c8b3"
+  },
+  {
+    "src": "assets/images/scene-03.webp",
+    "label": "复杂背景",
+    "page_id": "test/Complex-background Scene Text/Complex-background Scene Text/12J0061 复杂背景_1.jpg",
+    "condition": "Complex-background Scene Text",
+    "image_sha256": "9e803ff190338680fa7d8ccc4c773be8eb8048182dca91900554b97a83e4dee9"
+  },
+  {
+    "src": "assets/images/scene-04.webp",
+    "label": "遮挡",
+    "page_id": "test/Occluded Scene Text/Occluded Scene Text/12S0096 遮挡_1.jpg",
+    "condition": "Occluded Scene Text",
+    "image_sha256": "0004c7cc93751c0416ab9fe1ec068c2428dae27d27d82d1e127ecac4ea59fb88"
+  },
+  {
+    "src": "assets/images/scene-05.webp",
+    "label": "反光",
+    "page_id": "test/Reflective Scene Text/Reflective Scene Text/12J0085 反光_1.jpg",
+    "condition": "Reflective Scene Text",
+    "image_sha256": "006ebf8e960b99a1cc270ffbbb6e839aa26e16bfb116e9f8bcaa7f8ea2e739be"
+  },
+  {
+    "src": "assets/images/scene-06.webp",
+    "label": "屏幕拍摄",
+    "page_id": "test/Screen-based Scene Text/Screen-based Scene Text/12J0209 屏幕 底纹_1.jpg",
+    "condition": "Screen-based Scene Text",
+    "image_sha256": "27d8363f9edd352fcca180b52af2e81a3a7d16279be4d573dbe00d8b86bd9929"
+  },
+  {
+    "src": "assets/images/scene-07.webp",
+    "label": "小字与模糊",
+    "page_id": "test/Small-scale & Blurry Scene Text/Small-scale & Blurry Scene Text/G0039小图_1.jpg",
+    "condition": "Small-scale & Blurry Scene Text",
+    "image_sha256": "c4fffb38862a363c6ea1f7d4a9555954889dcb12c96aaf79002406717de29392"
+  },
+  {
+    "src": "assets/images/scene-08.webp",
+    "label": "低照度",
+    "page_id": "test/Underexposed Scene Text/Underexposed Scene Text/12J0045 光线不足_1.jpg",
+    "condition": "Underexposed Scene Text",
+    "image_sha256": "45ab940b4aeee9867af25235eb992357deacdf0346a6457ab3d36bd100b92044"
+  }
+]
