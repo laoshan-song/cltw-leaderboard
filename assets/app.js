@@ -363,6 +363,15 @@
       ["Beam", inference.num_beams == null ? "Model default" : String(inference.num_beams)],
       ["Temperature", inference.temperature == null ? "Model default" : String(inference.temperature)],
       ["Thinking", inference.thinking || "Not applicable"],
+      ...(inference.base_url ? [["API 地址", inference.base_url]] : []),
+      ...(model.full_text ? [
+        ["含英文与标点 CER", percent(model.full_text.cer)],
+        ["重复片段告警", `${integer(model.full_text.adjacent_repeat_pages)} 页`],
+      ] : []),
+      ...(model.api_diagnostics ? [
+        ["接口拒答", `${integer(model.api_diagnostics.refused_pages)} 页`],
+        ["触及生成上限", `${integer(model.api_diagnostics.truncated_pages)} 页`],
+      ] : []),
       [
         "RGS 95% 区间",
         `${percent(model.rgs.all_conditions.ci95[0])}–${percent(model.rgs.all_conditions.ci95[1])}`,
@@ -412,6 +421,7 @@
     const response = await fetch("data/benchmark.json", { cache: "no-store" });
     if (!response.ok) throw new Error(`Failed to load benchmark data: ${response.status}`);
     state.data = await response.json();
+    $("#snapshot-date").textContent = `CLTW benchmark snapshot · ${state.data.snapshot}`;
     const modelId = new URLSearchParams(window.location.search).get("model");
     if (modelId) {
       renderModel(modelId);
