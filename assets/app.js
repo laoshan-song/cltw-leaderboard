@@ -6,11 +6,8 @@
     search: "",
     type: "all",
     sort: "content_cer",
-    comparisonMetric: "pass5",
-    selected: new Set([
-      "doubao_seed21_turbo", "glmocr", "kimi_k28", "qwen3vl_8b",
-      "fireredocr", "hunyuanocr", "paddleocrvl", "ppocrv4_server",
-    ]),
+    comparisonMetric: "exact",
+    selected: new Set(),
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -252,26 +249,46 @@
       : 1;
     const chart = $("#comparison-bars");
     chart.innerHTML = "";
-    chart.parentElement.style.setProperty("--plot-width", `${Math.max(700, models.length * 105 + 110)}px`);
+    chart.parentElement.style.setProperty("--plot-width", `${Math.max(700, models.length * 52 + 96)}px`);
     $("#comparison-axis").replaceChildren(...[1, .75, .5, .25, 0].map((ratio) => node("span", "", percent(maximum * ratio, 0))));
     models.forEach((model, index) => {
       const value = modelMetric(model, state.comparisonMetric);
       const column = node("a", "comparison-column");
       column.href = modelUrl(model.id);
       column.dataset.type = model.type;
-      column.style.setProperty("--height", `${value / maximum * 260}px`);
+      column.style.setProperty("--height", `${value / maximum * 300}px`);
       column.setAttribute("aria-label", `${model.name}, ${metricNames[state.comparisonMetric]} ${percent(value)}`);
       const body = node("span", "column-body");
       const prism = node("span", "column-prism");
       prism.append(node("span", "column-face"), node("span", "column-top"), node("span", "column-side"));
       body.append(node("span", "column-value", percent(value)), prism);
-      const label = model.name.replace(" Preview (API)", "").replace(" (API)", "");
-      column.append(body, node("span", "column-name", label), node("span", "column-index", String(index + 1).padStart(2, "0")));
+      const label = model.name.replace(" Preview (API)", "").replace(" (API)", "")
+        .replace(/^(Doubao|Kimi) /, "$1\n")
+        .replace("GLM Flash", "GLM\nFlash")
+        .replace(/^(GLM|GOT)-OCR$/, "$1\nOCR")
+        .replace(/(Qwen[\d.]+|Ovis[\d.]+)-/, "$1\n")
+        .replace(/(InternVL)(?=\d)/, "$1\n")
+        .replace(/(PP-OCR)(?=v)/, "$1\n")
+        .replace("PaddleOCR-VL", "Paddle\nOCR-VL")
+        .replace("Surya OCR 2", "Surya\nOCR 2")
+        .replace("DeepSeek-", "DeepSeek\n")
+        .replace("HunyuanOCR", "Hunyuan\nOCR");
+      const name = node("span", "column-name");
+      name.append(...label.split("\n").map((part) => node("span", "column-name-part", part)));
+      column.append(body, name, node("span", "column-index", String(index + 1).padStart(2, "0")));
       chart.append(column);
     });
-    $("#comparison-note").textContent = `${metricNames[state.comparisonMetric]} · ${models.length} selected models`;
+    const values = models.map((model) => modelMetric(model, state.comparisonMetric));
+    $("#comparison-note").textContent = `${metricNames[state.comparisonMetric]} · ${models.length === state.data.models.length ? "All" : "Selected"} ${models.length} models · ${percent(Math.min(...values))}–${percent(Math.max(...values))}`;
+    $("#comparison-definition").textContent = {
+      exact: "Pages with no scored character errors. Higher is better.",
+      rgs: "Exact normal views that remain exact under real degradation. Higher is better.",
+      content_cer: "Character edit errors divided by scored reference characters. Lower is better.",
+      pass5: "Pages with a scored character error rate of at most 5%. Higher is better.",
+    }[state.comparisonMetric];
     $("#comparison-scale").textContent = `Scale: 0 to ${percent(maximum, 0)} · ${state.comparisonMetric === "content_cer" ? "Lower is better" : "Higher is better"}`;
     $("#selection-count").textContent = `${models.length} / ${state.data.models.length}`;
+    $("#comparison-all").disabled = models.length === state.data.models.length;
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
       chart.animate([{ opacity: .3 }, { opacity: 1 }], { duration: 420, easing: "ease-out" });
     }
@@ -700,6 +717,11 @@
   }
 
   function bindControls() {
+    $("#comparison-all").addEventListener("click", () => {
+      state.selected = new Set(state.data.models.map((model) => model.id));
+      $("#comparison-models").querySelectorAll("input").forEach((input) => { input.checked = true; });
+      renderComparison();
+    });
     $("#comparison-metric").addEventListener("change", (event) => {
       state.comparisonMetric = event.target.value;
       renderComparison();
@@ -747,6 +769,7 @@
     renderRgsChart();
     renderReliabilityChart();
     renderConfiguration();
+    state.selected = new Set(state.data.models.map((model) => model.id));
     renderComparisonPicker();
     renderComparison();
     renderHighlights();

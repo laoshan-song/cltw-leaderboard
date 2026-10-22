@@ -8,7 +8,7 @@
   <title>CLTW — Research Model Leaderboard</title>
   <link rel="icon" href="data:,">
   <link rel="preload" as="image" href="assets/images/scene-01.webp">
-  <link rel="stylesheet" href="assets/styles.css?v=20261022c">
+  <link rel="stylesheet" href="assets/styles.css?v=20261022d">
 </head>
 <body>
   <a class="skip-link" href="#home-view">Skip to main content</a>
@@ -67,15 +67,15 @@
           <div>
             <p class="eyebrow"><span class="section-number">01 /</span> PERFORMANCE IN PERSPECTIVE</p>
             <h2 id="compare-title">Compare full-page performance.</h2>
-            <p class="section-description">Select a metric and a set of models. All values use the same frozen evaluation set.</p>
+            <p class="section-description">Compare every model on the same frozen test set. Switch metrics or select a custom comparison.</p>
           </div>
           <div class="comparison-controls">
             <label class="metric-select"><span class="sr-only">Comparison metric</span>
               <select id="comparison-metric">
-                <option value="pass5">Pass@5% ↑</option>
                 <option value="exact">Page Exact ↑</option>
                 <option value="rgs">Correct retention ↑</option>
                 <option value="content_cer">Content CER ↓</option>
+                <option value="pass5">Pass@5% ↑</option>
               </select>
             </label>
             <div class="segments view-switch" id="view-switch" aria-label="Chart view">
@@ -92,6 +92,7 @@
               <span data-type="OCR model">OCR model</span><span data-type="OCR pipeline">Pipeline</span>
             </div>
           </div>
+          <p class="comparison-definition" id="comparison-definition"></p>
           <div class="comparison-scroll">
             <div class="comparison-plot">
               <div class="chart-axis" id="comparison-axis" aria-hidden="true"></div>
@@ -100,10 +101,11 @@
             </div>
           </div>
           <div class="comparison-bottom">
-            <span id="comparison-scale"></span><span>Select a bar to open the model profile <span aria-hidden="true">↗</span></span>
+            <span id="comparison-scale"></span><span>Scroll horizontally on smaller screens · Select a bar for details <span aria-hidden="true">↗</span></span>
           </div>
           <details class="model-picker">
             <summary>Select models <span id="selection-count"></span><span aria-hidden="true">＋</span></summary>
+            <div class="picker-actions"><button type="button" id="comparison-all">Select all models</button></div>
             <div id="comparison-models" class="picker-grid"></div>
           </details>
         </div>
@@ -271,6 +273,6 @@
       <a class="text-link" href="data/benchmark.json">Machine-readable results ↗</a>
     </div>
   </footer>
-  <script src="assets/app.js?v=20261022c" defer></script>
+  <script src="assets/app.js?v=20261022d" defer></script>
 </body>
 </html>
