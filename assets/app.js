@@ -81,7 +81,18 @@
   function profileFor(model) {
     const profile = profiles.find(([prefix]) => model.id.startsWith(prefix));
     if (!profile) throw new Error(`Missing model profile: ${model.id}`);
-    return { family: profile[1], mark: profile[2], image: profile[3], bio: profile[4], ...developers[profile[0]] };
+    const overrides = {
+      kimi_k3: {
+        bio: "Kimi is developed by Moonshot AI. This profile reports the K3 hosted API checkpoint, evaluated with thinking disabled and full-page images under the shared CLTW transcription protocol.",
+      },
+      deepseek_v41_flash: {
+        family: "DeepSeek",
+        project: "https://www.deepseek.com/",
+        bio: "DeepSeek V4.1 Flash is evaluated through the hosted API on full-page Chinese transcription. The returned checkpoint version, disabled thinking setting and shared CLTW scoring protocol are recorded with every prediction.",
+      },
+    };
+    return { family: profile[1], mark: profile[2], image: profile[3], bio: profile[4],
+      ...developers[profile[0]], ...overrides[model.id] };
   }
 
   function brandIdentity(model, compact = false) {
@@ -271,6 +282,8 @@
         .replace(/(PP-OCR)(?=v)/, "$1\n")
         .replace("PaddleOCR-VL", "Paddle\nOCR-VL")
         .replace("Surya OCR 2", "Surya\nOCR 2")
+        .replace(/^DeepSeek /, "DeepSeek\n")
+        .replace(/(V[\d.]+) Flash$/, "$1\nFlash")
         .replace("DeepSeek-", "DeepSeek\n")
         .replace("HunyuanOCR", "Hunyuan\nOCR");
       const name = node("span", "column-name");

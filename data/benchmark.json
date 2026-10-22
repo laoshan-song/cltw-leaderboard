@@ -38,9 +38,9 @@
     "confidence_intervals": "95% intervals from 2,000 source-group bootstrap resamples.",
     "prediction_policy": "No prediction imputation; provider refusals score as empty output.",
     "input_revision_policy": "Replaced test images enter scoring only after every listed model has fresh predictions on the final images. All replaced test images have fresh predictions for every model.",
-    "reference_audit": "最终审计发现 51 组相同图片的参考文字不一致，其中 7 组涉及测试集；另有 13 组不同图片具有相同归一化文字，该项作为内容重合观察，不计作图片或同源组泄漏。当前分数使用冻结标签，逐页证据保留在审计记录中。",
-    "pairing_audit": "6,105 对候选中，3,977 对具有相同评分文字且图片不同。视觉复核标记了 28 对文字区域不相交的候选，8 对相同图片已排除。",
-    "rgs": "RGS = P(退化图全对 | 同内容正常图全对)。使用所有 21 个模型均具备双侧预测的公共配对，并按同源组执行 2,000 次 bootstrap。"
+    "reference_audit": "The final audit found 51 groups of identical images with conflicting reference text; 7 groups involve the test split. Another 13 groups of different images share normalized text across splits. These are recorded as content overlap. Scores use frozen labels; page-level evidence remains in the audit records.",
+    "pairing_audit": "Of 6,105 candidate pairs, 3,977 have identical scored text and different image pixels. Visual review flagged 28 candidates with disjoint text regions; 8 byte-identical image pairs were excluded.",
+    "rgs": "RGS = P(degraded view exact | identical-content normal view exact). Common pairs have predictions for both views from all 23 models. 95% intervals use 2,000 source-group bootstrap resamples."
   },
   "models": [
     {
@@ -1676,6 +1676,618 @@
       }
     },
     {
+      "id": "kimi_k3",
+      "name": "Kimi K3",
+      "type": "Closed model",
+      "checkpoint": "kimi-k3",
+      "prompt": "按阅读顺序逐行抄录图中可见文字，每行单独换行。看不清的字不要猜。只输出原文，不要解释或 Markdown。",
+      "protocol_id": "cltw-4096-greedy-v1",
+      "inference": {
+        "method": "OpenAI-compatible multimodal API",
+        "max_new_tokens": 4096,
+        "temperature": 0,
+        "do_sample": false,
+        "num_beams": 1,
+        "thinking": "disabled",
+        "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3"
+      },
+      "overall": {
+        "pages": 2832,
+        "source_groups": 1282,
+        "reference_characters": 494987,
+        "metrics": {
+          "content_cer": 0.028909850157680907,
+          "exact": 0.748587570621469,
+          "pass1": 0.818502824858757,
+          "pass3": 0.8870056497175142,
+          "pass5": 0.9159604519774012
+        },
+        "ci95": {
+          "content_cer": [
+            0.02303874763230985,
+            0.035853394050579836
+          ],
+          "exact": [
+            0.7295637470803755,
+            0.7672689907717959
+          ],
+          "pass1": [
+            0.8011434217024629,
+            0.8343162090294655
+          ],
+          "pass3": [
+            0.873136666428728,
+            0.9002164858592578
+          ],
+          "pass5": [
+            0.9032005926724985,
+            0.9284015124742915
+          ]
+        }
+      },
+      "paired": {
+        "pairs": 798,
+        "source_groups": 694,
+        "normal_exact": 0.9054995196926032,
+        "degraded_exact": 0.7974303554274736,
+        "degraded_minus_normal_page_cer": 0.015769241675369437,
+        "degraded_minus_normal_exact": -0.10806916426512968,
+        "degraded_minus_normal_pass5": -0.058357348703170026,
+        "ci95": {
+          "degraded_minus_normal_page_cer": [
+            0.010264941341291536,
+            0.021921804290749327
+          ],
+          "degraded_minus_normal_exact": [
+            -0.1372478386167147,
+            -0.07996217579250725
+          ],
+          "degraded_minus_normal_pass5": [
+            -0.08069164265129683,
+            -0.03962536023054755
+          ]
+        }
+      },
+      "paired_excluding_occlusion": {
+        "pairs": 756,
+        "source_groups": 657,
+        "normal_exact": 0.9100710299340438,
+        "degraded_exact": 0.830162354134957,
+        "degraded_minus_normal_page_cer": 0.007488063065334277,
+        "degraded_minus_normal_exact": -0.07990867579908675,
+        "degraded_minus_normal_pass5": -0.03272450532724505,
+        "ci95": {
+          "degraded_minus_normal_page_cer": [
+            0.003759286827125217,
+            0.01207536124644181
+          ],
+          "degraded_minus_normal_exact": [
+            -0.106544901065449,
+            -0.05403348554033485
+          ],
+          "degraded_minus_normal_pass5": [
+            -0.0517503805175038,
+            -0.01598173515981735
+          ]
+        }
+      },
+      "paired_by_condition": {
+        "Occluded Scene Text": {
+          "pairs": 42,
+          "source_groups": 42,
+          "normal_exact": 0.8095238095238095,
+          "degraded_exact": 0.2619047619047619,
+          "degraded_minus_normal_page_cer": 0.15544910942588347,
+          "degraded_minus_normal_exact": -0.5476190476190477,
+          "degraded_minus_normal_pass5": -0.47619047619047616,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              0.09525561803649144,
+              0.22397642446034946
+            ],
+            "degraded_minus_normal_exact": [
+              -0.6904761904761905,
+              -0.40476190476190477
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.6190476190476191,
+              -0.3333333333333333
+            ]
+          }
+        },
+        "Perspective-distorted Scene Text": {
+          "pairs": 222,
+          "source_groups": 197,
+          "normal_exact": 0.9213197969543148,
+          "degraded_exact": 0.8642131979695431,
+          "degraded_minus_normal_page_cer": 0.0053701707875612875,
+          "degraded_minus_normal_exact": -0.05710659898477157,
+          "degraded_minus_normal_pass5": -0.03553299492385787,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              0.0015941603823570816,
+              0.009787656138851613
+            ],
+            "degraded_minus_normal_exact": [
+              -0.10406091370558376,
+              -0.012690355329949238
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.06598984771573604,
+              -0.01015228426395939
+            ]
+          }
+        },
+        "Reflective Scene Text": {
+          "pairs": 130,
+          "source_groups": 115,
+          "normal_exact": 0.8804347826086957,
+          "degraded_exact": 0.6760869565217391,
+          "degraded_minus_normal_page_cer": 0.019834840243852354,
+          "degraded_minus_normal_exact": -0.20434782608695654,
+          "degraded_minus_normal_pass5": -0.1,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              0.005181126493912101,
+              0.035383080227210775
+            ],
+            "degraded_minus_normal_exact": [
+              -0.29130434782608694,
+              -0.12608695652173912
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.16521739130434782,
+              -0.043478260869565216
+            ]
+          }
+        },
+        "Small-scale & Blurry Scene Text": {
+          "pairs": 212,
+          "source_groups": 198,
+          "normal_exact": 0.9074074074074073,
+          "degraded_exact": 0.819023569023569,
+          "degraded_minus_normal_page_cer": 0.00696893160961894,
+          "degraded_minus_normal_exact": -0.08838383838383838,
+          "degraded_minus_normal_pass5": -0.020202020202020204,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              0.00047300793235118145,
+              0.014945928502699978
+            ],
+            "degraded_minus_normal_exact": [
+              -0.1414141414141414,
+              -0.03535353535353535
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.050505050505050504,
+              0.010101010101010102
+            ]
+          }
+        },
+        "Underexposed Scene Text": {
+          "pairs": 192,
+          "source_groups": 182,
+          "normal_exact": 0.9258241758241759,
+          "degraded_exact": 0.8956043956043956,
+          "degraded_minus_normal_page_cer": 0.001962566699210672,
+          "degraded_minus_normal_exact": -0.03021978021978022,
+          "degraded_minus_normal_pass5": 0.0,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              -0.002232233150231101,
+              0.008075989166123327
+            ],
+            "degraded_minus_normal_exact": [
+              -0.06593406593406594,
+              0.0027472527472527475
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.016483516483516484,
+              0.016483516483516484
+            ]
+          }
+        }
+      },
+      "rgs": {
+        "label": "Kimi K3",
+        "all_conditions": {
+          "pairs": 798,
+          "source_groups": 694,
+          "normal_exact": 0.9072681704260651,
+          "degraded_exact": 0.8007518796992481,
+          "normal_correct_pairs": 724,
+          "retained_pairs": 619,
+          "rgs": 0.8549723756906077,
+          "ci95": [
+            0.8288543140028288,
+            0.8801652892561983
+          ]
+        },
+        "excluding_occlusion": {
+          "pairs": 756,
+          "source_groups": 657,
+          "normal_exact": 0.9126984126984127,
+          "degraded_exact": 0.8306878306878307,
+          "normal_correct_pairs": 690,
+          "retained_pairs": 608,
+          "rgs": 0.881159420289855,
+          "ci95": [
+            0.8563293885025633,
+            0.9055244933040536
+          ]
+        }
+      },
+      "worst_one_percent_edit_share": 0.4315863032844165,
+      "by_length": {
+        "0-50": {
+          "pages": 274,
+          "reference_characters": 9951,
+          "metrics": {
+            "content_cer": 0.04140287408300673,
+            "exact": 0.8029197080291971,
+            "pass1": 0.8029197080291971,
+            "pass3": 0.8576642335766423,
+            "pass5": 0.8832116788321168
+          },
+          "ci95": {
+            "content_cer": [
+              0.017842306768653126,
+              0.06934543817108221
+            ],
+            "exact": [
+              0.741108188032875,
+              0.8597803449625405
+            ],
+            "pass1": [
+              0.741108188032875,
+              0.8597803449625405
+            ],
+            "pass3": [
+              0.7999817518248176,
+              0.9090985356924953
+            ],
+            "pass5": [
+              0.8309165874847293,
+              0.9320754716981132
+            ]
+          }
+        },
+        "51-100": {
+          "pages": 769,
+          "reference_characters": 59712,
+          "metrics": {
+            "content_cer": 0.01962754555198285,
+            "exact": 0.8374512353706112,
+            "pass1": 0.8400520156046815,
+            "pass3": 0.9115734720416124,
+            "pass5": 0.9362808842652796
+          },
+          "ci95": {
+            "content_cer": [
+              0.013175350203455963,
+              0.027052902949498057
+            ],
+            "exact": [
+              0.8077909509844994,
+              0.8646500257054517
+            ],
+            "pass1": [
+              0.8110236220472441,
+              0.8675511585147857
+            ],
+            "pass3": [
+              0.8900658784369474,
+              0.9322724141029864
+            ],
+            "pass5": [
+              0.9176296013665124,
+              0.9544828047823478
+            ]
+          }
+        },
+        "101-200": {
+          "pages": 1031,
+          "reference_characters": 147182,
+          "metrics": {
+            "content_cer": 0.02260466633148075,
+            "exact": 0.7643064985451018,
+            "pass1": 0.8360814742967992,
+            "pass3": 0.9030067895247332,
+            "pass5": 0.9291949563530553
+          },
+          "ci95": {
+            "content_cer": [
+              0.016106772246522967,
+              0.029248267023916027
+            ],
+            "exact": [
+              0.7326626232972666,
+              0.7956281036637777
+            ],
+            "pass1": [
+              0.8086114861158152,
+              0.8632126027577643
+            ],
+            "pass3": [
+              0.882176902472856,
+              0.9235790627105714
+            ],
+            "pass5": [
+              0.910041748756919,
+              0.9477832512315271
+            ]
+          }
+        },
+        "201-500": {
+          "pages": 631,
+          "reference_characters": 184281,
+          "metrics": {
+            "content_cer": 0.024695980594852427,
+            "exact": 0.6576862123613312,
+            "pass1": 0.803486529318542,
+            "pass3": 0.8637083993660856,
+            "pass5": 0.9033280507131537
+          },
+          "ci95": {
+            "content_cer": [
+              0.018146704794350238,
+              0.03224519350761962
+            ],
+            "exact": [
+              0.6143204542226371,
+              0.7015921895500501
+            ],
+            "pass1": [
+              0.7664494640509657,
+              0.8372130472231585
+            ],
+            "pass3": [
+              0.8325069608053116,
+              0.8943001241874966
+            ],
+            "pass5": [
+              0.877161786815483,
+              0.9275831952398949
+            ]
+          }
+        },
+        ">500": {
+          "pages": 127,
+          "reference_characters": 93861,
+          "metrics": {
+            "content_cer": 0.051650845399047525,
+            "exact": 0.41732283464566927,
+            "pass1": 0.6535433070866141,
+            "pass3": 0.7874015748031497,
+            "pass5": 0.8188976377952756
+          },
+          "ci95": {
+            "content_cer": [
+              0.028679153330896167,
+              0.07928994758501595
+            ],
+            "exact": [
+              0.3185740144810941,
+              0.5161290322580645
+            ],
+            "pass1": [
+              0.5638965371174415,
+              0.7520461538461536
+            ],
+            "pass3": [
+              0.7050157057452628,
+              0.864
+            ],
+            "pass5": [
+              0.7352941176470589,
+              0.8943196405648266
+            ]
+          }
+        }
+      },
+      "by_regions": {
+        "1-5": {
+          "pages": 700,
+          "reference_characters": 49265,
+          "metrics": {
+            "content_cer": 0.018573023444636152,
+            "exact": 0.8642857142857143,
+            "pass1": 0.8728571428571429,
+            "pass3": 0.9071428571428571,
+            "pass5": 0.9242857142857143
+          },
+          "ci95": {
+            "content_cer": [
+              0.011488958488030951,
+              0.026964448122092147
+            ],
+            "exact": [
+              0.8355631601239739,
+              0.8923986716154707
+            ],
+            "pass1": [
+              0.8446320570662115,
+              0.8997134670487106
+            ],
+            "pass3": [
+              0.8813801319409134,
+              0.93181897205715
+            ],
+            "pass5": [
+              0.8993993993993994,
+              0.9469029722832366
+            ]
+          }
+        },
+        "6-10": {
+          "pages": 1255,
+          "reference_characters": 162986,
+          "metrics": {
+            "content_cer": 0.02146810155473476,
+            "exact": 0.7721115537848605,
+            "pass1": 0.8247011952191236,
+            "pass3": 0.9035856573705179,
+            "pass5": 0.9338645418326693
+          },
+          "ci95": {
+            "content_cer": [
+              0.016001292034066073,
+              0.02778652605286357
+            ],
+            "exact": [
+              0.7432846112681115,
+              0.7992191780821918
+            ],
+            "pass1": [
+              0.7996916200940114,
+              0.8495088573907871
+            ],
+            "pass3": [
+              0.8844582027875553,
+              0.9214178406339424
+            ],
+            "pass5": [
+              0.9155911627846182,
+              0.9490857819795575
+            ]
+          }
+        },
+        "11-20": {
+          "pages": 675,
+          "reference_characters": 161868,
+          "metrics": {
+            "content_cer": 0.022419502310524624,
+            "exact": 0.6725925925925926,
+            "pass1": 0.7985185185185185,
+            "pass3": 0.8755555555555555,
+            "pass5": 0.9081481481481481
+          },
+          "ci95": {
+            "content_cer": [
+              0.016058081707536264,
+              0.029766249763241038
+            ],
+            "exact": [
+              0.6320213384881015,
+              0.7113514608562553
+            ],
+            "pass1": [
+              0.7642624611511075,
+              0.8311602533943847
+            ],
+            "pass3": [
+              0.8462708170373787,
+              0.9023695554809091
+            ],
+            "pass5": [
+              0.8826108458196749,
+              0.9319213313161876
+            ]
+          }
+        },
+        ">20": {
+          "pages": 202,
+          "reference_characters": 120868,
+          "metrics": {
+            "content_cer": 0.05184995201376708,
+            "exact": 0.45544554455445546,
+            "pass1": 0.6584158415841584,
+            "pass3": 0.7524752475247525,
+            "pass5": 0.801980198019802
+          },
+          "ci95": {
+            "content_cer": [
+              0.0321385708130303,
+              0.07528561884277216
+            ],
+            "exact": [
+              0.3800802139037433,
+              0.5326183513573163
+            ],
+            "pass1": [
+              0.5862068965517241,
+              0.7301645658263305
+            ],
+            "pass3": [
+              0.6798029556650246,
+              0.8214285714285714
+            ],
+            "pass5": [
+              0.7316838649155722,
+              0.8622496220710506
+            ]
+          }
+        }
+      },
+      "full_text": {
+        "pages": 2832,
+        "reference_characters": 571063,
+        "cer": 0.04142800356528089,
+        "exact": 0.6578389830508474,
+        "pass1": 0.7655367231638418,
+        "pass3": 0.8739406779661016,
+        "pass5": 0.9018361581920904,
+        "insertions": 10144,
+        "deletions": 8748,
+        "substitutions": 4766,
+        "output_characters": 572459,
+        "adjacent_repeat_pages": 0,
+        "adjacent_repeat_exact_pages": 0,
+        "adjacent_repeat_edit_share": 0.0,
+        "cer_at_least_one_pages": 10,
+        "cer_at_least_one_edit_share": 0.266421506467157,
+        "source_groups": 1282,
+        "ci95": {
+          "cer": [
+            0.030860349696514897,
+            0.05425846781563129
+          ],
+          "exact": [
+            0.6364306194375446,
+            0.6787740827260618
+          ],
+          "pass1": [
+            0.7472677592813378,
+            0.7833311787937183
+          ],
+          "pass3": [
+            0.8587367113837933,
+            0.8886181691611555
+          ],
+          "pass5": [
+            0.8888502830239278,
+            0.9135637662521227
+          ]
+        }
+      },
+      "api_diagnostics": {
+        "provider_model": "kimi-k3",
+        "response_model": "kimi-k3",
+        "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+        "prompt": "按阅读顺序逐行抄录图中可见文字，每行单独换行。看不清的字不要猜。只输出原文，不要解释或 Markdown。",
+        "protocol_id": "cltw-4096-greedy-v1",
+        "decoding": {
+          "max_new_tokens": 4096,
+          "num_beams": 1,
+          "do_sample": false,
+          "temperature": 0,
+          "thinking": "disabled"
+        },
+        "run_fingerprint": {
+          "index_sha256": "a0d7235279bc463d88761836320482e52bbb4afabb2b98c35930311aa4252db5",
+          "script_sha256": "9b4bc39071173973bc557e074b15215d70cbae10ebdecd76723f147d6e24d310",
+          "concurrency": 8
+        },
+        "refused_pages": 2,
+        "truncated_pages": 0,
+        "non_successful_attempts": 8,
+        "generated_tokens": 391441,
+        "mean_request_seconds": 9.732641058322626,
+        "p50_request_seconds": 8.750100590928923,
+        "p95_request_seconds": 17.72937631171661
+      }
+    },
+    {
       "id": "glmocr",
       "name": "GLM-OCR",
       "type": "OCR model",
@@ -2217,6 +2829,618 @@
             ]
           }
         }
+      }
+    },
+    {
+      "id": "deepseek_v41_flash",
+      "name": "DeepSeek V4.1 Flash",
+      "type": "Closed model",
+      "checkpoint": "deepseek-v4-1-flash-261017",
+      "prompt": "按阅读顺序逐行抄录图中可见文字，每行单独换行。看不清的字不要猜。只输出原文，不要解释或 Markdown。",
+      "protocol_id": "cltw-4096-greedy-v1",
+      "inference": {
+        "method": "OpenAI-compatible multimodal API",
+        "max_new_tokens": 4096,
+        "temperature": 0,
+        "do_sample": false,
+        "num_beams": 1,
+        "thinking": "disabled",
+        "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3"
+      },
+      "overall": {
+        "pages": 2832,
+        "source_groups": 1282,
+        "reference_characters": 494987,
+        "metrics": {
+          "content_cer": 0.033556436835714874,
+          "exact": 0.6758474576271186,
+          "pass1": 0.7807203389830508,
+          "pass3": 0.8771186440677966,
+          "pass5": 0.9120762711864406
+        },
+        "ci95": {
+          "content_cer": [
+            0.024868249267363023,
+            0.04491372920005727
+          ],
+          "exact": [
+            0.6545066958700475,
+            0.6972908586053576
+          ],
+          "pass1": [
+            0.7632034655350128,
+            0.7993574295199496
+          ],
+          "pass3": [
+            0.8630135804569992,
+            0.8905459827422729
+          ],
+          "pass5": [
+            0.8997529121073068,
+            0.9232945521670776
+          ]
+        }
+      },
+      "paired": {
+        "pairs": 798,
+        "source_groups": 694,
+        "normal_exact": 0.8348943323727186,
+        "degraded_exact": 0.7037704130643612,
+        "degraded_minus_normal_page_cer": 0.02664875631752274,
+        "degraded_minus_normal_exact": -0.13112391930835735,
+        "degraded_minus_normal_pass5": -0.06964457252641691,
+        "ci95": {
+          "degraded_minus_normal_page_cer": [
+            0.013023646485347654,
+            0.05038071004303503
+          ],
+          "degraded_minus_normal_exact": [
+            -0.1637848222862632,
+            -0.09917447166186363
+          ],
+          "degraded_minus_normal_pass5": [
+            -0.09053794428434198,
+            -0.05043227665706052
+          ]
+        }
+      },
+      "paired_excluding_occlusion": {
+        "pairs": 756,
+        "source_groups": 657,
+        "normal_exact": 0.832445459157788,
+        "degraded_exact": 0.7365550481988838,
+        "degraded_minus_normal_page_cer": 0.01894797584863692,
+        "degraded_minus_normal_exact": -0.0958904109589041,
+        "degraded_minus_normal_pass5": -0.044647387113140535,
+        "ci95": {
+          "degraded_minus_normal_page_cer": [
+            0.006139207946150369,
+            0.045059336549784196
+          ],
+          "degraded_minus_normal_exact": [
+            -0.12836123795027904,
+            -0.06341641298833081
+          ],
+          "degraded_minus_normal_pass5": [
+            -0.06265854895991883,
+            -0.02765093860984273
+          ]
+        }
+      },
+      "paired_by_condition": {
+        "Occluded Scene Text": {
+          "pairs": 42,
+          "source_groups": 42,
+          "normal_exact": 0.8809523809523809,
+          "degraded_exact": 0.19047619047619047,
+          "degraded_minus_normal_page_cer": 0.14590436103907178,
+          "degraded_minus_normal_exact": -0.6904761904761905,
+          "degraded_minus_normal_pass5": -0.47619047619047616,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              0.08601094091230879,
+              0.2134181951685185
+            ],
+            "degraded_minus_normal_exact": [
+              -0.8333333333333334,
+              -0.5476190476190477
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.6190476190476191,
+              -0.3333333333333333
+            ]
+          }
+        },
+        "Perspective-distorted Scene Text": {
+          "pairs": 222,
+          "source_groups": 197,
+          "normal_exact": 0.8485617597292725,
+          "degraded_exact": 0.7356175972927242,
+          "degraded_minus_normal_page_cer": 0.005892237455206656,
+          "degraded_minus_normal_exact": -0.11294416243654823,
+          "degraded_minus_normal_pass5": -0.03553299492385787,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              0.0022293710310243636,
+              0.010644307084135425
+            ],
+            "degraded_minus_normal_exact": [
+              -0.1751269035532995,
+              -0.05199873096446718
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.06091370558375635,
+              -0.01015228426395939
+            ]
+          }
+        },
+        "Reflective Scene Text": {
+          "pairs": 130,
+          "source_groups": 115,
+          "normal_exact": 0.7369565217391304,
+          "degraded_exact": 0.6166666666666666,
+          "degraded_minus_normal_page_cer": 0.07567408012785301,
+          "degraded_minus_normal_exact": -0.12028985507246377,
+          "degraded_minus_normal_pass5": -0.11304347826086956,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              0.008982814576558877,
+              0.19630987397382343
+            ],
+            "degraded_minus_normal_exact": [
+              -0.22028985507246376,
+              -0.021739130434782608
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.17391304347826086,
+              -0.05652173913043478
+            ]
+          }
+        },
+        "Small-scale & Blurry Scene Text": {
+          "pairs": 212,
+          "source_groups": 198,
+          "normal_exact": 0.8114478114478114,
+          "degraded_exact": 0.6750841750841752,
+          "degraded_minus_normal_page_cer": 0.01024621015283659,
+          "degraded_minus_normal_exact": -0.13636363636363635,
+          "degraded_minus_normal_pass5": -0.044612794612794604,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              0.0023195659299728743,
+              0.020062650114230834
+            ],
+            "degraded_minus_normal_exact": [
+              -0.20454545454545456,
+              -0.0707070707070707
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.08670033670033671,
+              -0.0016835016835016843
+            ]
+          }
+        },
+        "Underexposed Scene Text": {
+          "pairs": 192,
+          "source_groups": 182,
+          "normal_exact": 0.8873626373626373,
+          "degraded_exact": 0.8571428571428571,
+          "degraded_minus_normal_page_cer": 0.004450092368358086,
+          "degraded_minus_normal_exact": -0.03021978021978022,
+          "degraded_minus_normal_pass5": -0.01098901098901099,
+          "ci95": {
+            "degraded_minus_normal_page_cer": [
+              6.513430237398822e-05,
+              0.012262746837473174
+            ],
+            "degraded_minus_normal_exact": [
+              -0.07142857142857142,
+              0.01098901098901099
+            ],
+            "degraded_minus_normal_pass5": [
+              -0.027472527472527472,
+              0.0
+            ]
+          }
+        }
+      },
+      "rgs": {
+        "label": "DeepSeek V4.1 Flash",
+        "all_conditions": {
+          "pairs": 798,
+          "source_groups": 694,
+          "normal_exact": 0.8345864661654135,
+          "degraded_exact": 0.7042606516290727,
+          "normal_correct_pairs": 666,
+          "retained_pairs": 523,
+          "rgs": 0.7852852852852853,
+          "ci95": [
+            0.7549160533709464,
+            0.8176587887584225
+          ]
+        },
+        "excluding_occlusion": {
+          "pairs": 756,
+          "source_groups": 657,
+          "normal_exact": 0.832010582010582,
+          "degraded_exact": 0.7328042328042328,
+          "normal_correct_pairs": 629,
+          "retained_pairs": 515,
+          "rgs": 0.8187599364069952,
+          "ci95": [
+            0.7883989634868046,
+            0.8482582358412061
+          ]
+        }
+      },
+      "worst_one_percent_edit_share": 0.5085490668272126,
+      "by_length": {
+        "0-50": {
+          "pages": 274,
+          "reference_characters": 9951,
+          "metrics": {
+            "content_cer": 0.03406692794694001,
+            "exact": 0.7627737226277372,
+            "pass1": 0.7627737226277372,
+            "pass3": 0.8138686131386861,
+            "pass5": 0.8759124087591241
+          },
+          "ci95": {
+            "content_cer": [
+              0.01732345547362316,
+              0.056719178488404604
+            ],
+            "exact": [
+              0.7025998987355265,
+              0.8202293052052282
+            ],
+            "pass1": [
+              0.7025998987355265,
+              0.8202293052052282
+            ],
+            "pass3": [
+              0.756749276952229,
+              0.8661897324268166
+            ],
+            "pass5": [
+              0.8267135980746089,
+              0.9201426630434781
+            ]
+          }
+        },
+        "51-100": {
+          "pages": 769,
+          "reference_characters": 59712,
+          "metrics": {
+            "content_cer": 0.01567524115755627,
+            "exact": 0.7854356306892067,
+            "pass1": 0.7867360208062418,
+            "pass3": 0.9024707412223667,
+            "pass5": 0.9362808842652796
+          },
+          "ci95": {
+            "content_cer": [
+              0.010960515633402952,
+              0.02088481178869793
+            ],
+            "exact": [
+              0.7509381002810289,
+              0.8222813545269118
+            ],
+            "pass1": [
+              0.752851351416146,
+              0.8230229805327737
+            ],
+            "pass3": [
+              0.8780487804878049,
+              0.9255900980592038
+            ],
+            "pass5": [
+              0.9162140366172624,
+              0.9547233253440569
+            ]
+          }
+        },
+        "101-200": {
+          "pages": 1031,
+          "reference_characters": 147182,
+          "metrics": {
+            "content_cer": 0.021517576877607317,
+            "exact": 0.6925315227934045,
+            "pass1": 0.8108632395732299,
+            "pass3": 0.8981571290009699,
+            "pass5": 0.9262851600387972
+          },
+          "ci95": {
+            "content_cer": [
+              0.01582303055223546,
+              0.027838518145474177
+            ],
+            "exact": [
+              0.6602661029374091,
+              0.726190768260199
+            ],
+            "pass1": [
+              0.7829425563437191,
+              0.8376011273463265
+            ],
+            "pass3": [
+              0.8771895857746981,
+              0.9180040918163673
+            ],
+            "pass5": [
+              0.9079575120589831,
+              0.9440093978587925
+            ]
+          }
+        },
+        "201-500": {
+          "pages": 631,
+          "reference_characters": 184281,
+          "metrics": {
+            "content_cer": 0.03706296362620129,
+            "exact": 0.5388272583201268,
+            "pass1": 0.757527733755943,
+            "pass3": 0.8652931854199684,
+            "pass5": 0.8969889064976229
+          },
+          "ci95": {
+            "content_cer": [
+              0.020775583901530746,
+              0.062359300390864014
+            ],
+            "exact": [
+              0.491444331052196,
+              0.5888764852202473
+            ],
+            "pass1": [
+              0.7184403483263762,
+              0.7984451159591195
+            ],
+            "pass3": [
+              0.8366412213740458,
+              0.8920646422820336
+            ],
+            "pass5": [
+              0.8719608550420999,
+              0.9210950080515298
+            ]
+          }
+        },
+        ">500": {
+          "pages": 127,
+          "reference_characters": 93861,
+          "metrics": {
+            "content_cer": 0.05687133101074994,
+            "exact": 0.3700787401574803,
+            "pass1": 0.6535433070866141,
+            "pass3": 0.7480314960629921,
+            "pass5": 0.8031496062992126
+          },
+          "ci95": {
+            "content_cer": [
+              0.032299534793438604,
+              0.08616932423072857
+            ],
+            "exact": [
+              0.2677165354330709,
+              0.4765625
+            ],
+            "pass1": [
+              0.5629399837793999,
+              0.7454585326953748
+            ],
+            "pass3": [
+              0.6608695652173913,
+              0.8266692913385827
+            ],
+            "pass5": [
+              0.7213019443385437,
+              0.8790564516129031
+            ]
+          }
+        }
+      },
+      "by_regions": {
+        "1-5": {
+          "pages": 700,
+          "reference_characters": 49265,
+          "metrics": {
+            "content_cer": 0.01550796711661423,
+            "exact": 0.8,
+            "pass1": 0.8171428571428572,
+            "pass3": 0.8871428571428571,
+            "pass5": 0.9228571428571428
+          },
+          "ci95": {
+            "content_cer": [
+              0.010472627445877899,
+              0.021586273273557003
+            ],
+            "exact": [
+              0.7646115330372196,
+              0.8335907149831742
+            ],
+            "pass1": [
+              0.7824202327327328,
+              0.8495597188225695
+            ],
+            "pass3": [
+              0.8606304638173871,
+              0.9140409635997028
+            ],
+            "pass5": [
+              0.9001316523109099,
+              0.9445215472425488
+            ]
+          }
+        },
+        "6-10": {
+          "pages": 1255,
+          "reference_characters": 162986,
+          "metrics": {
+            "content_cer": 0.019572233197943382,
+            "exact": 0.7059760956175298,
+            "pass1": 0.7880478087649403,
+            "pass3": 0.8972111553784861,
+            "pass5": 0.9322709163346613
+          },
+          "ci95": {
+            "content_cer": [
+              0.01481981512726716,
+              0.025311984010233813
+            ],
+            "exact": [
+              0.6744726119343095,
+              0.7373878521637206
+            ],
+            "pass1": [
+              0.7595041287847193,
+              0.8155388002498515
+            ],
+            "pass3": [
+              0.8766114005209377,
+              0.9159115090918571
+            ],
+            "pass5": [
+              0.9142154318725628,
+              0.9473264166001596
+            ]
+          }
+        },
+        "11-20": {
+          "pages": 675,
+          "reference_characters": 161868,
+          "metrics": {
+            "content_cer": 0.03754911409296464,
+            "exact": 0.5911111111111111,
+            "pass1": 0.7748148148148148,
+            "pass3": 0.8696296296296296,
+            "pass5": 0.8962962962962963
+          },
+          "ci95": {
+            "content_cer": [
+              0.020276179586162763,
+              0.06812816804484538
+            ],
+            "exact": [
+              0.5462620157132887,
+              0.6360857418776299
+            ],
+            "pass1": [
+              0.7394513238137735,
+              0.8102974282129913
+            ],
+            "pass3": [
+              0.8421033022197819,
+              0.8959276018099548
+            ],
+            "pass5": [
+              0.8717117110729832,
+              0.9205397301349325
+            ]
+          }
+        },
+        ">20": {
+          "pages": 202,
+          "reference_characters": 120868,
+          "metrics": {
+            "content_cer": 0.05442300691663633,
+            "exact": 0.3415841584158416,
+            "pass1": 0.6287128712871287,
+            "pass3": 0.7425742574257426,
+            "pass5": 0.801980198019802
+          },
+          "ci95": {
+            "content_cer": [
+              0.03309339954068785,
+              0.07898232629821585
+            ],
+            "exact": [
+              0.26167864845434935,
+              0.4210655314757481
+            ],
+            "pass1": [
+              0.5565508021390374,
+              0.7028336913880067
+            ],
+            "pass3": [
+              0.6715686274509803,
+              0.8095238095238095
+            ],
+            "pass5": [
+              0.7363114629896204,
+              0.8640837683563447
+            ]
+          }
+        }
+      },
+      "full_text": {
+        "pages": 2832,
+        "reference_characters": 571063,
+        "cer": 0.04504056470126764,
+        "exact": 0.5935734463276836,
+        "pass1": 0.72704802259887,
+        "pass3": 0.859816384180791,
+        "pass5": 0.899364406779661,
+        "insertions": 14081,
+        "deletions": 6042,
+        "substitutions": 5598,
+        "output_characters": 579102,
+        "adjacent_repeat_pages": 7,
+        "adjacent_repeat_exact_pages": 0,
+        "adjacent_repeat_edit_share": 0.11613078807200342,
+        "cer_at_least_one_pages": 9,
+        "cer_at_least_one_edit_share": 0.31911667509039304,
+        "source_groups": 1282,
+        "ci95": {
+          "cer": [
+            0.033082346177940126,
+            0.05962386016749513
+          ],
+          "exact": [
+            0.5705335388938433,
+            0.6159038894407907
+          ],
+          "pass1": [
+            0.7066023099540947,
+            0.7474260302169452
+          ],
+          "pass3": [
+            0.8448556017801857,
+            0.8743861353592169
+          ],
+          "pass5": [
+            0.8866905201051624,
+            0.9114512476135284
+          ]
+        }
+      },
+      "api_diagnostics": {
+        "provider_model": "deepseek-v4.1-flash",
+        "response_model": "deepseek-v4-1-flash-261017",
+        "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+        "prompt": "按阅读顺序逐行抄录图中可见文字，每行单独换行。看不清的字不要猜。只输出原文，不要解释或 Markdown。",
+        "protocol_id": "cltw-4096-greedy-v1",
+        "decoding": {
+          "max_new_tokens": 4096,
+          "num_beams": 1,
+          "do_sample": false,
+          "temperature": 0,
+          "thinking": "disabled"
+        },
+        "run_fingerprint": {
+          "index_sha256": "a0d7235279bc463d88761836320482e52bbb4afabb2b98c35930311aa4252db5",
+          "script_sha256": "9b4bc39071173973bc557e074b15215d70cbae10ebdecd76723f147d6e24d310",
+          "concurrency": 8
+        },
+        "refused_pages": 2,
+        "truncated_pages": 1,
+        "non_successful_attempts": 10,
+        "generated_tokens": 393668,
+        "mean_request_seconds": 1.8131981768257213,
+        "p50_request_seconds": 1.3680653619812801,
+        "p95_request_seconds": 4.423139473993797
       }
     },
     {
@@ -11538,10 +12762,18 @@
   ],
   "ranking_inversions": {
     "cer_vs_exact": {
-      "count": 43,
-      "comparisons": 210,
-      "kendall_tau": 0.5904761904761905,
+      "count": 46,
+      "comparisons": 253,
+      "kendall_tau": 0.6363636363636364,
       "pairs": [
+        [
+          "deepseek_v41_flash",
+          "glm53_flash"
+        ],
+        [
+          "deepseek_v41_flash",
+          "qwen3vl_8b"
+        ],
         [
           "deepseekocr",
           "ppocrv2"
@@ -11553,6 +12785,10 @@
         [
           "doubao_seed21_lite",
           "doubao_seed21_turbo"
+        ],
+        [
+          "doubao_seed21_pro",
+          "kimi_k3"
         ],
         [
           "fireredocr",
@@ -11717,10 +12953,18 @@
       ]
     },
     "cer_vs_pass5": {
-      "count": 49,
-      "comparisons": 210,
-      "kendall_tau": 0.5333333333333333,
+      "count": 52,
+      "comparisons": 253,
+      "kendall_tau": 0.5889328063241106,
       "pairs": [
+        [
+          "deepseek_v41_flash",
+          "glmocr"
+        ],
+        [
+          "deepseek_v41_flash",
+          "qwen3vl_8b"
+        ],
         [
           "deepseekocr",
           "ppocrv2"
@@ -11831,6 +13075,10 @@
         ],
         [
           "kimi_k28",
+          "qwen3vl_8b"
+        ],
+        [
+          "kimi_k3",
           "qwen3vl_8b"
         ],
         [
