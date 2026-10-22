@@ -17,38 +17,61 @@
   const percent = (value, digits = 2) => `${(100 * value).toFixed(digits)}%`;
   const integer = (value) => Number(value).toLocaleString("en-US");
   const typeNames = {
-    "OCR pipeline": "OCR 流水线",
-    "OCR model": "OCR 模型",
-    "General model": "通用视觉模型",
-    "Closed model": "闭源视觉模型",
+    "OCR pipeline": "OCR pipeline",
+    "OCR model": "OCR model",
+    "General model": "General VLM",
+    "Closed model": "Hosted API",
   };
   const conditionNames = {
-    "Occluded Scene Text": "遮挡",
-    "Perspective-distorted Scene Text": "透视变形",
-    "Reflective Scene Text": "反光",
-    "Small-scale & Blurry Scene Text": "小字 / 模糊",
-    "Underexposed Scene Text": "低照度",
+    "Complex-background Scene Text": "Complex Background",
+    "Occluded Scene Text": "Occlusion",
+    "Perspective-distorted Scene Text": "Perspective Distortion",
+    "Reflective Scene Text": "Reflection",
+    "Screen-based Scene Text": "Photographed Screens",
+    "Small-scale & Blurry Scene Text": "Small Text and Blur",
+    "Special-material Scene Text": "Special Materials",
+    "Underexposed Scene Text": "Underexposure",
   };
 
   const profiles = [
-    ["doubao", "Doubao", "DB", "api", "豆包系列闭源多模态模型。通过 API 接收完整图像，按统一指令转写可见文字；本页展示当前检查点在真实场景长文本中的整页表现。"],
-    ["kimi", "Kimi", "K", "api", "Kimi K2.8 Preview 的 API 预览版本。本次评测关闭思考，使用完整图像与统一转写指令，观察它对长文本、复杂布局和真实退化的读取表现。"],
-    ["glm53", "GLM", "GL", "api", "GLM 系列闭源视觉模型。通过 API 完成整页文字转写，使用冻结的图像、提示词与评分协议，和其他系统在同一批页面上比较。"],
-    ["glmocr", "GLM-OCR", "GL", "ocr", "面向文字读取的专用模型。使用原生 OCR 入口处理整页图像，在 CLTW 上比较字符准确性、页面完整性和同文退化视图的识别表现。"],
-    ["qwen", "Qwen", "Q", "vision", "Qwen 系列通用视觉语言模型。结合完整图像和文字指令生成转写；不同规模与版本分别评测，保留各自的原生图像处理方式。"],
-    ["paddleocrvl", "PaddleOCR-VL", "P", "ocr", "PaddleOCR 系列视觉语言文字识别模型。以原生 OCR 入口读取完整图像，评测多区域长文本与不同物理拍摄条件下的转写完整性。"],
-    ["firered", "FireRed", "F", "ocr", "面向文字识别的专用模型。使用原生识别入口转写整页内容，并在冻结测试集上统计字符错误、整页成功与退化保持情况。"],
-    ["hunyuan", "HunyuanOCR", "H", "ocr", "混元系列文字识别模型。以完整图像为输入，通过原生 OCR 入口进行转写；本页同时呈现长文本负担、布局复杂度和真实退化下的表现。"],
-    ["ppocr", "PP-OCR", "PP", "pipeline", "文字检测与识别组成的 OCR 流水线。先定位文字区域，再识别并按几何关系组织阅读顺序，评测从完整场景图像到整页转写的处理链。"],
-    ["gotocr", "GOT-OCR", "G", "ocr", "面向 OCR 任务的文字读取模型。使用固定的原生识别入口处理完整页面，在统一评分下比较内容恢复与整页正确性。"],
-    ["deepseek", "DeepSeek-OCR", "D", "ocr", "DeepSeek 系列文字识别模型。本次使用其原生 OCR 入口读取整页图像，记录它在长输出、复杂区域与退化视图中的识别表现。"],
-    ["intern", "InternVL", "IV", "vision", "InternVL 系列通用多模态模型。根据图像和统一指令生成文字转写，观察通用视觉理解能力在完整长文本读取中的表现。"],
-    ["surya", "Surya", "S", "ocr", "面向文字读取的 Surya OCR 系统。使用官方推理入口处理整页图像，按同一套内容评分和配对协议统计识别表现。"],
-    ["ovis", "Ovis", "O", "vision", "Ovis 系列通用视觉语言模型。通过图像与文字指令进行整页转写，在真实长文本场景中观察内容准确性与持续读取的完整性。"],
+    ["doubao", "Doubao", "DB", "doubao.webp", "Doubao is the model family developed by ByteDance's Seed team. The listed Seed 2.1 variants are evaluated through a hosted API with full-page images and the shared CLTW transcription prompt."],
+    ["kimi", "Kimi", "K", "kimi.svg", "Kimi is developed by Moonshot AI. This profile reports the K2.8 Preview API checkpoint, evaluated with thinking disabled and full-page images under the shared CLTW transcription protocol."],
+    ["glm53", "GLM", "GL", "glm.svg", "GLM is developed by Zhipu AI, also known as Z.ai. The listed Flash API checkpoint is evaluated on full-page Chinese text using the shared transcription prompt and scoring protocol."],
+    ["glmocr", "GLM-OCR", "GL", "glmocr.svg", "GLM-OCR is Z.ai's model for reading and parsing text-rich images. CLTW evaluates its recorded local checkpoint on full-page character accuracy, page completeness and paired-view robustness."],
+    ["qwen25", "Qwen2.5-VL", "Q", "qwen25.webp", "Qwen2.5-VL is Alibaba Cloud's vision-language model family. This profile reports the 3B Instruct checkpoint, evaluated on full-page Chinese text with the shared CLTW prompt and scoring protocol."],
+    ["qwen", "Qwen", "Q", "qwen.webp", "Qwen is Alibaba Cloud's model family. The listed vision-language checkpoints receive full-page images and the shared transcription prompt; model versions and sizes are evaluated separately."],
+    ["paddleocrvl", "PaddleOCR-VL", "P", "paddleocr.webp", "PaddleOCR-VL is part of Baidu's PaddlePaddle OCR project. Its recorded local checkpoint is evaluated on complete images, with results grouped by text length, region count and capture condition."],
+    ["firered", "FireRed-OCR", "F", "firered.webp", "FireRed-OCR is developed by Xiaohongshu's Super Intelligence Team. CLTW evaluates the recorded local checkpoint using full-page images and the shared transcription prompt."],
+    ["hunyuan", "HunyuanOCR", "H", "hunyuan.webp", "HunyuanOCR is Tencent's OCR model from the Hunyuan team. CLTW evaluates the recorded local checkpoint using full-page images, including long text, complex layouts and paired capture conditions."],
+    ["ppocr", "PP-OCR", "PP", "paddleocr.webp", "PP-OCR is the text detection and recognition pipeline from Baidu's PaddleOCR project. CLTW evaluates the complete pipeline, including the organization of detected text into page reading order."],
+    ["gotocr", "GOT-OCR", "G", "gotocr.webp", "GOT-OCR 2.0 is the General OCR Theory project from a joint team at StepFun, Megvii, the University of Chinese Academy of Sciences and Tsinghua University. CLTW evaluates its recorded local checkpoint and native plain-text processor."],
+    ["deepseek", "DeepSeek-OCR", "D", "deepseek.svg", "DeepSeek-OCR is DeepSeek's model family for visual text recognition. This profile evaluates the OCR-2 checkpoint using its recorded OCR prompt and the shared full-page CLTW scoring protocol."],
+    ["intern", "InternVL", "IV", "internvl.webp", "InternVL is the vision-language model family led by Shanghai AI Laboratory's OpenGVLab with research collaborators. CLTW evaluates the listed open checkpoint on full-page Chinese transcription."],
+    ["surya", "Surya", "S", "surya.svg", "Surya is Datalab's OCR project, developed by Vikas Paruchuri and the Datalab team. The OCR 2 checkpoint is evaluated using its native full-page inference under the shared CLTW scoring protocol."],
+    ["ovis", "Ovis", "O", "ovis.webp", "Ovis is developed by the research team at Alibaba International Digital Commerce Group. CLTW evaluates the listed vision-language checkpoint with full-page images and the shared transcription prompt."],
   ];
+  // Asset sources are the official project/company logos; each family keeps its own attribution.
+  const developers = {
+    doubao: { company: "ByteDance · Seed", project: "https://seed.bytedance.com/en/seed2_1", source: "https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/deploy/flow/ai_official_website/88329/static/image/footer_brand_logo.a2d9c12f.png", logoName: "ByteDance Seed", wide: true },
+    kimi: { company: "Moonshot AI", project: "https://www.kimi.ai/", source: "https://statics.kimi.ai/moonshot-ai/assets/static/moonshot-ai-wordmark.DeMGOuiG.svg", logoName: "Moonshot AI", wide: true, dark: true },
+    glm53: { company: "Zhipu AI · Z.ai", project: "https://www.zhipuai.cn/en/", source: "https://www.zhipuai.cn/logo-en.svg", logoName: "Zhipu AI", wide: true },
+    glmocr: { company: "Zhipu AI · Z.ai", project: "https://github.com/zai-org/GLM-OCR", source: "https://raw.githubusercontent.com/zai-org/GLM-OCR/main/resources/logo.svg", logoName: "GLM-OCR", wide: true },
+    qwen25: { company: "Alibaba Cloud · Qwen", project: "https://qwenlm.github.io/blog/qwen2.5-vl/", source: "https://qianwen-res.oss-cn-beijing.aliyuncs.com/Qwen2.5-VL/qwen2.5vl_logo.png", logoName: "Qwen2.5-VL", wide: true },
+    qwen: { company: "Alibaba Cloud · Qwen", project: "https://github.com/QwenLM/Qwen3-VL", source: "https://qianwen-res.oss-accelerate.aliyuncs.com/Qwen3-VL/qwen3vllogo.png", logoName: "Qwen3-VL", wide: true },
+    paddleocrvl: { company: "Baidu · PaddlePaddle", project: "https://github.com/PaddlePaddle/PaddleOCR", source: "https://www.paddleocr.ai/latest/version3.x/logo.jpg", logoName: "PaddleOCR", wide: true, dark: true },
+    firered: { company: "Xiaohongshu · Super Intelligence Team", project: "https://github.com/FireRedTeam/FireRed-OCR", source: "https://raw.githubusercontent.com/FireRedTeam/FireRed-OCR/main/assets/logo.png", logoName: "FireRed-OCR", wide: true },
+    hunyuan: { company: "Tencent · Hunyuan", project: "https://github.com/Tencent-Hunyuan/HunyuanOCR", source: "https://cdn-portal.hunyuan.tencent.com/public/static/logo/favicon.png", logoName: "Tencent Hunyuan" },
+    ppocr: { company: "Baidu · PaddlePaddle", project: "https://github.com/PaddlePaddle/PaddleOCR", source: "https://www.paddleocr.ai/latest/version3.x/logo.jpg", logoName: "PaddleOCR", wide: true, dark: true },
+    gotocr: { company: "StepFun · Megvii · University of Chinese Academy of Sciences · Tsinghua University", project: "https://github.com/Ucas-HaoranWei/GOT-OCR2.0", source: "https://raw.githubusercontent.com/Ucas-HaoranWei/GOT-OCR2.0/main/assets/got_logo.png", logoName: "GOT-OCR" },
+    deepseek: { company: "DeepSeek", project: "https://github.com/deepseek-ai/DeepSeek-OCR-2", source: "https://raw.githubusercontent.com/deepseek-ai/DeepSeek-OCR-2/main/assets/logo.svg", logoName: "DeepSeek", wide: true },
+    intern: { company: "Shanghai AI Laboratory · OpenGVLab", project: "https://internvl.github.io/", source: "https://www.shlab.org.cn/static/asset/2025/imgs/logo.webp", logoName: "Shanghai AI Laboratory", wide: true, dark: true },
+    surya: { company: "Datalab", project: "https://github.com/datalab-to/surya", source: "https://www.datalab.to/images/datalab-icon.svg", logoName: "Datalab" },
+    ovis: { company: "Alibaba International Digital Commerce Group", project: "https://github.com/ATH-MaaS/Ovis", source: "https://raw.githubusercontent.com/ATH-MaaS/Ovis/main/docs/ovis_logo.png", logoName: "Ovis", wide: true },
+  };
   const metricNames = {
-    content_cer: "字符错误率", exact: "整页全对率",
-    pass5: "5% 容错通过率", rgs: "退化保持率",
+    content_cer: "Content CER", exact: "Page Exact",
+    pass1: "Pass@1%", pass3: "Pass@3%", pass5: "Pass@5%",
+    rgs: "Correct retention (RGS)", tail: "Worst 1% error share",
   };
 
   function node(tag, className, text) {
@@ -61,7 +84,21 @@
   function profileFor(model) {
     const profile = profiles.find(([prefix]) => model.id.startsWith(prefix));
     if (!profile) throw new Error(`Missing model profile: ${model.id}`);
-    return { family: profile[1], mark: profile[2], image: profile[3], bio: profile[4] };
+    return { family: profile[1], mark: profile[2], image: profile[3], bio: profile[4], ...developers[profile[0]] };
+  }
+
+  function brandIdentity(model, compact = false) {
+    const profile = profileFor(model);
+    const identity = node("div", "brand-identity");
+    const logo = node("img", "brand-logo");
+    logo.src = `assets/brands/${profile.image}`;
+    logo.alt = `${profile.logoName} official logo`;
+    if (profile.wide) logo.classList.add("is-wide");
+    if (profile.dark) logo.classList.add("on-dark");
+    identity.append(logo, node("strong", "brand-family", profile.family),
+      node("span", "brand-company", profile.company));
+    if (!compact) identity.append(node("span", "brand-checkpoint", model.checkpoint));
+    return identity;
   }
 
   function sortedModels(metric = state.sort) {
@@ -178,10 +215,10 @@
 
     const pending = state.data.dataset.excluded_revised_image_pages;
     $("#table-note").textContent = models.length
-      ? `显示 ${models.length} / ${state.data.models.length} 个模型；RGS 使用 ${integer(state.data.dataset.rgs_common_pairs)} 个公共配对。` +
-        (pending ? `${pending} 张换图页待补推理。` : "测试集全部计分。") +
-        "排名按当前指标在全部模型中计算。"
-      : "没有匹配的模型。";
+      ? `Showing ${models.length} / ${state.data.models.length} models; correct retention (RGS) uses ${integer(state.data.dataset.rgs_common_pairs)} common pairs. ` +
+        (pending ? `${pending} pages with revised images await inference. ` : "All test pages are scored. ") +
+        "Ranks are computed across all models for the selected metric."
+      : "No matching models.";
 
     document.querySelectorAll("[data-sort]").forEach((button) => {
       button.dataset.active = String(button.dataset.sort === state.sort);
@@ -199,12 +236,12 @@
     $("#hero-page-count").textContent = `${integer(dataset.scored_test_pages)} PAGES`;
     stats.innerHTML = "";
     [
-      ["完整测试页", integer(dataset.scored_test_pages)],
-      ["参评模型", integer(state.data.models.length)],
-      ["计分字符", integer(dataset.test_reference_characters)],
-      ["同文测试配对", integer(dataset.exact_content_pairs)],
-      ["现场图像", integer(dataset.pages)],
-      ["场景条件", integer(Object.keys(dataset.conditions).length)],
+      ["Scored test pages", integer(dataset.scored_test_pages)],
+      ["Evaluated models", integer(state.data.models.length)],
+      ["Scored reference characters", integer(dataset.test_reference_characters)],
+      ["Identical-content test pairs", integer(dataset.exact_content_pairs)],
+      ["Scene images", integer(dataset.pages)],
+      ["Scene conditions", integer(Object.keys(dataset.conditions).length)],
     ].forEach(([label, value]) => addStat(stats, label, value));
   }
 
@@ -223,7 +260,7 @@
       column.href = modelUrl(model.id);
       column.dataset.type = model.type;
       column.style.setProperty("--height", `${value / maximum * 260}px`);
-      column.setAttribute("aria-label", `${model.name}，${metricNames[state.comparisonMetric]} ${percent(value)}`);
+      column.setAttribute("aria-label", `${model.name}, ${metricNames[state.comparisonMetric]} ${percent(value)}`);
       const body = node("span", "column-body");
       const prism = node("span", "column-prism");
       prism.append(node("span", "column-face"), node("span", "column-top"), node("span", "column-side"));
@@ -232,8 +269,8 @@
       column.append(body, node("span", "column-name", label), node("span", "column-index", String(index + 1).padStart(2, "0")));
       chart.append(column);
     });
-    $("#comparison-note").textContent = `${metricNames[state.comparisonMetric]} · ${models.length} 个已选模型`;
-    $("#comparison-scale").textContent = `标尺从 0 到 ${percent(maximum, 0)} · ${state.comparisonMetric === "content_cer" ? "越低越好" : "越高越好"}`;
+    $("#comparison-note").textContent = `${metricNames[state.comparisonMetric]} · ${models.length} selected models`;
+    $("#comparison-scale").textContent = `Scale: 0 to ${percent(maximum, 0)} · ${state.comparisonMetric === "content_cer" ? "Lower is better" : "Higher is better"}`;
     $("#selection-count").textContent = `${models.length} / ${state.data.models.length}`;
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
       chart.animate([{ opacity: .3 }, { opacity: 1 }], { duration: 420, easing: "ease-out" });
@@ -266,7 +303,7 @@
   function renderHighlights() {
     const target = $("#highlights");
     target.innerHTML = "";
-    [["content_cer", "最低字符错误率"], ["exact", "最高整页全对率"], ["rgs", "最高退化保持率"]]
+    [["content_cer", "Lowest Content CER"], ["exact", "Highest Page Exact"], ["rgs", "Highest correct retention (RGS)"]]
       .forEach(([metric, title]) => {
         const model = sortedModels(metric)[0];
         const card = node("a", "highlight");
@@ -287,17 +324,11 @@
       card.href = modelUrl(model.id);
       card.dataset.type = model.type;
       const art = node("div", "card-image");
-      const image = node("img");
-      image.src = `assets/images/${profile.image}.webp`;
-      image.alt = `${profile.family} 模型概念插画`;
-      image.loading = "lazy";
-      image.width = 900;
-      image.height = 900;
-      art.append(image, node("span", "card-code", `${String(index + 1).padStart(2, "0")} / ${profile.family}`),
+      art.append(brandIdentity(model, true), node("span", "card-code", `${String(index + 1).padStart(2, "0")} / ${profile.family}`),
         node("span", "card-arrow", "↗"));
       const info = node("div", "card-info");
       const score = node("div", "card-score");
-      score.append(node("span", "", "整页全对率"), node("strong", "", percent(model.overall.metrics.exact)));
+      score.append(node("span", "", "Page Exact"), node("strong", "", percent(model.overall.metrics.exact)));
       info.append(typeLabel(model), node("h3", "", model.name), score);
       card.append(art, info);
       gallery.append(card);
@@ -350,7 +381,7 @@
       backdrop.alt = "";
       const image = node("img", "scene-image" + (i === 0 ? " is-active" : ""));
       image.src = scene.src;
-      image.alt = `CLTW 真实样例：${scene.label}`;
+      image.alt = `CLTW scene example: ${scene.label}`;
       backgroundImages.push(backdrop);
       foregroundImages.push(image);
     });
@@ -359,9 +390,10 @@
     const update = () => {
       $("#scene-label").textContent = scenes[index].label;
       $("#scene-counter").textContent = `${String(index + 1).padStart(2, "0")} / ${String(scenes.length).padStart(2, "0")}`;
-      $("#scene-pause").textContent = paused ? "播放" : "暂停";
+      $("#scene-pause").textContent = paused ? "Play" : "Pause";
       $("#scene-pause").setAttribute("aria-pressed", String(paused));
-      $("#hero-example").title = scenes[index].page_id;
+      $("#hero-example").title = `CLTW dataset example: ${scenes[index].label}`;
+      $("#hero-example").dataset.pageId = scenes[index].page_id;
     };
     const advance = () => {
       const next = (index + 1) % scenes.length;
@@ -400,7 +432,7 @@
         row.href = modelUrl(model.id);
         row.setAttribute(
           "aria-label",
-          `${model.name} PagePass@5 ${percent(model.overall.metrics.pass5)}`,
+          `${model.name}, ${metricNames.pass5} ${percent(model.overall.metrics.pass5)}`,
         );
 
         const label = document.createElement("span");
@@ -435,10 +467,10 @@
         row.className = "reliability-row";
         row.dataset.type = model.type;
         row.href = modelUrl(model.id);
-        row.title = `95% CI ${percent(metric.ci95[0])}–${percent(metric.ci95[1])}`;
+        row.title = `95% CI ${percent(metric.ci95[0])} to ${percent(metric.ci95[1])}`;
         row.setAttribute(
           "aria-label",
-          `${model.name} RGS ${percent(metric.rgs)}，95% 置信区间 ${percent(metric.ci95[0])} 至 ${percent(metric.ci95[1])}`,
+          `${model.name}, ${metricNames.rgs} ${percent(metric.rgs)}, 95% confidence interval ${percent(metric.ci95[0])} to ${percent(metric.ci95[1])}`,
         );
 
         const label = document.createElement("span");
@@ -463,18 +495,18 @@
   function renderConfiguration() {
     const { dataset, protocol, models } = state.data;
     addDefinitions($("#generation-config"), [
-      ["测试输入", `${integer(dataset.canonical_test_pages)} 页；当前共同计分 ${integer(dataset.scored_test_pages)} 页`],
-      ["生成上限", `${integer(protocol.max_new_tokens)} tokens`],
-      ["解码", protocol.decoding],
-      ["预测缺失", protocol.prediction_policy],
+      ["Test input", `${integer(dataset.canonical_test_pages)} pages; ${integer(dataset.scored_test_pages)} pages currently scored across all models`],
+      ["Generation limit", `${integer(protocol.max_new_tokens)} tokens`],
+      ["Decoding", protocol.decoding],
+      ["Missing predictions", protocol.prediction_policy],
     ]);
     addDefinitions($("#scoring-config"), [
-      ["主指标", "Page Exact、PagePass@1/3/5"],
-      ["辅助指标", "Content CER、Worst 1% error share"],
-      ["文本处理", protocol.scoring],
-      ["置信区间", protocol.confidence_intervals],
-      ["标签审计", protocol.reference_audit],
-      ["配对审计", protocol.pairing_audit],
+      ["Primary metrics", "Page Exact (page CER = 0); Pass@1%/3%/5% (page CER <= 1%/3%/5%, respectively)"],
+      ["Secondary metrics", "Content CER; Worst 1% error share"],
+      ["Text normalization", protocol.scoring],
+      ["Confidence intervals", protocol.confidence_intervals],
+      ["Reference audit", protocol.reference_audit],
+      ["Pairing audit", protocol.pairing_audit],
     ]);
     $("#primary-prompt").textContent = protocol.primary_prompt;
 
@@ -579,20 +611,27 @@
     const profile = profileFor(model);
     const ordered = sortedModels("content_cer");
     const rank = ordered.findIndex((item) => item.id === model.id);
-    $("#model-rank").textContent = `字符错误率排名 ${rank + 1} / ${ordered.length}`;
+    $("#model-rank").textContent = `Content CER rank ${rank + 1} / ${ordered.length}`;
     $("#model-type").dataset.type = model.type;
     $("#model-art").dataset.type = model.type;
     $("#model-bio").textContent = profile.bio;
-    $("#model-image").src = `assets/images/${profile.image}.webp`;
-    $("#model-image").alt = `${profile.family} 模型概念插画`;
-    $("#art-monogram").textContent = profile.mark;
-    $("#art-family").textContent = profile.family;
+    $("#model-identity").replaceChildren(...brandIdentity(model).children);
+    $("#art-family").textContent = profile.logoName;
+    $("#model-source-links").replaceChildren(...[
+      ["Official project ↗", profile.project], ["Logo source ↗", profile.source],
+    ].map(([text, href]) => {
+      const link = node("a", "", text);
+      link.href = href;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      return link;
+    }));
     $("#model-tags").replaceChildren(...[
-      typeNames[model.type], "完整图像输入", `${integer(model.overall.pages)} 页冻结测试`,
+      typeNames[model.type], "Full-image input", `${integer(model.overall.pages)} frozen test pages`,
     ].map((text) => node("span", "", text)));
     const navigation = $("#profile-navigation");
     navigation.innerHTML = "";
-    [[rank - 1, "← 上一个模型"], [rank + 1, "下一个模型 →"]].forEach(([i, title]) => {
+    [[rank - 1, "← Previous model"], [rank + 1, "Next model →"]].forEach(([i, title]) => {
       if (!ordered[i]) return;
       const link = node("a", "", title);
       link.href = modelUrl(ordered[i].id);
@@ -602,48 +641,48 @@
     const long = model.by_length[">500"];
     const gap = model.paired.degraded_minus_normal_exact;
     $("#model-observation").replaceChildren(
-      node("strong", "", "本次测试观察"),
-      node("p", "", `超过 500 字的 ${integer(long.pages)} 页中，整页全对率为 ${percent(long.metrics.exact)}。` +
-        `同文配对中，退化视图的整页全对率比正常视图${gap < 0 ? "低" : "高"} ${(Math.abs(gap) * 100).toFixed(2)} 个百分点。`),
+      node("strong", "", "Evaluation observations"),
+      node("p", "", `Across ${integer(long.pages)} pages with more than 500 characters, Page Exact is ${percent(long.metrics.exact)}. ` +
+        `For identical-content pairs, Page Exact on degraded views is ${(Math.abs(gap) * 100).toFixed(2)} percentage points ${gap < 0 ? "lower" : "higher"} than on normal views.`),
     );
 
     const stats = $("#model-stats");
     stats.innerHTML = "";
     [
-      ["字符错误率", percent(model.overall.metrics.content_cer)],
-      ["整页全对率", percent(model.overall.metrics.exact)],
-      ["1% 容错通过率", percent(model.overall.metrics.pass1)],
-      ["5% 容错通过率", percent(model.overall.metrics.pass5)],
-      ["退化保持率", percent(model.rgs.all_conditions.rgs)],
-      ["最差 1% 错误占比", percent(model.worst_one_percent_edit_share)],
+      [metricNames.content_cer, percent(model.overall.metrics.content_cer)],
+      [metricNames.exact, percent(model.overall.metrics.exact)],
+      [metricNames.pass1, percent(model.overall.metrics.pass1)],
+      [metricNames.pass5, percent(model.overall.metrics.pass5)],
+      [metricNames.rgs, percent(model.rgs.all_conditions.rgs)],
+      [metricNames.tail, percent(model.worst_one_percent_edit_share)],
     ].forEach(([label, value]) => addStat(stats, label, value));
 
     const inference = model.inference;
     addDefinitions($("#model-config"), [
-      ["模型 ID", model.id],
-      ["检查点 / API", model.checkpoint],
-      ["推理方式", inference.method],
-      ["生成上限", inference.max_new_tokens ? `${integer(inference.max_new_tokens)} tokens` : "Native output"],
-      ["采样", inference.do_sample === false ? "Disabled" : "Model default"],
-      ["Beam", inference.num_beams == null ? "Model default" : String(inference.num_beams)],
+      ["Model ID", model.id],
+      ["Checkpoint / API", model.checkpoint],
+      ["Inference method", inference.method],
+      ["Generation limit", inference.max_new_tokens ? `${integer(inference.max_new_tokens)} tokens` : "Native output"],
+      ["Sampling", inference.do_sample === false ? "Disabled" : "Model default"],
+      ["Beam count", inference.num_beams == null ? "Model default" : String(inference.num_beams)],
       ["Temperature", inference.temperature == null ? "Model default" : String(inference.temperature)],
       ["Thinking", inference.thinking || "Not applicable"],
-      ...(inference.base_url ? [["API 地址", inference.base_url]] : []),
+      ...(inference.base_url ? [["API URL", inference.base_url]] : []),
       ...(model.full_text ? [
-        ["含英文与标点 CER", percent(model.full_text.cer)],
-        ["重复片段告警", `${integer(model.full_text.adjacent_repeat_pages)} 页`],
+        ["Full-text CER (including Latin letters and punctuation)", percent(model.full_text.cer)],
+        ["Adjacent repetition alerts", `${integer(model.full_text.adjacent_repeat_pages)} pages`],
       ] : []),
       ...(model.api_diagnostics ? [
-        ["接口拒答", `${integer(model.api_diagnostics.refused_pages)} 页`],
-        ["触及生成上限", `${integer(model.api_diagnostics.truncated_pages)} 页`],
+        ["API refusals", `${integer(model.api_diagnostics.refused_pages)} pages`],
+        ["Generation limit reached", `${integer(model.api_diagnostics.truncated_pages)} pages`],
       ] : []),
       [
-        "RGS 95% 区间",
-        `${percent(model.rgs.all_conditions.ci95[0])}–${percent(model.rgs.all_conditions.ci95[1])}`,
+        "Correct retention (RGS) 95% CI",
+        `${percent(model.rgs.all_conditions.ci95[0])} to ${percent(model.rgs.all_conditions.ci95[1])}`,
       ],
       [
-        "RGS 样本",
-        `${integer(model.rgs.all_conditions.retained_pairs)} / ${integer(model.rgs.all_conditions.normal_correct_pairs)} 个正常图正确配对保持全对`,
+        "Correct retention (RGS) sample",
+        `${integer(model.rgs.all_conditions.retained_pairs)} / ${integer(model.rgs.all_conditions.normal_correct_pairs)} pairs correct on normal views remain correct on degraded views`,
       ],
     ]);
 
@@ -719,6 +758,6 @@
   }
 
   initialize().catch((error) => {
-    document.body.innerHTML = `<main class="section"><div class="section-inner"><h1>数据加载失败</h1><p>${error.message}</p></div></main>`;
+    document.body.innerHTML = `<main class="section"><div class="section-inner"><h1>Failed to load data</h1><p>${error.message}</p></div></main>`;
   });
 })();

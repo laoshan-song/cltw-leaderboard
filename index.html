@@ -1,30 +1,30 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f4ed">
-  <meta name="description" content="CLTW: A Paired Benchmark for Reliable Full-Page Chinese Long-Text Recognition in the Wild. 探索 21 个模型的中文长文本整页识别表现。">
-  <title>CLTW — Chinese Long Text in the Wild</title>
+  <meta name="description" content="The CLTW model leaderboard: full-page Chinese long-text recognition in real scenes, with paired degradation evaluation and reproducible model configurations.">
+  <title>CLTW — Research Model Leaderboard</title>
   <link rel="icon" href="data:,">
   <link rel="preload" as="image" href="assets/images/scene-01.webp">
-  <link rel="stylesheet" href="assets/styles.css?v=20261022b">
+  <link rel="stylesheet" href="assets/styles.css?v=20261022c">
 </head>
 <body>
-  <a class="skip-link" href="#home-view">跳到主要内容</a>
+  <a class="skip-link" href="#home-view">Skip to main content</a>
   <header class="topbar">
     <div class="topbar-inner">
-      <a class="brand" href="./" aria-label="CLTW 首页">
+      <a class="brand" href="./" aria-label="CLTW home">
         <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <strong>CLTW</strong><span class="brand-caption">RESEARCH BENCHMARK</span>
+        <strong>CLTW</strong><span class="brand-caption">MODEL LEADERBOARD</span>
       </a>
-      <nav aria-label="主导航">
-        <a href="./#compare">立体对比</a>
-        <a href="./#leaderboard">榜单</a>
-        <a href="./#models">模型图鉴</a>
-        <a href="./#research">论文</a>
+      <nav aria-label="Main navigation">
+        <a href="./#leaderboard">Leaderboard</a>
+        <a href="./#compare">Compare</a>
+        <a href="./#models">Models</a>
+        <a href="./#research">About CLTW</a>
       </nav>
-      <a class="nav-data" href="data/benchmark.json" aria-label="下载榜单 JSON 数据">开放数据 <span aria-hidden="true">↗</span></a>
+      <a class="nav-data" href="data/benchmark.json" aria-label="Download benchmark JSON">Evaluation data <span aria-hidden="true">↗</span></a>
     </div>
   </header>
 
@@ -34,21 +34,21 @@
       <div class="hero-shade"></div>
       <div class="section-inner hero-inner">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="live-dot"></span> REAL SCENES. FULL PAGES.</p>
+          <p class="eyebrow"><span class="live-dot"></span> CHINESE LONG TEXT IN THE WILD</p>
           <h1 id="snapshot-title">CLTW<span class="hero-title-dot">.</span></h1>
-          <p class="hero-subtitle">中文长文本 · 整页可靠性</p>
+          <p class="hero-subtitle">Full-page OCR. Real-world evidence.</p>
           <p class="hero-paper">A Paired Benchmark for Reliable Full-Page Chinese Long-Text Recognition in the Wild</p>
-          <p class="hero-description">真实场景中的长文本，真实拍摄的退化。<br>从读对一个字，到完整读出一整页。</p>
+          <p class="hero-description">A research leaderboard for complete Chinese text recognition.<br>Compare character accuracy, page completeness and robustness to real capture conditions.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#leaderboard">探索完整榜单 <span aria-hidden="true">↗</span></a>
-            <a class="button button-ghost" href="#compare">进入立体对比 <span aria-hidden="true">↓</span></a>
+            <a class="button button-primary" href="#leaderboard">View leaderboard <span aria-hidden="true">↗</span></a>
+            <a class="button button-ghost" href="#compare">Compare models <span aria-hidden="true">↓</span></a>
           </div>
         </div>
         <figure class="hero-example" id="hero-example">
-          <div class="scene-images" id="hero-scene-images"><img class="scene-image is-active" src="assets/images/scene-01.webp" alt="CLTW 真实样例：特殊材质"></div>
+          <div class="scene-images" id="hero-scene-images"><img class="scene-image is-active" src="assets/images/scene-01.webp" alt="CLTW dataset example: special material"></div>
           <figcaption>
-            <div><span>CLTW 真实样例</span><strong id="scene-label">特殊材质</strong></div>
-            <div class="scene-controls"><span id="scene-counter">01 / 08</span><button type="button" id="scene-pause" aria-pressed="false" aria-label="暂停或播放背景样例轮播">暂停</button><button type="button" id="scene-next" aria-label="下一张数据集样例">→</button></div>
+            <div><span>CLTW DATASET EXAMPLE</span><strong id="scene-label">Special material</strong></div>
+            <div class="scene-controls"><span id="scene-counter">01 / 08</span><button type="button" id="scene-pause" aria-pressed="false" aria-label="Pause or resume dataset examples">Pause</button><button type="button" id="scene-next" aria-label="Next dataset example">→</button></div>
           </figcaption>
         </figure>
         <div class="hero-stamp"><span class="live-dot"></span> FROZEN TEST SET <span id="hero-page-count">2,832 PAGES</span></div>
@@ -66,44 +66,44 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow"><span class="section-number">01 /</span> PERFORMANCE IN PERSPECTIVE</p>
-            <h2 id="compare-title">把模型表现，放在一起看。</h2>
-            <p class="section-description">切换指标、选择模型，探索字符准确性与整页可靠性的差别。</p>
+            <h2 id="compare-title">Compare full-page performance.</h2>
+            <p class="section-description">Select a metric and a set of models. All values use the same frozen evaluation set.</p>
           </div>
           <div class="comparison-controls">
-            <label class="metric-select"><span class="sr-only">对比指标</span>
+            <label class="metric-select"><span class="sr-only">Comparison metric</span>
               <select id="comparison-metric">
-                <option value="pass5">5% 容错通过率 ↑</option>
-                <option value="exact">整页全对率 ↑</option>
-                <option value="rgs">退化保持率 ↑</option>
-                <option value="content_cer">字符错误率 ↓</option>
+                <option value="pass5">Pass@5% ↑</option>
+                <option value="exact">Page Exact ↑</option>
+                <option value="rgs">Correct retention ↑</option>
+                <option value="content_cer">Content CER ↓</option>
               </select>
             </label>
-            <div class="segments view-switch" id="view-switch" aria-label="图表视角">
-              <button type="button" data-view="3d" aria-pressed="true">立体</button>
-              <button type="button" data-view="flat" aria-pressed="false">平面</button>
+            <div class="segments view-switch" id="view-switch" aria-label="Chart view">
+              <button type="button" data-view="3d" aria-pressed="true">3D</button>
+              <button type="button" data-view="flat" aria-pressed="false">Flat</button>
             </div>
           </div>
         </div>
         <div class="comparison-panel" id="comparison-panel" data-view="3d">
           <div class="comparison-meta">
             <span class="chart-kicker" id="comparison-note"></span>
-            <div class="chart-legend" aria-label="模型类型图例">
-              <span data-type="Closed model">闭源</span><span data-type="General model">通用</span>
-              <span data-type="OCR model">OCR</span><span data-type="OCR pipeline">流水线</span>
+            <div class="chart-legend" aria-label="Model type legend">
+              <span data-type="Closed model">Hosted API</span><span data-type="General model">General VLM</span>
+              <span data-type="OCR model">OCR model</span><span data-type="OCR pipeline">Pipeline</span>
             </div>
           </div>
           <div class="comparison-scroll">
             <div class="comparison-plot">
               <div class="chart-axis" id="comparison-axis" aria-hidden="true"></div>
               <div class="perspective-floor" aria-hidden="true"></div>
-              <div class="comparison-bars" id="comparison-bars" aria-label="模型指标对比"></div>
+              <div class="comparison-bars" id="comparison-bars" aria-label="Model performance comparison"></div>
             </div>
           </div>
           <div class="comparison-bottom">
-            <span id="comparison-scale"></span><span>点击柱体查看模型详情 <span aria-hidden="true">↗</span></span>
+            <span id="comparison-scale"></span><span>Select a bar to open the model profile <span aria-hidden="true">↗</span></span>
           </div>
           <details class="model-picker">
-            <summary>选择参与对比的模型 <span id="selection-count"></span><span aria-hidden="true">＋</span></summary>
+            <summary>Select models <span id="selection-count"></span><span aria-hidden="true">＋</span></summary>
             <div id="comparison-models" class="picker-grid"></div>
           </details>
         </div>
@@ -116,51 +116,57 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow"><span class="section-number">02 /</span> THE FULL LEADERBOARD</p>
-            <h2 id="leaderboard-title">每个模型，都有据可查。</h2>
+            <h2 id="leaderboard-title">The CLTW model leaderboard.</h2>
+            <p class="section-description">Full-image input, native inference and a shared scoring protocol. Open a model for detailed results.</p>
           </div>
-          <p class="scope-label" id="leaderboard-scope">完整测试集 · 2,832 页</p>
+          <p class="scope-label" id="leaderboard-scope">2,832 TEST PAGES</p>
         </div>
         <div class="table-toolbar">
-          <div class="segments" id="type-filter" aria-label="模型类型">
-            <button type="button" data-type="all" aria-pressed="true">全部模型</button>
-            <button type="button" data-type="Closed model" aria-pressed="false">闭源</button>
-            <button type="button" data-type="General model" aria-pressed="false">通用视觉</button>
-            <button type="button" data-type="OCR model" aria-pressed="false">OCR 模型</button>
-            <button type="button" data-type="OCR pipeline" aria-pressed="false">OCR 流水线</button>
+          <div class="segments" id="type-filter" aria-label="Model type filter">
+            <button type="button" data-type="all" aria-pressed="true">All models</button>
+            <button type="button" data-type="Closed model" aria-pressed="false">Hosted API</button>
+            <button type="button" data-type="General model" aria-pressed="false">General VLM</button>
+            <button type="button" data-type="OCR model" aria-pressed="false">OCR model</button>
+            <button type="button" data-type="OCR pipeline" aria-pressed="false">OCR pipeline</button>
           </div>
-          <label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">搜索模型</span>
-            <input id="model-search" type="search" placeholder="搜索模型或检查点…" autocomplete="off">
+          <label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">Search models</span>
+            <input id="model-search" type="search" placeholder="Search model or checkpoint…" autocomplete="off">
           </label>
         </div>
         <div class="table-shell">
           <table class="leaderboard-table">
             <thead>
               <tr>
-                <th class="rank-column" scope="col">排名</th>
-                <th class="model-column" scope="col">模型 / 检查点</th>
-                <th scope="col">类型</th>
-                <th scope="col"><button type="button" data-sort="content_cer">字符错误率 ↓</button></th>
-                <th scope="col"><button type="button" data-sort="exact">整页全对 ↑</button></th>
-                <th scope="col"><button type="button" data-sort="pass1">1% 容错 ↑</button></th>
-                <th scope="col"><button type="button" data-sort="pass3">3% 容错 ↑</button></th>
-                <th scope="col"><button type="button" data-sort="pass5">5% 容错 ↑</button></th>
-                <th scope="col"><button type="button" data-sort="rgs" title="正常图全对后，同文退化图仍全对的比例">退化保持率 ↑</button></th>
-                <th scope="col"><button type="button" data-sort="tail" title="错误最多的 1% 页面占全部字符编辑错误的比例">最差 1% ↓</button></th>
+                <th class="rank-column" scope="col">Rank</th>
+                <th class="model-column" scope="col">Model / checkpoint</th>
+                <th scope="col">Type</th>
+                <th scope="col"><button type="button" data-sort="content_cer" title="Character edit errors divided by the total number of reference characters under content normalization">Content CER ↓</button></th>
+                <th scope="col"><button type="button" data-sort="exact" title="Proportion of pages transcribed exactly under content normalization">Page Exact ↑</button></th>
+                <th scope="col"><button type="button" data-sort="pass1" title="Proportion of pages with character error rate at most 1%">Pass@1% ↑</button></th>
+                <th scope="col"><button type="button" data-sort="pass3" title="Proportion of pages with character error rate at most 3%">Pass@3% ↑</button></th>
+                <th scope="col"><button type="button" data-sort="pass5" title="Proportion of pages with character error rate at most 5%">Pass@5% ↑</button></th>
+                <th scope="col"><button type="button" data-sort="rgs" title="Among same-content normal views read exactly, the proportion whose degraded views remain exact">Retention ↑</button></th>
+                <th scope="col"><button type="button" data-sort="tail" title="Share of all character edit errors contributed by the worst 1% of pages">Worst 1% ↓</button></th>
               </tr>
             </thead>
             <tbody id="leaderboard-rows"></tbody>
           </table>
         </div>
         <p class="table-note" id="table-note" aria-live="polite"></p>
+        <div class="metric-guide" aria-label="Metric definitions">
+          <p><strong>Character accuracy</strong> Content CER counts character edits under content normalization. Latin letters and sentence punctuation are excluded. Lower is better.</p>
+          <p><strong>Page completeness</strong> Page Exact requires an exact match under content normalization. Pass@5% counts pages with a content character error rate of at most 5%.</p>
+          <p><strong>Paired robustness</strong> Correct retention (RGS) measures how often a normal view read exactly remains exact under real degradation.</p>
+        </div>
         <details class="reliability-details" id="rgs">
-          <summary>展开各模型的可靠性对比 <span aria-hidden="true">＋</span></summary>
+          <summary>Explore paired robustness and page completeness <span aria-hidden="true">＋</span></summary>
           <div class="reliability-grid">
             <article class="chart-card">
-              <h3>退化保持率</h3><p class="metric-description">正常图上全对的页面，换成同文退化图后仍保持全对的比例。</p>
+              <h3>Correct retention</h3><p class="metric-description">The fraction of exact normal views whose same-content degraded views remain exact.</p>
               <div class="reliability-chart" id="rgs-chart"></div>
             </article>
             <article class="chart-card">
-              <h3>5% 容错通过率</h3><p class="metric-description">页面字符错误率不超过 5% 的比例。</p>
+              <h3>Pass@5%</h3><p class="metric-description">The fraction of pages with a character error rate of at most 5%.</p>
               <div class="reliability-chart" id="reliability-chart"></div>
             </article>
           </div>
@@ -171,10 +177,10 @@
     <section class="section models-section" id="models" aria-labelledby="models-title">
       <div class="section-inner">
         <div class="section-heading">
-          <div><p class="eyebrow"><span class="section-number">03 /</span> MEET THE MODELS</p><h2 id="models-title">模型图鉴。</h2><p class="section-description">从专用文字识别到通用视觉模型，打开一张卡片，了解它的整页表现。</p></div>
-          <div class="gallery-controls"><button type="button" id="gallery-prev" aria-label="上一组模型">←</button><button type="button" id="gallery-next" aria-label="下一组模型">→</button></div>
+          <div><p class="eyebrow"><span class="section-number">03 /</span> MEET THE MODELS</p><h2 id="models-title">Models &amp; research teams.</h2><p class="section-description">Explore each model family, its developer and its CLTW evaluation profile.</p></div>
+          <div class="gallery-controls"><button type="button" id="gallery-prev" aria-label="Previous models">←</button><button type="button" id="gallery-next" aria-label="Next models">→</button></div>
         </div>
-        <div class="model-gallery" id="model-gallery" aria-label="模型介绍卡片"></div>
+        <div class="model-gallery" id="model-gallery" aria-label="Model profiles"></div>
       </div>
     </section>
 
@@ -183,23 +189,23 @@
         <div class="research-label"><p class="eyebrow"><span class="section-number">04 /</span> THE RESEARCH</p><span class="paper-symbol" aria-hidden="true">CL<br>TW.</span></div>
         <div class="research-copy">
           <h2 id="paper-title">CLTW: A Paired Benchmark for Reliable Full-Page Chinese Long-Text Recognition in the Wild</h2>
-          <p>面向整页可靠性的自然场景中文长文本配对基准。保留真实载体上的完整文本，比较同源内容在正常与退化视图中的读取表现。</p>
-          <div class="research-facts"><span>14,183 张现场图像</span><span>8 类场景条件</span><span>6,105 对现场视图</span></div>
-          <a class="text-link" href="#configuration">查看评测协议 <span aria-hidden="true">↗</span></a>
+          <p>CLTW preserves complete Chinese text on real-world signs, exhibits and other text-bearing surfaces. Normal and degraded views of the same content support evaluation of page completeness and robustness to physical capture conditions. This companion leaderboard provides checkpoint-specific results and evaluation configurations.</p>
+          <div class="research-facts"><span>14,183 field images</span><span>8 scene conditions</span><span>6,105 field-view pairs</span></div>
+          <a class="text-link" href="#configuration">Evaluation protocol <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
 
     <section class="section config-section" id="configuration" aria-labelledby="configuration-title">
       <div class="section-inner">
-        <div class="section-heading"><div><p class="eyebrow">EVALUATION, EXPLAINED</p><h2 id="configuration-title">分数背后的评测协议。</h2></div><a class="text-link" href="data/benchmark.json">下载完整数据 ↗</a></div>
+        <div class="section-heading"><div><p class="eyebrow">EVALUATION, EXPLAINED</p><h2 id="configuration-title">Evaluation protocol.</h2></div><a class="text-link" href="data/benchmark.json">Download evaluation data ↗</a></div>
         <details class="protocol-details">
-          <summary>输入、评分与审计记录 <span aria-hidden="true">＋</span></summary>
+          <summary>Inputs, scoring and audit records <span aria-hidden="true">＋</span></summary>
           <div class="config-grid">
-            <article><h3>输入与生成</h3><dl id="generation-config" class="definition-list"></dl></article>
-            <article><h3>评分协议</h3><dl id="scoring-config" class="definition-list"></dl></article>
-            <article class="prompt-panel"><h3>标准提示词</h3><pre id="primary-prompt"></pre></article>
-            <article class="prompt-exceptions-panel"><h3>原生提示词例外</h3><div class="compact-table-shell"><table class="compact-table"><thead><tr><th>模型</th><th>实际提示词</th></tr></thead><tbody id="prompt-exceptions"></tbody></table></div></article>
+            <article><h3>Input &amp; generation</h3><dl id="generation-config" class="definition-list"></dl></article>
+            <article><h3>Scoring &amp; audits</h3><dl id="scoring-config" class="definition-list"></dl></article>
+            <article class="prompt-panel"><h3>Standard prompt</h3><pre id="primary-prompt" lang="zh-CN"></pre></article>
+            <article class="prompt-exceptions-panel"><h3>Native prompt exceptions</h3><div class="compact-table-shell"><table class="compact-table"><thead><tr><th>Model</th><th>Actual prompt</th></tr></thead><tbody id="prompt-exceptions"></tbody></table></div></article>
           </div>
         </details>
       </div>
@@ -209,7 +215,7 @@
   <main id="model-view" hidden>
     <section class="model-header" aria-labelledby="model-name">
       <div class="section-inner">
-        <a class="back-link" href="./#leaderboard"><span aria-hidden="true">←</span> 返回完整榜单</a>
+        <a class="back-link" href="./#leaderboard"><span aria-hidden="true">←</span> Back to leaderboard</a>
         <div class="model-profile-grid">
           <div class="model-profile-copy">
             <p class="eyebrow">MODEL PROFILE <span class="profile-rank" id="model-rank"></span></p>
@@ -217,13 +223,13 @@
             <h1 id="model-name"></h1>
             <p class="model-checkpoint" id="model-checkpoint"></p>
             <p class="model-bio" id="model-bio"></p>
+            <div class="model-source-links" id="model-source-links"></div>
             <div class="model-tags" id="model-tags"></div>
             <div class="profile-navigation" id="profile-navigation"></div>
           </div>
           <figure class="model-art" id="model-art">
-            <img id="model-image" alt="" width="900" height="900">
-            <div class="art-grid" aria-hidden="true"></div><span class="art-monogram" id="art-monogram" aria-hidden="true"></span>
-            <figcaption><span>VISUAL MODEL ATLAS</span><span id="art-family"></span></figcaption>
+            <div id="model-identity" class="brand-identity"></div>
+            <figcaption><span>MODEL / DEVELOPER IDENTITY</span><span id="art-family"></span></figcaption>
           </figure>
         </div>
         <dl class="snapshot-stats model-stats" id="model-stats"></dl>
@@ -234,26 +240,26 @@
 
     <section class="section" aria-labelledby="length-title">
       <div class="section-inner">
-        <div class="section-heading"><div><p class="eyebrow">READING LOAD</p><h2 id="length-title">文本越长，表现如何？</h2><p class="section-description">按每页计分字数分组，观察完整读取的难度变化。</p></div></div>
-        <div class="table-shell"><table class="detail-table"><thead><tr><th>字数区间</th><th>页面数</th><th>字符错误率 ↓</th><th>整页全对 ↑</th><th>5% 容错 ↑</th></tr></thead><tbody id="length-rows"></tbody></table></div>
+        <div class="section-heading"><div><p class="eyebrow">READING LOAD</p><h2 id="length-title">Performance across text lengths.</h2><p class="section-description">Pages grouped by the number of scored reference characters.</p></div></div>
+        <div class="table-shell"><table class="detail-table"><thead><tr><th>Characters / page</th><th>Pages</th><th>Content CER ↓</th><th>Page Exact ↑</th><th>Pass@5% ↑</th></tr></thead><tbody id="length-rows"></tbody></table></div>
       </div>
     </section>
     <section class="section" aria-labelledby="region-title">
       <div class="section-inner">
-        <div class="section-heading"><div><p class="eyebrow">LAYOUT COMPLEXITY</p><h2 id="region-title">布局越复杂，表现如何？</h2><p class="section-description">按文本区域数分组，比较多区域页面的识别表现。</p></div></div>
-        <div class="table-shell"><table class="detail-table"><thead><tr><th>区域数</th><th>页面数</th><th>字符错误率 ↓</th><th>整页全对 ↑</th><th>5% 容错 ↑</th></tr></thead><tbody id="region-rows"></tbody></table></div>
+        <div class="section-heading"><div><p class="eyebrow">LAYOUT COMPLEXITY</p><h2 id="region-title">Performance across region counts.</h2><p class="section-description">Pages grouped by the number of annotated text regions.</p></div></div>
+        <div class="table-shell"><table class="detail-table"><thead><tr><th>Regions / page</th><th>Pages</th><th>Content CER ↓</th><th>Page Exact ↑</th><th>Pass@5% ↑</th></tr></thead><tbody id="region-rows"></tbody></table></div>
       </div>
     </section>
     <section class="section" aria-labelledby="condition-title">
       <div class="section-inner">
-        <div class="section-heading"><div><p class="eyebrow">REAL DEGRADATION</p><h2 id="condition-title">同一内容，换一种拍摄条件。</h2><p class="section-description">仅比较具有相同计分文字的正常与退化视图。</p></div></div>
-        <div class="table-shell"><table class="detail-table condition-table"><thead><tr><th>退化类型</th><th>配对数</th><th>正常图全对</th><th>退化图全对</th><th>全对率变化</th><th>字符错误率变化</th></tr></thead><tbody id="condition-rows"></tbody></table></div>
+        <div class="section-heading"><div><p class="eyebrow">REAL DEGRADATION</p><h2 id="condition-title">Same content, different capture conditions.</h2><p class="section-description">Normal and degraded views share the same scored reference. Changes are shown in percentage points (pp).</p></div></div>
+        <div class="table-shell"><table class="detail-table condition-table"><thead><tr><th>Condition</th><th>Pairs</th><th>Normal Exact</th><th>Degraded Exact</th><th>Exact change</th><th>Page CER change</th></tr></thead><tbody id="condition-rows"></tbody></table></div>
       </div>
     </section>
     <section class="section model-config-section">
       <div class="section-inner detail-grid">
-        <article><p class="eyebrow">REPRODUCIBLE SETUP</p><h2>模型配置</h2><dl class="definition-list" id="model-config"></dl></article>
-        <article><p class="eyebrow">ACTUAL INSTRUCTION</p><h2>实际提示词</h2><pre id="model-prompt"></pre></article>
+        <article><p class="eyebrow">REPRODUCIBLE SETUP</p><h2>Model configuration</h2><dl class="definition-list" id="model-config"></dl></article>
+        <article><p class="eyebrow">ACTUAL INSTRUCTION</p><h2>Actual prompt</h2><pre id="model-prompt"></pre></article>
       </div>
     </section>
   </main>
@@ -265,6 +271,6 @@
       <a class="text-link" href="data/benchmark.json">Machine-readable results ↗</a>
     </div>
   </footer>
-  <script src="assets/app.js?v=20261022b" defer></script>
+  <script src="assets/app.js?v=20261022c" defer></script>
 </body>
 </html>
