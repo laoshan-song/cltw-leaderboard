@@ -13,7 +13,7 @@
     cases: null,
     exampleIndex: 0,
     exampleModel: null,
-    showDiff: false,
+    showDiff: true,
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -655,32 +655,47 @@
     const output = example.outputs[state.exampleModel];
     const model = state.data.models.find((item) => item.id === state.exampleModel);
     $("#example-scene").value = String(state.exampleIndex);
+    $("#example-model").value = state.exampleModel;
     if ($("#example-image").getAttribute("src") !== example.src) $("#example-image").src = example.src;
     $("#example-image").alt = `CLTW ${example.label}: ${example.page_id.split("/").pop()}`;
     $("#example-label").textContent = example.label;
     $("#example-page-id").textContent = example.page_id;
     $("#example-model-link").href = modelUrl(model.id);
     $("#example-model-link").title = `${model.name} evaluation`;
+    $("#example-failure").replaceChildren(
+      node("strong", "", example.featured.title),
+      node("p", "", example.featured.description),
+    );
     $("#example-output-status").textContent = output.provider_refused ? "Provider refusal · empty output"
-      : output.differences.every(([tag]) => tag === "equal") ? "Text matches after removing whitespace" : "Text differences present";
+      : output.differences.every(([tag]) => tag === "equal") ? "Text matches after removing whitespace" : example.featured.title;
     $("#example-diff").setAttribute("aria-pressed", String(state.showDiff));
-    $("#example-diff").textContent = state.showDiff ? "Show original text" : "Highlight differences";
+    $("#example-diff").textContent = state.showDiff ? "Hide highlights" : "Highlight differences";
     const reference = $("#example-reference"), prediction = $("#example-output");
     reference.replaceChildren();
     prediction.replaceChildren();
     if (state.showDiff) {
       output.differences.forEach(([tag, left, right]) => {
-        if (left) reference.append(node("span", tag === "equal" ? "" : "diff-removed", left));
-        if (right) prediction.append(node("span", tag === "equal" ? "" : "diff-added", right));
+        const contentChange = tag !== "equal" && /[\p{L}\p{N}]/u.test(left + right);
+        if (left) reference.append(node("span", contentChange ? "diff-removed" : "", left));
+        if (right) prediction.append(node("span", contentChange ? "diff-added" : "", right));
       });
     } else {
       reference.textContent = example.reference;
-      prediction.textContent = output.text || "(Empty output)";
+      prediction.textContent = output.display_text || "(Empty output)";
     }
     reference.scrollTop = prediction.scrollTop = 0;
+    if (state.showDiff && !["Wrong words throughout", "Wrong subject and facts", "Rewritten passage"].includes(example.featured.title)) {
+      requestAnimationFrame(() => [reference, prediction].forEach((container) => {
+        const changes = [...container.querySelectorAll(".diff-removed, .diff-added")]
+          .filter((span) => (span.textContent.match(/[\p{L}\p{N}]/gu) || []).length >= 8)
+          .sort((a, b) => b.textContent.length - a.textContent.length);
+        const target = changes[0];
+        if (target) container.scrollTop += target.getBoundingClientRect().top - container.getBoundingClientRect().top - 20;
+      }));
+    }
     $("#diff-note").textContent = state.showDiff
-      ? "Peach: changed or omitted reference text. Green: changed or added output. Whitespace is ignored; punctuation and Latin letters are retained. This display comparison uses different normalization from benchmark scores."
-      : "Original reference and returned text, including punctuation, line breaks and formatting.";
+      ? "Peach: missing or changed text. Green: added or changed text. Punctuation-only differences stay uncolored. Highlights ignore whitespace; original outputs are included in the download."
+      : "Transcribed text with line breaks. Thinking and HTML wrappers are removed for reading; original outputs are included in the download.";
   }
 
   function initializeImageViewer() {
@@ -785,9 +800,10 @@
     const response = await fetch("data/cases.json");
     if (!response.ok) throw new Error("Recorded examples are unavailable");
     state.cases = await response.json();
-    state.exampleModel = state.data.models[0].id;
+    state.exampleModel = state.cases.examples[0].featured.model;
     $("#example-scene").replaceChildren(...state.cases.examples.map((example, i) => {
-      const option = node("option", "", `${String(i + 1).padStart(2, "0")} · ${example.label}`);
+      const model = state.data.models.find((item) => item.id === example.featured.model);
+      const option = node("option", "", `${model.name} · ${example.featured.title}`);
       option.value = String(i);
       return option;
     }));
@@ -798,18 +814,35 @@
     }));
     $("#example-scene").addEventListener("change", (event) => {
       state.exampleIndex = Number(event.target.value);
+      state.exampleModel = state.cases.examples[state.exampleIndex].featured.model;
+      state.showDiff = true;
       $("#case-search").value = "";
       $("#case-search-status").textContent = "";
       renderExample();
     });
-    $("#example-model").addEventListener("change", (event) => { state.exampleModel = event.target.value; renderExample(); });
+    $("#example-model").addEventListener("change", (event) => {
+      state.exampleModel = event.target.value;
+      state.exampleIndex = state.cases.examples.findIndex((example) => example.featured.model === state.exampleModel);
+      state.showDiff = true;
+      $("#case-search").value = "";
+      $("#case-search-status").textContent = "";
+      renderExample();
+    });
     $("#example-diff").addEventListener("click", () => { state.showDiff = !state.showDiff; renderExample(); });
     $("#case-search").addEventListener("input", (event) => {
       const query = event.target.value.trim();
-      const index = state.cases.examples.findIndex((example) => example.page_id === query || example.page_id.split("/").pop() === query);
+      const matches = state.cases.examples.map((example, i) => ({ example, i }))
+        .filter(({ example }) => example.page_id === query || example.page_id.split("/").pop() === query);
+      const match = matches.find(({ example }) => example.featured.model === state.exampleModel) || matches[0];
+      const index = match?.i ?? -1;
       $("#case-search-status").textContent = !query ? "" : index < 0
-        ? "No exact match in these eight examples. Paste a full page ID or complete filename." : "Exact example found.";
-      if (index >= 0) { state.exampleIndex = index; renderExample(); }
+        ? "No exact match in the selected examples. Paste a full page ID or complete filename." : "Exact example found.";
+      if (index >= 0) {
+        state.exampleIndex = index;
+        state.exampleModel = state.cases.examples[index].featured.model;
+        state.showDiff = true;
+        renderExample();
+      }
     });
     initializeImageViewer();
     renderExample();
