@@ -797,7 +797,7 @@
   }
 
   async function initializeExamples() {
-    const response = await fetch("data/cases.json");
+    const response = await fetch("data/cases.json", { cache: "no-store" });
     if (!response.ok) throw new Error("Recorded examples are unavailable");
     state.cases = await response.json();
     state.exampleModel = state.cases.examples[0].featured.model;
