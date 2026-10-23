@@ -1,0 +1,10 @@
+{
+  "model_id": null,
+  "checkpoint": null,
+  "prompt": null,
+  "image_processing": null,
+  "max_new_tokens": null,
+  "decoding": null,
+  "evaluation_date": null,
+  "reference_used_for_inference": null
+}

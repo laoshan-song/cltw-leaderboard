@@ -14,6 +14,8 @@
     exampleIndex: 0,
     exampleModel: null,
     showDiff: true,
+    research: null,
+    study: "training",
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -386,6 +388,191 @@
       });
     }));
     updateButtons();
+  }
+
+  function studyTable(headers, rows) {
+    const table = node("table", "detail-table");
+    const head = node("thead");
+    const titles = node("tr");
+    headers.forEach((title) => {
+      const th = node("th", "", title);
+      th.scope = "col";
+      titles.append(th);
+    });
+    head.append(titles);
+    const body = node("tbody");
+    rows.forEach((values) => {
+      const row = node("tr");
+      values.forEach((value) => row.append(node("td", "", value)));
+      body.append(row);
+    });
+    table.append(head, body);
+    $("#study-table").replaceChildren(table);
+  }
+
+  function studyBar(label, value, maximum, variant = "") {
+    const row = node("div", `study-bar ${variant}`);
+    row.append(node("span", "study-bar-label", label));
+    const track = node("div", "study-bar-track");
+    const fill = node("span", "study-bar-fill");
+    fill.style.width = `${Math.max(0, Math.min(100, 100 * value / maximum))}%`;
+    track.append(fill);
+    row.append(track, node("span", "study-bar-value", value.toFixed(2) + "%"));
+    return row;
+  }
+
+  function studyReading(title, number, label, paragraphs) {
+    const target = $("#study-interpretation");
+    const key = node("div", "study-key");
+    key.append(node("strong", "", number), node("span", "", label));
+    target.replaceChildren(node("p", "eyebrow", "WHAT THE RESULT SUPPORTS"),
+      node("h3", "", title), key, ...paragraphs.map((text) => node("p", "", text)));
+  }
+
+  function renderResearch() {
+    const data = state.research;
+    const chart = $("#study-chart");
+    chart.replaceChildren();
+    chart.dataset.study = state.study;
+    $("#study-date").textContent = `Research snapshot ${data.snapshot}`;
+    $("#study-tabs").querySelectorAll("button").forEach((button) =>
+      button.setAttribute("aria-pressed", String(button.dataset.study === state.study)));
+    $("#research-provenance").textContent =
+      `${data.dataset_release} · Leaderboard snapshot ${data.leaderboard_snapshot}. ` +
+      "Study values are generated from frozen aggregate files with source hashes; the research repository remains private.";
+
+    if (state.study === "training") {
+      const study = data.training;
+      const [base, normal, real] = study.arms;
+      $("#study-scope").textContent = `${study.model} · ${integer(study.test_pages)} CLTW test pages`;
+      chart.append(node("h3", "", "Content character error rate ↓"),
+        node("p", "study-axis-label", "Same test set · Percentage of reference characters"));
+      study.arms.forEach((arm) => chart.append(studyBar(
+        `${arm.id} · ${arm.label}`, arm.cer_pct, 30, arm.id === "B" ? "is-selected" : "")));
+      $("#study-chart-note").textContent =
+        "B/C/D show the mean of all three training seeds. The original model is a single baseline.";
+      studyReading("Normal-view supervision provides a consistent in-domain gain.",
+        (base.cer_pct - normal.cer_pct).toFixed(2) + " pp",
+        "lower Content-CER after normal-view training", [
+          `${integer(study.training_runs)} training runs and ${integer(study.new_predictions)} new predictions are recorded. Formal arms share ${study.source_groups} sources, ${study.presentations} presentations and ${study.steps} training steps.`,
+          `Adding real degradation increases Page Exact by ${(real.exact_pct - normal.exact_pct).toFixed(2)} percentage points, while Content-CER increases by ${(real.cer_pct - normal.cer_pct).toFixed(2)} points.`,
+        ]);
+      studyTable(["Condition", "Content-CER", "Seed CER range", "Page Exact", "Seed Exact range"],
+        study.arms.map((arm) => [
+          `${arm.id} · ${arm.label}`, arm.cer_pct.toFixed(2) + "%",
+          arm.id === "A" ? "Single baseline" : arm.cer_seed_range_pct.map((v) => v.toFixed(2) + "%").join(" – "),
+          arm.exact_pct.toFixed(2) + "%",
+          arm.id === "A" ? "Single baseline" : arm.exact_seed_range_pct.map((v) => v.toFixed(2) + "%").join(" – "),
+        ]));
+      $("#study-boundary").textContent =
+        `${study.scope} ${study.range_note} CLTW reference text has not undergone complete independent double annotation.`;
+    } else if (state.study === "transfer") {
+      const study = data.transfer;
+      const pooled = study.cohorts.find((cohort) => cohort.id === "combined_lsvt");
+      $("#study-scope").textContent = `${integer(study.source_groups)} sources · Chinese text regions · 256-token limit`;
+      chart.append(node("h3", "", "External region character error rate ↓"),
+        node("p", "study-axis-label", "Original model / CLTW-trained model · Different scoring scope from the leaderboard"));
+      study.cohorts.filter((cohort) => cohort.cohort !== "line").forEach((cohort) => {
+        const group = node("div", "study-transfer-group");
+        group.append(node("h4", "", `${cohort.dataset} · ${cohort.cohort === "confirm" ? "Source-disjoint follow-up" : "Pooled cohorts"} · ${cohort.sources} sources`),
+          studyBar("Original", cohort.raw_cer_pct, 50, "is-baseline"),
+          studyBar("CLTW-trained", cohort.trained_cer_pct, 50, "is-selected"));
+        chart.append(group);
+      });
+      $("#study-chart-note").textContent = "Published boxes locate one Chinese text region per source. All three trained seeds are retained.";
+      studyReading("Transfer gains are concentrated in a few long erroneous outputs.",
+        (100 * pooled.capped_source_gain_fraction).toFixed(1) + "%",
+        `of pooled LSVT edit reduction comes from ${pooled.capped_sources} capped sources`, [
+          "Pooled LSVT improves cumulative CER, while region exact accuracy changes from " +
+            pooled.raw_exact_pct.toFixed(2) + "% to " + pooled.trained_exact_pct.toFixed(2) + "%.",
+          "The source-disjoint LSVT follow-up interval crosses zero. ArT pooled CER increases. A same-budget alternative Chinese training set remains an open comparison.",
+        ]);
+      studyTable(["Dataset / cohort", "Sources", "Original CER", "Trained CER", "Change / 95% interval (pp)", "Original → trained exact"],
+        study.cohorts.map((cohort) => [
+          `${cohort.dataset} / ${{line: "Exploratory", confirm: "Follow-up", combined: "Pooled"}[cohort.cohort]}`,
+          cohort.sources, cohort.raw_cer_pct.toFixed(2) + "%", cohort.trained_cer_pct.toFixed(2) + "%",
+          `${cohort.delta_cer_pp.toFixed(2)} [${cohort.ci95_pp.map((v) => v.toFixed(2)).join(", ")}]`,
+          `${cohort.raw_exact_pct.toFixed(2)}% → ${cohort.trained_exact_pct.toFixed(2)}%`,
+        ]));
+      $("#study-boundary").textContent =
+        `${study.scope} ${study.normalization} Intervals use 5,000 paired source resamples, conditional on three fixed training seeds.`;
+    } else {
+      const study = data.loop_case;
+      $("#study-scope").textContent = `${study.model} · External table · 4-bit weights (NF4)`;
+      chart.append(node("h3", "", "One header. Excessive continuation."),
+        node("p", "study-axis-label", "Occurrences counted in the image and model output"));
+      [
+        ["Visible in the image", study.visible_occurrences, "is-baseline"],
+        ["Repeated in the output", study.output_occurrences, "is-loop"],
+      ].forEach(([label, value, variant]) => {
+        const row = node("div", `study-count ${variant}`);
+        const track = node("div", "study-bar-track");
+        const fill = node("span", "study-bar-fill");
+        fill.style.width = `${100 * value / study.output_occurrences}%`;
+        track.append(fill);
+        row.append(node("span", "", label), node("strong", "", integer(value)), track);
+        chart.append(row);
+      });
+      const methodNames = {
+        raw: "Original Hunyuan output", iterative_deduplicate: "Iterative deduplication",
+        extended_deduplicate: "Extended deduplication", PP_mobile: "Ordinary PP-OCR mobile",
+        physical_confidence_GOT: "Visual-evidence GOT rereading",
+        four_line_chunk_PP_fallback: "Four-line chunks + PP fallback",
+        fresh_full_GOT: "Fresh full-page GOT",
+      };
+      $("#study-chart-note").textContent =
+        `A visually audited case from CC-OCR table photos. Output reached ${integer(study.generated_tokens)} generated tokens.`;
+      studyReading("Natural loops also appear in an independent text-decoder family.",
+        integer(study.output_occurrences) + " repeats",
+        `for a header with ${study.visible_occurrences} visible occurrences`, [
+          "Deduplication removes the repeated continuation but leaves missing page content. Reading the pixels again is needed to recover it.",
+          "Ordinary OCR is the strongest recovery control on this case: " +
+            study.methods.PP_mobile.content_cer_pct.toFixed(2) + "% CER versus " +
+            study.methods.physical_confidence_GOT.content_cer_pct.toFixed(2) + "% for the rereading candidate.",
+        ]);
+      studyTable(["Same-case method", "Character error rate", "Edits", "Page exact"],
+        Object.entries(study.methods).map(([method, result]) => [
+          methodNames[method], result.content_cer_pct.toFixed(2) + "%",
+          integer(result.edits), result.page_exact ? "Yes" : "No",
+        ]));
+      $("#study-boundary").textContent =
+        `${study.scope} Complete-cohort recovery evidence remains ${data.cross_model.full_cohort_gate}; ` +
+        `${data.cross_model.pending_stages} stages are incomplete in this frozen snapshot.`;
+    }
+  }
+
+  async function initializeResearch() {
+    try {
+      const response = await fetch("data/research.json", { cache: "no-store" });
+      if (!response.ok) throw new Error(`Research data HTTP ${response.status}`);
+      state.research = await response.json();
+      $("#study-tabs").addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-study]");
+        if (!button) return;
+        state.study = button.dataset.study;
+        renderResearch();
+      });
+      renderResearch();
+    } catch (error) {
+      $("#study-scope").textContent = "Study data temporarily unavailable";
+      $("#study-boundary").textContent = error.message;
+    }
+  }
+
+  function renderUncertainty(model) {
+    const overallScope = `${integer(model.overall.pages)} pages / ${integer(model.overall.source_groups)} sources`;
+    const pairedScope = `${integer(model.rgs.all_conditions.pairs)} pairs / ${integer(model.rgs.all_conditions.source_groups)} sources`;
+    const rows = ["content_cer", "exact", "pass5"].map((key) => [
+      metricNames[key], model.overall.metrics[key], model.overall.ci95[key], overallScope,
+    ]);
+    rows.push(["Correct retention", model.rgs.all_conditions.rgs,
+      model.rgs.all_conditions.ci95, pairedScope]);
+    $("#uncertainty-rows").replaceChildren(...rows.map(([label, value, interval, scope]) => {
+      const row = node("tr");
+      [label, percent(value), interval.map((v) => percent(v)).join(" – "), scope]
+        .forEach((text) => row.append(node("td", "", text)));
+      return row;
+    }));
   }
 
   function initializeMotion() {
@@ -980,6 +1167,7 @@
       [metricNames.tail, percent(model.worst_one_percent_edit_share)],
     ].forEach(([label, value]) => addStat(stats, label, value));
 
+    renderUncertainty(model);
     const inference = model.inference;
     addDefinitions($("#model-config"), [
       ["Model ID", model.id],
@@ -1037,7 +1225,7 @@
     });
     const issue = new URL($("#submission-link").href);
     issue.searchParams.set("title", "Model evaluation request: [checkpoint]");
-    issue.searchParams.set("body", "Checkpoint / API version:\nEvaluation date:\nPrediction file URL (2,832 pages):\nActual prompt:\nImage preprocessing:\nGeneration limit:\nDecoding / thinking settings:\nDataset release: CLTW-canonical-2026-10-17\nAdditional notes:\n");
+    issue.searchParams.set("body", "Checkpoint / API version:\nModel ID:\nEvaluation date:\nPrediction file URL (2,832 pages with status and actual input image hashes):\nRun metadata file URL:\nActual prompt:\nImage preprocessing:\nGeneration limit:\nDecoding / thinking settings:\nReference text or paired normal image used for inference:\nUnresolved failures / retries:\nDataset release: CLTW-canonical-2026-10-17\nAdditional notes:\n");
     $("#submission-link").href = issue.href;
     $("#comparison-all").addEventListener("click", () => {
       state.selected = new Set(state.data.models.map((model) => model.id));
@@ -1102,6 +1290,7 @@
     initializeMotion();
     await initializeScenes();
     await initializeExamples();
+    await initializeResearch();
   }
 
   initialize().catch((error) => {

@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "snapshot": "2026-10-24",
+  "dataset_release": "CLTW-canonical-2026-10-17",
+  "leaderboard_snapshot": "2026-10-22",
+  "training": {
+    "model": "Qwen3-VL-2B-Instruct",
+    "test_pages": 2832,
+    "training_runs": 18,
+    "new_predictions": 37200,
+    "source_groups": 400,
+    "presentations": 800,
+    "steps": 200,
+    "seeds": [
+      20261031,
+      20261032,
+      20261033
+    ],
+    "arms": [
+      {
+        "id": "A",
+        "label": "Original model",
+        "cer_pct": 24.301850351625394,
+        "exact_pct": 58.89830508474576,
+        "cer_seed_range_pct": [
+          24.301850351625394,
+          24.301850351625394
+        ],
+        "exact_seed_range_pct": [
+          58.89830508474576,
+          58.89830508474576
+        ],
+        "seeds": [
+          {
+            "run": "A",
+            "cer_pct": 24.301850351625394,
+            "exact_pct": 58.89830508474576
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "label": "CLTW normal views",
+        "cer_pct": 11.297401076526588,
+        "exact_pct": 63.35922787193974,
+        "cer_seed_range_pct": [
+          10.77119197069822,
+          11.784349892017367
+        ],
+        "exact_seed_range_pct": [
+          63.1002824858757,
+          63.62994350282486
+        ],
+        "seeds": [
+          {
+            "run": "B_20261031",
+            "cer_pct": 11.33666136686418,
+            "exact_pct": 63.62994350282486
+          },
+          {
+            "run": "B_20261032",
+            "cer_pct": 11.784349892017367,
+            "exact_pct": 63.347457627118644
+          },
+          {
+            "run": "B_20261033",
+            "cer_pct": 10.77119197069822,
+            "exact_pct": 63.1002824858757
+          }
+        ]
+      },
+      {
+        "id": "C",
+        "label": "Normal + real degradation",
+        "cer_pct": 19.527583552699365,
+        "exact_pct": 64.05367231638418,
+        "cer_seed_range_pct": [
+          16.917413992690715,
+          24.0297219926988
+        ],
+        "exact_seed_range_pct": [
+          63.70056497175142,
+          64.40677966101694
+        ],
+        "seeds": [
+          {
+            "run": "C_20261031",
+            "cer_pct": 16.917413992690715,
+            "exact_pct": 64.40677966101694
+          },
+          {
+            "run": "C_20261032",
+            "cer_pct": 17.635614672708577,
+            "exact_pct": 63.70056497175142
+          },
+          {
+            "run": "C_20261033",
+            "cer_pct": 24.0297219926988,
+            "exact_pct": 64.05367231638418
+          }
+        ]
+      },
+      {
+        "id": "D",
+        "label": "Normal + synthetic degradation",
+        "cer_pct": 16.65350133774557,
+        "exact_pct": 63.60640301318268,
+        "cer_seed_range_pct": [
+          14.18320077092934,
+          19.595262097792467
+        ],
+        "exact_seed_range_pct": [
+          63.31214689265536,
+          64.15960451977402
+        ],
+        "seeds": [
+          {
+            "run": "D_20261031",
+            "cer_pct": 16.182041144514905,
+            "exact_pct": 64.15960451977402
+          },
+          {
+            "run": "D_20261032",
+            "cer_pct": 19.595262097792467,
+            "exact_pct": 63.347457627118644
+          },
+          {
+            "run": "D_20261033",
+            "cer_pct": 14.18320077092934,
+            "exact_pct": 63.31214689265536
+          }
+        ]
+      }
+    ],
+    "scope": "Repeated evaluation of the previously inspected CLTW test set.",
+    "range_note": "Ranges show min/max across three training seeds, not confidence intervals."
+  },
+  "transfer": {
+    "model": "Qwen3-VL-2B-Instruct",
+    "task": "Published-box-assisted Chinese region recognition; one region per source.",
+    "normalization": "NFKC and whitespace removal; Latin letters, case and punctuation retained.",
+    "generation_limit": 256,
+    "source_groups": 613,
+    "outputs": 2452,
+    "bootstrap": "5000 paired source resamples; seed20261023; conditional on three fixed training seeds",
+    "cohorts": [
+      {
+        "id": "line_lsvt",
+        "cohort": "line",
+        "dataset": "LSVT",
+        "sources": 200,
+        "raw_cer_pct": 35.6267029972752,
+        "trained_cer_pct": 15.031789282470479,
+        "delta_cer_pp": -20.594913714804726,
+        "ci95_pp": [
+          -58.91630194542763,
+          -0.6245122825608106
+        ],
+        "raw_exact_pct": 71.0,
+        "trained_exact_pct": 70.33333333333333,
+        "trained_seed_cer_pct": [
+          15.66757493188011,
+          13.896457765667575,
+          15.531335149863759
+        ],
+        "capped_source_gain_fraction": 0.8269018743109151,
+        "capped_sources": 1
+      },
+      {
+        "id": "line_art",
+        "cohort": "line",
+        "dataset": "ART",
+        "sources": 109,
+        "raw_cer_pct": 24.94061757719715,
+        "trained_cer_pct": 35.58986539984164,
+        "delta_cer_pp": 10.649247822644492,
+        "ci95_pp": [
+          -5.65259988221402,
+          41.35430340103504
+        ],
+        "raw_exact_pct": 56.88073394495413,
+        "trained_exact_pct": 59.63302752293578,
+        "trained_seed_cer_pct": [
+          22.921615201900238,
+          40.49881235154395,
+          43.34916864608076
+        ],
+        "capped_source_gain_fraction": 1.2342007434944238,
+        "capped_sources": 1
+      },
+      {
+        "id": "confirm_lsvt",
+        "cohort": "confirm",
+        "dataset": "LSVT",
+        "sources": 200,
+        "raw_cer_pct": 42.83783783783784,
+        "trained_cer_pct": 27.725225225225223,
+        "delta_cer_pp": -15.112612612612613,
+        "ci95_pp": [
+          -42.80446471223544,
+          1.0635490556878362
+        ],
+        "raw_exact_pct": 71.0,
+        "trained_exact_pct": 71.16666666666666,
+        "trained_seed_cer_pct": [
+          22.905405405405403,
+          20.743243243243242,
+          39.52702702702703
+        ],
+        "capped_source_gain_fraction": 0.7391952309985097,
+        "capped_sources": 1
+      },
+      {
+        "id": "confirm_art",
+        "cohort": "confirm",
+        "dataset": "ART",
+        "sources": 104,
+        "raw_cer_pct": 36.80104031209363,
+        "trained_cer_pct": 29.475509319462507,
+        "delta_cer_pp": -7.3255309926311245,
+        "ci95_pp": [
+          -30.588046283610797,
+          15.961130517155445
+        ],
+        "raw_exact_pct": 61.53846153846154,
+        "trained_exact_pct": 60.256410256410255,
+        "trained_seed_cer_pct": [
+          42.26267880364109,
+          21.196358907672302,
+          24.967490247074124
+        ],
+        "capped_source_gain_fraction": -1.0,
+        "capped_sources": 1
+      },
+      {
+        "id": "combined_lsvt",
+        "cohort": "combined",
+        "dataset": "LSVT",
+        "sources": 400,
+        "raw_cer_pct": 39.24694708276798,
+        "trained_cer_pct": 21.404341926729987,
+        "delta_cer_pp": -17.842605156037994,
+        "ci95_pp": [
+          -40.85253934700058,
+          -2.0415994634247996
+        ],
+        "raw_exact_pct": 71.0,
+        "trained_exact_pct": 70.75,
+        "trained_seed_cer_pct": [
+          19.30122116689281,
+          17.333785617367706,
+          27.578018995929444
+        ],
+        "capped_source_gain_fraction": 0.7896070975918886,
+        "capped_sources": 2
+      },
+      {
+        "id": "combined_art",
+        "cohort": "combined",
+        "dataset": "ART",
+        "sources": 213,
+        "raw_cer_pct": 30.60211049037865,
+        "trained_cer_pct": 32.67121870473826,
+        "delta_cer_pp": 2.069108214359611,
+        "ci95_pp": [
+          -13.738693740817782,
+          22.00487738405602
+        ],
+        "raw_exact_pct": 59.154929577464785,
+        "trained_exact_pct": 59.937402190923315,
+        "trained_seed_cer_pct": [
+          32.15394165114836,
+          31.28491620111732,
+          34.574798261949105
+        ],
+        "capped_source_gain_fraction": 5.009999999999999,
+        "capped_sources": 2
+      }
+    ],
+    "scope": "Fixed follow-up cohorts; pooled results include the exploratory cohort."
+  },
+  "loop_case": {
+    "schema_version": 1,
+    "page_id": "ccocr_table_photo/a342687c923f.jpg",
+    "model": "HunyuanOCR-1.5",
+    "text_family": "Hunyuan",
+    "precision": "NF4, double quantization, bfloat16 compute",
+    "max_new_tokens": 2048,
+    "generated_tokens": 2048,
+    "output_occurrences": 646,
+    "visible_occurrences": 12,
+    "input_image_sha256": "5b993947f92f87ef7a97ebd97002f82012a759b948a8f77ae63810ee748a5037",
+    "scope": "Posthoc visually audited external table case; no cohort loop-rate or general recovery estimate.",
+    "reference_characters": 2611,
+    "source_files_sha256": {
+      "hunyuan_loop_evidence.json": "d87e48c4dddb2a011cadd4b2cea358daf3fe1729eb4fb6af192088aad28de1fa",
+      "hunyuan_loop_recovery.json": "53c4eaa1c00b226df0204c1955d48ab94a008c71c7e3cea3ab6e2be65f54a078"
+    },
+    "methods": {
+      "raw": {
+        "edits": 2602,
+        "content_cer_pct": 99.65530448104175,
+        "page_exact": false,
+        "characters": 2711,
+        "header_occurrences": 646,
+        "seconds": 85.27094228297938,
+        "generated_tokens": 2048
+      },
+      "iterative_deduplicate": {
+        "edits": 2571,
+        "content_cer_pct": 98.4680199157411,
+        "page_exact": false,
+        "characters": 131,
+        "header_occurrences": 1
+      },
+      "extended_deduplicate": {
+        "edits": 2571,
+        "content_cer_pct": 98.4680199157411,
+        "page_exact": false,
+        "characters": 131,
+        "header_occurrences": 1
+      },
+      "PP_mobile": {
+        "edits": 160,
+        "content_cer_pct": 6.127920337035619,
+        "page_exact": false,
+        "characters": 2765,
+        "header_occurrences": 12,
+        "extra_seconds": 1.0891556930728257,
+        "extra_tokens": 0
+      },
+      "physical_confidence_GOT": {
+        "edits": 162,
+        "content_cer_pct": 6.204519341248564,
+        "page_exact": false,
+        "characters": 2767,
+        "header_occurrences": 12,
+        "extra_seconds": 13.149801226099953,
+        "extra_tokens": 18
+      },
+      "four_line_chunk_PP_fallback": {
+        "edits": 188,
+        "content_cer_pct": 7.200306396016852,
+        "page_exact": false,
+        "characters": 2793,
+        "header_occurrences": 12,
+        "extra_seconds": 10.642035266151652,
+        "extra_tokens": 107
+      },
+      "fresh_full_GOT": {
+        "edits": 2611,
+        "content_cer_pct": 100.0,
+        "page_exact": false,
+        "characters": 1,
+        "header_occurrences": 0,
+        "extra_seconds": 21.127706652972847,
+        "extra_tokens": 512
+      }
+    }
+  },
+  "cross_model": {
+    "status": "PARTIAL",
+    "full_cohort_gate": "NOT_MET",
+    "complete_cohorts": false,
+    "passing_text_families": [],
+    "required_text_families": 2,
+    "pending_stages": 12,
+    "matched_status": "PARTIAL",
+    "matched_pending": 6,
+    "scope": "Incomplete cohort evidence; no established advantage over all strong recovery controls."
+  },
+  "provenance": {
+    "compiler": "evaluation/build_research.py",
+    "compiler_sha256": "6e27316d07c3b3451eb4d10af0b250e9761daef67caada5e7b66f2e29ab7ec74",
+    "source_sha256": {
+      "experiments/training_contribution/metrics.csv": "ff6f0d6540b7b521612125b8e094bb71b174a20d016e3d041deceafd30e46dff",
+      "experiments/training_contribution/results.json": "40302e0124697c8fe2ac513f140b7196e378a351ae3e482c5254380fdb947db1",
+      "experiments/training_contribution/design.json": "6afad7ed101d575bc70d2e55c046a8c532c9ea1e4f75cc7f98387631a4f05dd2",
+      "experiments/training_contribution/training_source.json": "5b84e712894edefcc44cb6ea6cb5aa06142d9c3fd00e3ccf6fa9047568bdd16a",
+      "experiments/transfer/metrics.csv": "fcc72b52b187b49c01bff51924cc2e0a3ad9ceb0ed9ec292e6135f37c3f21dd4",
+      "experiments/transfer/results.json": "3251def3ab35ec781697851fab9b38478d1a6fd529a8dced46d67e37998da076",
+      "experiments/cross_model/results.json": "01c6fa79ecd0856a78ed6af1f6618d15df5e1129c20953f5012447ae6e3fa17b",
+      "experiments/cross_model/matched_confirmation.json": "33601ff7c3f70a3e032c304a803f1cc0b95ea4b077fd30b32f0dfdba36068a73",
+      "experiments/cross_model/tail_control_results.json": "74ecd27e9b0b687ef4271cceff04ee6c3eec2a29f9ab364543538186fa5a334a",
+      "experiments/cross_model/loop_case.json": "9f762dbb9d23b97d9177bc9877f522e72bcf1bdeecad2940207eed32827947b1"
+    },
+    "private_repository": "https://github.com/laoshan-song/cltw"
+  }
+}
