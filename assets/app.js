@@ -8,6 +8,12 @@
     sort: "content_cer",
     comparisonMetric: "exact",
     selected: new Set(),
+    sceneMetric: "degraded_exact",
+    matrixSelection: null,
+    cases: null,
+    exampleIndex: 0,
+    exampleModel: null,
+    showDiff: false,
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -214,6 +220,7 @@
       ].map(([key, primary]) => {
         const cell = document.createElement("td");
         if (primary) cell.className = "metric-primary";
+        if (["pass1", "pass3", "tail"].includes(key)) cell.classList.add("extra-metric");
         cell.textContent = percent(modelMetric(model, key));
         return cell;
       });
@@ -251,6 +258,9 @@
       ["Scene images", integer(dataset.pages)],
       ["Scene conditions", integer(Object.keys(dataset.conditions).length)],
     ].forEach(([label, value]) => addStat(stats, label, value));
+    $("#dataset-splits").replaceChildren();
+    Object.entries(dataset.splits).forEach(([split, pages]) =>
+      addStat($("#dataset-splits"), `${split[0].toUpperCase()}${split.slice(1)} pages`, integer(pages)));
   }
 
   function renderComparison() {
@@ -557,6 +567,256 @@
     });
   }
 
+  const pp = (value, digits = 1) => `${value > 0 ? "+" : ""}${(value * 100).toFixed(digits)} pp`;
+
+  function inspectCondition(model, conditionName) {
+    state.matrixSelection = { model: model.id, condition: conditionName };
+    const result = model.paired_by_condition[conditionName];
+    const target = $("#matrix-inspector");
+    const identity = node("div", "matrix-inspector-identity");
+    const link = node("a", "", `${model.name} ↗`);
+    link.href = modelUrl(model.id);
+    identity.append(link, node("span", "", conditionNames[conditionName]));
+    const stats = node("dl", "matrix-cell-stats");
+    [["Normal Exact", percent(result.normal_exact)], ["Degraded Exact", percent(result.degraded_exact)],
+      ["Exact change", pp(result.degraded_minus_normal_exact)],
+      ["Page CER change", pp(result.degraded_minus_normal_page_cer, 2)]]
+      .forEach(([label, value]) => addStat(stats, label, value));
+    const intervalKey = state.sceneMetric === "degraded_minus_normal_page_cer"
+      ? state.sceneMetric : "degraded_minus_normal_exact";
+    const interval = result.ci95[intervalKey];
+    const note = node("p", "matrix-interval",
+      `${integer(result.pairs)} pairs · ${integer(result.source_groups)} source groups · ` +
+      `${intervalKey.includes("page_cer") ? "Page CER" : "Page Exact"} change 95% interval: ${pp(interval[0], 2)} to ${pp(interval[1], 2)}`);
+    target.replaceChildren(identity, stats, note);
+    document.querySelectorAll(".scene-cell").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.model === model.id && button.dataset.condition === conditionName));
+    });
+  }
+
+  function renderSceneMatrix() {
+    const conditions = Object.keys(state.data.models[0].paired_by_condition);
+    const models = sortedModels("content_cer");
+    const values = models.flatMap((model) => conditions.map((name) => model.paired_by_condition[name][state.sceneMetric]));
+    const minimum = Math.min(...values), maximum = Math.max(...values);
+    const isRate = state.sceneMetric === "degraded_exact";
+    const format = (value) => isRate ? percent(value, 1) : pp(value, state.sceneMetric.includes("page_cer") ? 2 : 1);
+    $("#matrix-definition").textContent = {
+      degraded_exact: "Exact transcription on degraded views in the paired subset. Higher is better.",
+      degraded_minus_normal_exact: "Degraded minus normal Page Exact, in percentage points. Higher is better.",
+      degraded_minus_normal_page_cer: "Degraded minus normal mean page CER, in percentage points. Lower is better.",
+    }[state.sceneMetric];
+    $("#matrix-scale").textContent = `Observed range ${format(minimum)} to ${format(maximum)} · greener = better`;
+    const head = node("tr");
+    const first = node("th", "", "Model / checkpoint");
+    first.scope = "col";
+    head.append(first);
+    conditions.forEach((name) => {
+      const result = models[0].paired_by_condition[name];
+      const th = node("th");
+      th.scope = "col";
+      th.append(node("span", "", conditionNames[name]),
+        node("small", "", `${result.pairs} pairs · ${result.source_groups} sources`));
+      head.append(th);
+    });
+    $("#matrix-head").replaceChildren(head);
+    $("#matrix-rows").replaceChildren(...models.map((model) => {
+      const row = node("tr");
+      const label = node("th");
+      label.scope = "row";
+      const link = node("a", "model-link", model.name);
+      link.href = modelUrl(model.id);
+      label.append(link);
+      row.append(label);
+      conditions.forEach((name) => {
+        const result = model.paired_by_condition[name];
+        const cell = node("td");
+        const button = node("button", "scene-cell", format(result[state.sceneMetric]));
+        button.type = "button";
+        button.dataset.model = model.id;
+        button.dataset.condition = name;
+        let strength = (result[state.sceneMetric] - minimum) / (maximum - minimum || 1);
+        if (state.sceneMetric.includes("page_cer")) strength = 1 - strength;
+        button.style.background = `rgb(${[235, 221, 201].map((channel, i) => Math.round(channel + ([148, 188, 149][i] - channel) * strength)).join(",")})`;
+        button.title = `${model.name} · ${conditionNames[name]}: Normal Exact ${percent(result.normal_exact)}, degraded Exact ${percent(result.degraded_exact)}; ${result.pairs} pairs`;
+        button.setAttribute("aria-label", `${model.name}, ${conditionNames[name]}, ${format(result[state.sceneMetric])}. Show paired details.`);
+        button.addEventListener("click", () => inspectCondition(model, name));
+        cell.append(button);
+        row.append(cell);
+      });
+      return row;
+    }));
+    const selection = state.matrixSelection || { model: models[0].id, condition: conditions[0] };
+    inspectCondition(models.find((model) => model.id === selection.model), selection.condition);
+  }
+
+  function renderExample() {
+    const example = state.cases.examples[state.exampleIndex];
+    const output = example.outputs[state.exampleModel];
+    const model = state.data.models.find((item) => item.id === state.exampleModel);
+    $("#example-scene").value = String(state.exampleIndex);
+    if ($("#example-image").getAttribute("src") !== example.src) $("#example-image").src = example.src;
+    $("#example-image").alt = `CLTW ${example.label}: ${example.page_id.split("/").pop()}`;
+    $("#example-label").textContent = example.label;
+    $("#example-page-id").textContent = example.page_id;
+    $("#example-model-link").href = modelUrl(model.id);
+    $("#example-model-link").title = `${model.name} evaluation`;
+    $("#example-output-status").textContent = output.provider_refused ? "Provider refusal · empty output"
+      : output.differences.every(([tag]) => tag === "equal") ? "Text matches after removing whitespace" : "Text differences present";
+    $("#example-diff").setAttribute("aria-pressed", String(state.showDiff));
+    $("#example-diff").textContent = state.showDiff ? "Show original text" : "Highlight differences";
+    const reference = $("#example-reference"), prediction = $("#example-output");
+    reference.replaceChildren();
+    prediction.replaceChildren();
+    if (state.showDiff) {
+      output.differences.forEach(([tag, left, right]) => {
+        if (left) reference.append(node("span", tag === "equal" ? "" : "diff-removed", left));
+        if (right) prediction.append(node("span", tag === "equal" ? "" : "diff-added", right));
+      });
+    } else {
+      reference.textContent = example.reference;
+      prediction.textContent = output.text || "(Empty output)";
+    }
+    reference.scrollTop = prediction.scrollTop = 0;
+    $("#diff-note").textContent = state.showDiff
+      ? "Peach: changed or omitted reference text. Green: changed or added output. Whitespace is ignored; punctuation and Latin letters are retained. This display comparison uses different normalization from benchmark scores."
+      : "Original reference and returned text, including punctuation, line breaks and formatting.";
+  }
+
+  function initializeImageViewer() {
+    const viewport = $("#image-viewport"), image = $("#example-image");
+    let scale = 1, x = 0, y = 0;
+    const pointers = new Map();
+    let pinchDistance = 0;
+    const apply = () => {
+      const width = viewport.clientWidth, height = viewport.clientHeight;
+      const ratio = (image.naturalWidth || width) / (image.naturalHeight || height);
+      const fitWidth = Math.min(width, height * ratio), fitHeight = fitWidth / ratio;
+      const limitX = Math.max(0, (fitWidth * scale - width) / 2);
+      const limitY = Math.max(0, (fitHeight * scale - height) / 2);
+      x = Math.max(-limitX, Math.min(limitX, x));
+      y = Math.max(-limitY, Math.min(limitY, y));
+      image.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+      $("#image-scale").textContent = `${Math.round(scale * 100)}%`;
+      $("#image-out").disabled = scale <= 1;
+      $("#image-in").disabled = scale >= 8;
+    };
+    const reset = () => { scale = 1; x = y = 0; apply(); };
+    const zoom = (factor, px = 0, py = 0) => {
+      const next = Math.max(1, Math.min(8, scale * factor));
+      x = px - (px - x) * next / scale;
+      y = py - (py - y) * next / scale;
+      scale = next;
+      apply();
+    };
+    image.addEventListener("load", reset);
+    new ResizeObserver(apply).observe(viewport);
+    $("#image-in").addEventListener("click", () => zoom(1.35));
+    $("#image-out").addEventListener("click", () => zoom(1 / 1.35));
+    $("#image-reset").addEventListener("click", reset);
+    viewport.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      const rect = viewport.getBoundingClientRect();
+      zoom(Math.exp(-event.deltaY * .002), event.clientX - rect.left - rect.width / 2, event.clientY - rect.top - rect.height / 2);
+    }, { passive: false });
+    viewport.addEventListener("keydown", (event) => {
+      if (["+", "=", "-", "0", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) event.preventDefault();
+      if (["+", "="].includes(event.key)) zoom(1.35);
+      if (event.key === "-") zoom(1 / 1.35);
+      if (event.key === "0") reset();
+      if (event.key.startsWith("Arrow")) {
+        x += ({ ArrowLeft: 30, ArrowRight: -30 }[event.key] || 0);
+        y += ({ ArrowUp: 30, ArrowDown: -30 }[event.key] || 0);
+        apply();
+      }
+    });
+    viewport.addEventListener("pointerdown", (event) => {
+      viewport.setPointerCapture(event.pointerId);
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      viewport.classList.add("is-dragging");
+      if (pointers.size === 2) {
+        const [a, b] = [...pointers.values()];
+        pinchDistance = Math.hypot(a.x - b.x, a.y - b.y);
+      }
+    });
+    viewport.addEventListener("pointermove", (event) => {
+      const previous = pointers.get(event.pointerId);
+      if (!previous) return;
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      if (pointers.size === 2) {
+        const [a, b] = [...pointers.values()];
+        const distance = Math.hypot(a.x - b.x, a.y - b.y);
+        if (pinchDistance) zoom(distance / pinchDistance);
+        pinchDistance = distance;
+      } else { x += event.clientX - previous.x; y += event.clientY - previous.y; apply(); }
+    });
+    const release = (event) => {
+      pointers.delete(event.pointerId);
+      pinchDistance = 0;
+      if (!pointers.size) viewport.classList.remove("is-dragging");
+    };
+    ["pointerup", "pointercancel", "lostpointercapture"].forEach((name) => viewport.addEventListener(name, release));
+    const expand = $("#image-expand"), browser = $("#example-browser");
+    const setExpanded = (expanded) => {
+      browser.classList.toggle("is-expanded", expanded);
+      document.body.classList.toggle("viewer-expanded", expanded);
+      expand.setAttribute("aria-pressed", String(expanded));
+      expand.textContent = expanded ? "Close ×" : "Expand ↗";
+      if (expanded) { browser.setAttribute("role", "dialog"); browser.setAttribute("aria-modal", "true"); browser.setAttribute("aria-label", "Image and transcription viewer"); viewport.focus(); }
+      else { browser.removeAttribute("role"); browser.removeAttribute("aria-modal"); expand.focus(); }
+      document.querySelectorAll("body > header, body > footer, #home-view > :not(#examples), #examples .section-heading, .example-toolbar, .example-footer, #case-search-status")
+        .forEach((element) => { element.inert = expanded; });
+      apply();
+    };
+    expand.addEventListener("click", () => setExpanded(!browser.classList.contains("is-expanded")));
+    document.addEventListener("keydown", (event) => {
+      if (!browser.classList.contains("is-expanded")) return;
+      if (event.key === "Escape") { event.preventDefault(); setExpanded(false); }
+      if (event.key === "Tab") {
+        const focusable = [...browser.querySelectorAll('button:not(:disabled), select, a[href], [tabindex="0"]')];
+        const first = focusable[0], last = focusable.at(-1);
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    });
+  }
+
+  async function initializeExamples() {
+    const response = await fetch("data/cases.json");
+    if (!response.ok) throw new Error("Recorded examples are unavailable");
+    state.cases = await response.json();
+    state.exampleModel = state.data.models[0].id;
+    $("#example-scene").replaceChildren(...state.cases.examples.map((example, i) => {
+      const option = node("option", "", `${String(i + 1).padStart(2, "0")} · ${example.label}`);
+      option.value = String(i);
+      return option;
+    }));
+    $("#example-model").replaceChildren(...state.data.models.map((model) => {
+      const option = node("option", "", model.name);
+      option.value = model.id;
+      return option;
+    }));
+    $("#example-scene").addEventListener("change", (event) => {
+      state.exampleIndex = Number(event.target.value);
+      $("#case-search").value = "";
+      $("#case-search-status").textContent = "";
+      renderExample();
+    });
+    $("#example-model").addEventListener("change", (event) => { state.exampleModel = event.target.value; renderExample(); });
+    $("#example-diff").addEventListener("click", () => { state.showDiff = !state.showDiff; renderExample(); });
+    $("#case-search").addEventListener("input", (event) => {
+      const query = event.target.value.trim();
+      const index = state.cases.examples.findIndex((example) => example.page_id === query || example.page_id.split("/").pop() === query);
+      $("#case-search-status").textContent = !query ? "" : index < 0
+        ? "No exact match in these eight examples. Paste a full page ID or complete filename." : "Exact example found.";
+      if (index >= 0) { state.exampleIndex = index; renderExample(); }
+    });
+    initializeImageViewer();
+    renderExample();
+    $("#release-label").textContent = `${state.cases.dataset_release} · Evaluation snapshot ${state.data.snapshot} · ${state.data.models.length} checkpoints`;
+    $("#site-citation").textContent = `@misc{cltw_leaderboard_2026,\n  title = {CLTW Model Leaderboard},\n  year = {2026},\n  url = {https://laoshan-song.github.io/cltw-leaderboard/},\n  note = {${state.cases.dataset_release}; evaluation snapshot ${state.data.snapshot}}\n}`;
+  }
+
   function metricBar(value) {
     const wrapper = document.createElement("span");
     wrapper.className = "metric-bar";
@@ -730,6 +990,22 @@
   }
 
   function bindControls() {
+    $("#scene-metric").addEventListener("change", (event) => { state.sceneMetric = event.target.value; renderSceneMatrix(); });
+    $("#table-details").addEventListener("click", (event) => {
+      const detailed = event.currentTarget.getAttribute("aria-pressed") !== "true";
+      event.currentTarget.setAttribute("aria-pressed", String(detailed));
+      event.currentTarget.textContent = detailed ? "Hide detailed metrics −" : "Show detailed metrics ＋";
+      $(".leaderboard-table").dataset.detailed = String(detailed);
+      if (!detailed && ["pass1", "pass3", "tail"].includes(state.sort)) { state.sort = "content_cer"; renderLeaderboard(); }
+    });
+    $("#copy-citation").addEventListener("click", async (event) => {
+      try { await navigator.clipboard.writeText($("#site-citation").textContent); event.target.textContent = "Copied"; }
+      catch { event.target.textContent = "Select the citation above to copy"; }
+    });
+    const issue = new URL($("#submission-link").href);
+    issue.searchParams.set("title", "Model evaluation request: [checkpoint]");
+    issue.searchParams.set("body", "Checkpoint / API version:\nEvaluation date:\nPrediction file URL (2,832 pages):\nActual prompt:\nImage preprocessing:\nGeneration limit:\nDecoding / thinking settings:\nDataset release: CLTW-canonical-2026-10-17\nAdditional notes:\n");
+    $("#submission-link").href = issue.href;
     $("#comparison-all").addEventListener("click", () => {
       state.selected = new Set(state.data.models.map((model) => model.id));
       $("#comparison-models").querySelectorAll("input").forEach((input) => { input.checked = true; });
@@ -785,15 +1061,21 @@
     state.selected = new Set(state.data.models.map((model) => model.id));
     renderComparisonPicker();
     renderComparison();
+    renderSceneMatrix();
     renderHighlights();
     renderGallery();
     bindControls();
     renderLeaderboard();
     initializeMotion();
     await initializeScenes();
+    await initializeExamples();
   }
 
   initialize().catch((error) => {
-    document.body.innerHTML = `<main class="section"><div class="section-inner"><h1>Failed to load data</h1><p>${error.message}</p></div></main>`;
+    const main = node("main", "section");
+    const inner = node("div", "section-inner");
+    inner.append(node("h1", "", "Failed to load data"), node("p", "", error.message));
+    main.append(inner);
+    document.body.replaceChildren(main);
   });
 })();
