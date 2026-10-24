@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "snapshot": "2026-10-24",
   "dataset_release": "CLTW-canonical-2026-10-17",
   "leaderboard_snapshot": "2026-10-22",
@@ -279,6 +279,305 @@
     ],
     "scope": "Fixed follow-up cohorts; pooled results include the exploratory cohort."
   },
+  "matched_training": {
+    "status": "COMPLETE",
+    "primary_gate": "FAILED",
+    "model": "Qwen3-VL-2B-Instruct",
+    "pages": 356,
+    "predictions": 2492,
+    "sources": 400,
+    "presentations": 800,
+    "steps": 200,
+    "training_seeds": [
+      20261031,
+      20261032,
+      20261033
+    ],
+    "public_training_sources": {
+      "art": 43,
+      "lsvt": 357
+    },
+    "supervised_tokens": {
+      "B": 66320,
+      "E": 66018
+    },
+    "relative_token_gap_pct": 0.4553679131483715,
+    "test_overlap": 0,
+    "generation_limit": 2048,
+    "gate_rule": "Requires B>A and B>E on official CC-OCR auto-mode recognition F1, positive paired 95% intervals and all seed directions. Exact and tail results still determine breadth.",
+    "cohorts": [
+      {
+        "id": "ccocr_zh_document",
+        "label": "CC-OCR document",
+        "pages": 100,
+        "primary": true,
+        "arms": [
+          {
+            "id": "A",
+            "f1_pct": 60.13824927190321,
+            "exact_pct": 0.0,
+            "cer_pct": 177.92646231377057,
+            "capped_pages": 38
+          },
+          {
+            "id": "B",
+            "f1_pct": 53.5305407741864,
+            "exact_pct": 0.0,
+            "cer_pct": 198.36909101287603,
+            "capped_pages": 45.0
+          },
+          {
+            "id": "E",
+            "f1_pct": 54.8185320950775,
+            "exact_pct": 0.0,
+            "cer_pct": 213.80401366701736,
+            "capped_pages": 44.333333333333336
+          }
+        ],
+        "comparisons": {
+          "B_vs_A": {
+            "delta_f1_pp": -6.607708497716819,
+            "ci95_pp": [
+              -10.772441228870502,
+              -2.4869711161818917
+            ],
+            "seed_delta_f1_pp": {
+              "31": -7.887778433257492,
+              "32": -4.9304289751840145,
+              "33": -7.004918084708955
+            }
+          },
+          "B_vs_E": {
+            "delta_f1_pp": -1.2879913208911153,
+            "ci95_pp": [
+              -6.202948776273083,
+              3.8413373638789015
+            ],
+            "seed_delta_f1_pp": {
+              "31": -1.1299124628921906,
+              "32": 0.20598045270661955,
+              "33": -2.940041952487777
+            }
+          }
+        }
+      },
+      {
+        "id": "lsvt",
+        "label": "LSVT",
+        "pages": 128,
+        "primary": false,
+        "arms": [
+          {
+            "id": "A",
+            "f1_pct": 73.68852718643168,
+            "exact_pct": 17.96875,
+            "cer_pct": 883.5202761000863,
+            "capped_pages": 21
+          },
+          {
+            "id": "B",
+            "f1_pct": 69.91337047018865,
+            "exact_pct": 17.96875,
+            "cer_pct": 926.2798389416164,
+            "capped_pages": 21.333333333333332
+          },
+          {
+            "id": "E",
+            "f1_pct": 73.76461836805673,
+            "exact_pct": 16.927083333333336,
+            "cer_pct": 777.8329019269485,
+            "capped_pages": 18.666666666666668
+          }
+        ],
+        "comparisons": {
+          "B_vs_A": {
+            "delta_f1_pp": -3.7751567162429986,
+            "ci95_pp": [
+              -8.597547811453762,
+              0.7771225517356618
+            ],
+            "seed_delta_f1_pp": {
+              "31": -5.32335631831079,
+              "32": -4.51876517364759,
+              "33": -1.4833486567706147
+            }
+          },
+          "B_vs_E": {
+            "delta_f1_pp": -3.8512478978680957,
+            "ci95_pp": [
+              -7.907618110474528,
+              0.3303243091544453
+            ],
+            "seed_delta_f1_pp": {
+              "31": -6.782214092839656,
+              "32": -3.1885555805642065,
+              "33": -1.5829740202004228
+            }
+          }
+        }
+      },
+      {
+        "id": "art",
+        "label": "ArT",
+        "pages": 128,
+        "primary": false,
+        "arms": [
+          {
+            "id": "A",
+            "f1_pct": 84.10465673406257,
+            "exact_pct": 22.65625,
+            "cer_pct": 143.7562637803167,
+            "capped_pages": 2
+          },
+          {
+            "id": "B",
+            "f1_pct": 80.810086249521,
+            "exact_pct": 20.052083333333336,
+            "cer_pct": 373.20772365871585,
+            "capped_pages": 6.0
+          },
+          {
+            "id": "E",
+            "f1_pct": 86.90258542333461,
+            "exact_pct": 22.135416666666664,
+            "cer_pct": 109.2670541858756,
+            "capped_pages": 1.6666666666666667
+          }
+        ],
+        "comparisons": {
+          "B_vs_A": {
+            "delta_f1_pp": -3.2945704845415467,
+            "ci95_pp": [
+              -7.0030581317797465,
+              0.059958553752582196
+            ],
+            "seed_delta_f1_pp": {
+              "31": -3.5362055340613057,
+              "32": -3.3021089148318223,
+              "33": -3.0453970047315115
+            }
+          },
+          "B_vs_E": {
+            "delta_f1_pp": -6.092499173813595,
+            "ci95_pp": [
+              -9.690410111696368,
+              -2.9015596688935186
+            ],
+            "seed_delta_f1_pp": {
+              "31": -5.968493273787609,
+              "32": -6.730805211463705,
+              "33": -5.57819903618947
+            }
+          }
+        }
+      }
+    ],
+    "statistics": "5000 paired public-page/source-ID bootstraps, seed20261023; mean three fixed training seeds, all seeds individually",
+    "scope": "Full-image recognition; common-support training budget, separate from the 2026-10-22 CLTW study.",
+    "reference_caveat": "CC-OCR recognition references verified by Git/LFS digest; no independent relabel; unordered text and # markers affect CER. LSVT/ArT geometry-derived references have minor omissions/uncertainties. CC-OCR parent document IDs unavailable; sample bootstrap cannot account for undisclosed parent grouping. Pretraining overlap unknown.",
+    "precision": {
+      "pages": 20,
+      "predictions": 60,
+      "training_seed": 20261031,
+      "scope": "exploratory execution-and-precision sensitivity; cannot replace failed prespecified study",
+      "decoder": "unquantized float32 CPU",
+      "execution_and_precision_both_changed": true,
+      "extend_confirmation": false,
+      "comparisons": {
+        "B31_vs_A": {
+          "delta_f1_pp": -4.887351239930355,
+          "ci95_pp": [
+            -19.433545245894074,
+            8.836415966389136
+          ]
+        },
+        "B31_vs_E31": {
+          "delta_f1_pp": -1.3892652452638372,
+          "ci95_pp": [
+            -15.604180746788579,
+            12.5493458045821
+          ]
+        }
+      }
+    },
+    "previous_transfer_recheck": {
+      "pages": 512,
+      "predictions": 5120,
+      "scope": "Retrospective diagnostic of existing BF16 runs; 104008 training supervision tokens; no matched public-data control. Original run has unrecorded framework seed. Two recorded seeds enter group means; original run stays separate.",
+      "cohorts": [
+        {
+          "dataset": "ArT",
+          "delta_f1_pp": 0.20502563448896396,
+          "ci95_pp": [
+            -2.470406052270031,
+            3.07863200043853
+          ],
+          "delta_exact_pp": -1.5625
+        },
+        {
+          "dataset": "LSVT",
+          "delta_f1_pp": 1.0483018869533658,
+          "ci95_pp": [
+            -2.1781086828703002,
+            4.359998724037778
+          ],
+          "delta_exact_pp": -2.34375
+        }
+      ]
+    }
+  },
+  "development": {
+    "scope": "ArT and LSVT already inspected; follow-up optimization, not new blind confirmation",
+    "selected_factor": 0.25,
+    "validation_sources": 100,
+    "new_training_steps": 0,
+    "screened_outputs": 4291,
+    "triggered_outputs": 11,
+    "triggered_sources": 4,
+    "accepted_outputs": 7,
+    "accepted_exact": 0,
+    "uncertain_outputs": 4,
+    "bypass_pct": 99.7436494989513,
+    "policy_scope": "Post-measurement development policy, CPU replay; no new model reads",
+    "cohorts": [
+      {
+        "dataset": "ArT",
+        "sources": 213,
+        "selected_cer_pct": 29.48479205462446,
+        "selected_delta_cer_pp": -1.1173184357541888,
+        "selected_ci95_pp": [
+          -3.1973080649991923,
+          0.38610660149616916
+        ],
+        "trained_reread_cer_pct": 22.42913304365818,
+        "trained_dedup_cer_pct": 22.304986550796606,
+        "trained_abstain_cer_pct": 22.42913304365818,
+        "reread_vs_dedup_ci95_pp": [
+          0.0,
+          0.3395081913717202
+        ],
+        "reread_coverage_pct": 99.53051643192488
+      },
+      {
+        "dataset": "LSVT",
+        "sources": 400,
+        "selected_cer_pct": 34.8937132519222,
+        "selected_delta_cer_pp": -4.3532338308457765,
+        "selected_ci95_pp": [
+          -11.322778715731376,
+          -0.4494385073325908
+        ],
+        "trained_reread_cer_pct": 18.53233830845771,
+        "trained_dedup_cer_pct": 18.57756671189507,
+        "trained_abstain_cer_pct": 18.57756671189507,
+        "reread_vs_dedup_ci95_pp": [
+          -0.1396172745619912,
+          0.0
+        ],
+        "reread_coverage_pct": 100.0
+      }
+    ]
+  },
   "loop_case": {
     "schema_version": 1,
     "page_id": "ccocr_table_photo/a342687c923f.jpg",
@@ -371,7 +670,7 @@
   },
   "provenance": {
     "compiler": "evaluation/build_research.py",
-    "compiler_sha256": "6e27316d07c3b3451eb4d10af0b250e9761daef67caada5e7b66f2e29ab7ec74",
+    "compiler_sha256": "6d42436a089de10f7e633f76265297c034e9cfb619be9f21df2d5e1296e3fd74",
     "source_sha256": {
       "experiments/training_contribution/metrics.csv": "ff6f0d6540b7b521612125b8e094bb71b174a20d016e3d041deceafd30e46dff",
       "experiments/training_contribution/results.json": "40302e0124697c8fe2ac513f140b7196e378a351ae3e482c5254380fdb947db1",
@@ -382,6 +681,21 @@
       "experiments/cross_model/results.json": "01c6fa79ecd0856a78ed6af1f6618d15df5e1129c20953f5012447ae6e3fa17b",
       "experiments/cross_model/matched_confirmation.json": "33601ff7c3f70a3e032c304a803f1cc0b95ea4b077fd30b32f0dfdba36068a73",
       "experiments/cross_model/tail_control_results.json": "74ecd27e9b0b687ef4271cceff04ee6c3eec2a29f9ab364543538186fa5a334a",
+      "experiments/matched_training/results.json": "3e2002f6ce97b269a9038d8a300e2986f9bb1c4cf24a878c925444ba57edb993",
+      "experiments/matched_training/protocol.json": "1e5cbfe5637f9ec5af271ce913a88067547f1ed7378a0f3eb50429a714fb3904",
+      "experiments/matched_training/training_B.json": "5556553d7747ff84ee878733a62b4275c58736125fb165a32ef557e59857141f",
+      "experiments/matched_training/training_E.json": "0485e96206c6a7fe5e7b802ae6af7e46cdd7c2fcd25d81e273172135569a32c0",
+      "experiments/matched_training/verification.json": "3c4cde45edba1521589d73d91a55f4753e23f30a9cafbe04e79519a0d684e498",
+      "experiments/matched_training/independent_verification.json": "3482f97d698f4a450d5a864ba8ab585720e306671fc34e21adbc4d88108ef761",
+      "experiments/matched_training/precision_results.json": "530896517d3575eaf51ca4b07d01c64d9bbf7ac5a8a6dd0b5f024b26c6e8debe",
+      "experiments/matched_training/precision_protocol.json": "2999c5df5cb9dcc2bc415bdcd9b8d2b086583a1b7a0d9966070d3d90d9bb39d6",
+      "experiments/matched_training/precision_verification.json": "0d0a8ab87af0322c178879ccc747a45d1272f0ff4973ad5206118a5e79fc29ea",
+      "experiments/matched_training/previous_transfer_recheck.json": "5bd40268a5ad6d56ec0316eac5661c085fa3b77598355f19e155f1b9d85855af",
+      "experiments/development/results.json": "fc7fdac11ef14f3a9fef37227df2e0b098481f5b6cbc310c5942acf5e8d75226",
+      "experiments/development/metrics.csv": "ba6c7bfe9fdc78a42b747226779128be267328e2ff05f3678b84c50a53a585dc",
+      "experiments/development/method_results.json": "81c393112376fc63cf0edf3137d42bc603ae2708b801c026116aed8dc01150a9",
+      "experiments/development/method_metrics.csv": "6ed20239278e1ce03a8dcea24de6c2203ec279bdc9d157c4176f42fd5086a3a2",
+      "experiments/development/method_comparisons.json": "05905cc31774c35957b0eceb3f2972f9c8a26ab6df59ad958bd67a25c5e21e6d",
       "experiments/cross_model/loop_case.json": "9f762dbb9d23b97d9177bc9877f522e72bcf1bdeecad2940207eed32827947b1"
     },
     "private_repository": "https://github.com/laoshan-song/cltw"

@@ -390,8 +390,9 @@
     updateButtons();
   }
 
-  function studyTable(headers, rows) {
+  function studyTable(headers, rows, caption = "", append = false) {
     const table = node("table", "detail-table");
+    if (caption) table.append(node("caption", "", caption));
     const head = node("thead");
     const titles = node("tr");
     headers.forEach((title) => {
@@ -407,7 +408,8 @@
       body.append(row);
     });
     table.append(head, body);
-    $("#study-table").replaceChildren(table);
+    if (append) $("#study-table").append(table);
+    else $("#study-table").replaceChildren(table);
   }
 
   function studyBar(label, value, maximum, variant = "") {
@@ -434,6 +436,7 @@
     const chart = $("#study-chart");
     chart.replaceChildren();
     chart.dataset.study = state.study;
+    $("#study-interpretation").dataset.study = state.study;
     $("#study-date").textContent = `Research snapshot ${data.snapshot}`;
     $("#study-tabs").querySelectorAll("button").forEach((button) =>
       button.setAttribute("aria-pressed", String(button.dataset.study === state.study)));
@@ -466,8 +469,61 @@
         ]));
       $("#study-boundary").textContent =
         `${study.scope} ${study.range_note} CLTW reference text has not undergone complete independent double annotation.`;
+    } else if (state.study === "matched") {
+      const study = data.matched_training;
+      const primary = study.cohorts.find((cohort) => cohort.primary);
+      const change = primary.comparisons.B_vs_A;
+      const interval = (row) => `${row.delta_f1_pp.toFixed(3)} [${row.ci95_pp.map((v) => v.toFixed(3)).join(", ")}]`;
+      $("#study-scope").textContent =
+        `${study.model} · ${study.pages} full images · ${integer(study.predictions)} complete outputs`;
+      chart.append(node("h3", "", "Official recognition F1 ↑"),
+        node("p", "study-axis-label", "Balances missed and extra text · Mean over pages · Shared 0–100% scale"));
+      study.cohorts.forEach((cohort) => {
+        const group = node("div", "study-transfer-group");
+        group.append(node("h4", "", `${cohort.label} · ${cohort.pages} pages${cohort.primary ? " · Primary test" : ""}`));
+        cohort.arms.forEach((arm) => group.append(studyBar(
+          `${arm.id} · ${{A: "Original", B: "CLTW", E: "Public data"}[arm.id]}`,
+          arm.f1_pct, 100, arm.id === "B" ? "is-selected" : arm.id === "E" ? "is-control" : "is-baseline")));
+        chart.append(group);
+      });
+      $("#study-chart-note").textContent =
+        `B/E are means of three training seeds. E uses ${study.public_training_sources.lsvt} LSVT and ${study.public_training_sources.art} ArT training sources; CC-OCR is external to both.`;
+      studyReading("The matched-budget primary test failed.",
+        change.delta_f1_pp.toFixed(2) + " pp",
+        "CC-OCR F1 change: CLTW-trained model versus original", [
+          `The prespecified test requires B to improve over both A and E, with positive lower 95% interval bounds and all three seed directions positive. The recorded gate is ${study.primary_gate}.`,
+          `CC-OCR B−A is ${interval(change)} pp; B−E is ${interval(primary.comparisons.B_vs_E)} pp. B has lower mean F1 on all three datasets.`,
+          `B/E share ${study.sources} sources, ${study.presentations} presentations and ${study.steps} steps. Supervised text tokens: ${integer(study.supervised_tokens.B)} / ${integer(study.supervised_tokens.E)}; gap ${study.relative_token_gap_pct.toFixed(4)}%. Verified training/test image and pixel overlap: zero.`,
+          `The ${study.precision.pages}-page, one-seed supplement changes both CPU execution and decoder precision. It remains exploratory; the failed primary result is retained.`,
+        ]);
+      studyTable(["Dataset / pages", "A F1", "B F1", "E F1", "B−A / 95% interval (pp)", "B−E / 95% interval (pp)"],
+        study.cohorts.map((cohort) => [
+          `${cohort.label} / ${cohort.pages}${cohort.primary ? " · Primary" : ""}`,
+          ...cohort.arms.map((arm) => arm.f1_pct.toFixed(3) + "%"),
+          interval(cohort.comparisons.B_vs_A), interval(cohort.comparisons.B_vs_E),
+        ]));
+      studyTable(["Dataset", "Comparison", "Seed 20261031", "Seed 20261032", "Seed 20261033"],
+        study.cohorts.flatMap((cohort) => Object.entries(cohort.comparisons).map(([key, row]) => [
+          cohort.label, key.replaceAll("_", " "),
+          ...["31", "32", "33"].map((seed) => row.seed_delta_f1_pp[seed].toFixed(3) + " pp"),
+        ])), "All training seeds · F1 changes", true);
+      studyTable(["Supplement", "Comparison", "F1 change / 95% interval (pp)", "Scope"],
+        Object.entries(study.precision.comparisons).map(([key, row]) => [
+          `${study.precision.pages} CC-OCR pages / ${study.precision.predictions} outputs`,
+          key.replaceAll("_", " "), interval(row), "One seed; CPU execution and float32 decoder",
+        ]), "Exploratory execution and precision sensitivity", true);
+      studyTable(["Dataset", "B−A F1 / 95% interval (pp)", "Page Exact change", "Scope"],
+        study.previous_transfer_recheck.cohorts.map((cohort) => [
+          cohort.dataset, interval(cohort), cohort.delta_exact_pp.toFixed(3) + " pp",
+          "Historical full weights; two recorded seeds; 104,008-token training budget",
+        ]), "Retrospective full-weight recheck · 512 pages / 5,120 outputs", true);
+      $("#study-boundary").textContent =
+        `${study.scope} Formal inference uses 4-bit decoder weights and a ${integer(study.generation_limit)}-token generation limit. ` +
+        "Intervals use 5,000 paired page/source resamples, conditional on fixed training seeds. CC-OCR includes 99 Chinese pages and one English page; unknown parent-document grouping is not covered by these intervals. References have not been independently relabeled. " +
+        "The 2026-10-22 CLTW experiment uses a different 104,008-token training budget.";
     } else if (state.study === "transfer") {
       const study = data.transfer;
+      const development = data.development;
       const pooled = study.cohorts.find((cohort) => cohort.id === "combined_lsvt");
       $("#study-scope").textContent = `${integer(study.source_groups)} sources · Chinese text regions · 256-token limit`;
       chart.append(node("h3", "", "External region character error rate ↓"),
@@ -485,7 +541,8 @@
         `of pooled LSVT edit reduction comes from ${pooled.capped_sources} capped sources`, [
           "Pooled LSVT improves cumulative CER, while region exact accuracy changes from " +
             pooled.raw_exact_pct.toFixed(2) + "% to " + pooled.trained_exact_pct.toFixed(2) + "%.",
-          "The source-disjoint LSVT follow-up interval crosses zero. ArT pooled CER increases. A same-budget alternative Chinese training set remains an open comparison.",
+          "The source-disjoint LSVT follow-up interval crosses zero. ArT pooled CER increases. The separate full-image matched-budget study is complete and its primary test failed.",
+          `Development rereading screened ${integer(development.screened_outputs)} outputs: ${development.triggered_outputs} triggered across ${development.triggered_sources} sources, ${development.accepted_outputs} replacements accepted, none exact. ArT matches direct abstention; the LSVT advantage over deduplication is 0.05 pp with an interval touching zero.`,
         ]);
       studyTable(["Dataset / cohort", "Sources", "Original CER", "Trained CER", "Change / 95% interval (pp)", "Original → trained exact"],
         study.cohorts.map((cohort) => [
@@ -494,8 +551,16 @@
           `${cohort.delta_cer_pp.toFixed(2)} [${cohort.ci95_pp.map((v) => v.toFixed(2)).join(", ")}]`,
           `${cohort.raw_exact_pct.toFixed(2)}% → ${cohort.trained_exact_pct.toFixed(2)}%`,
         ]));
+      studyTable(["Dataset / sources", "25% weight CER", "Change / 95% interval (pp)", "B + reread CER", "B + dedup CER", "Reread coverage"],
+        development.cohorts.map((cohort) => [
+          `${cohort.dataset} / ${cohort.sources}`, cohort.selected_cer_pct.toFixed(2) + "%",
+          `${cohort.selected_delta_cer_pp.toFixed(2)} [${cohort.selected_ci95_pp.map((v) => v.toFixed(2)).join(", ")}]`,
+          cohort.trained_reread_cer_pct.toFixed(2) + "%", cohort.trained_dedup_cer_pct.toFixed(2) + "%",
+          cohort.reread_coverage_pct.toFixed(4) + "%",
+        ]), "Development follow-up · Weight strength chosen on 100 CLTW validation sources; zero new training steps", true);
       $("#study-boundary").textContent =
-        `${study.scope} ${study.normalization} Intervals use 5,000 paired source resamples, conditional on three fixed training seeds.`;
+        `${study.scope} ${study.normalization} Intervals use 5,000 paired source resamples, conditional on three fixed training seeds. ` +
+        "Development rereading replays measured reads after prompt changes on inspected sources; accepted replacements have remaining text errors.";
     } else {
       const study = data.loop_case;
       $("#study-scope").textContent = `${study.model} · External table · 4-bit weights (NF4)`;
