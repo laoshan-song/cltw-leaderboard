@@ -1,0 +1,24 @@
+﻿rank_by_content_cer,model_id,model,checkpoint,type,content_cer_percent,page_exact_percent,pass1_percent,pass3_percent,pass5_percent,correct_retention_percent,worst_1_percent_error_share_percent,test_pages,snapshot
+1,doubao_seed21_turbo,Doubao Turbo,doubao-seed-2-1-turbo-260628,Closed model,2.28,75.53,82.84,90.71,93.15,85.30,47.96,2832,2026-10-22
+2,doubao_seed21_lite,Doubao Lite,doubao-seed-2-1-lite-260915,Closed model,2.50,77.05,83.12,90.50,92.83,85.48,46.91,2832,2026-10-22
+3,doubao_seed21_pro,Doubao Pro,doubao-seed-2-1-pro-260628,Closed model,2.53,74.19,81.50,89.16,92.13,84.22,45.46,2832,2026-10-22
+4,kimi_k3,Kimi K3,kimi-k3,Closed model,2.89,74.86,81.85,88.70,91.60,85.50,43.16,2832,2026-10-22
+5,glmocr,GLM-OCR,GLM-OCR,OCR model,3.20,68.86,76.55,85.81,89.09,74.57,43.99,2832,2026-10-22
+6,deepseek_v41_flash,DeepSeek V4.1 Flash,deepseek-v4-1-flash-261017,Closed model,3.36,67.58,78.07,87.71,91.21,78.53,50.85,2832,2026-10-22
+7,glm53_flash,GLM Flash,glm-5-3-flash-260828,Closed model,3.50,70.80,79.27,87.92,91.07,79.51,48.56,2832,2026-10-22
+8,kimi_k28,Kimi K2.8 Preview (API),kimi-k2-8-preview,Closed model,3.67,67.51,77.26,86.51,89.76,75.11,47.17,2832,2026-10-22
+9,qwen3vl_8b,Qwen3-VL-8B,Qwen3-VL-8B-Instruct,General model,6.49,72.32,80.86,89.27,92.06,82.89,76.99,2832,2026-10-22
+10,ovis2_5_2b,Ovis2.5-2B,ovis2_5_2b,General model,6.74,56.32,68.47,81.36,85.49,63.47,43.28,2832,2026-10-22
+11,qwen3vl_4b,Qwen3-VL-4B,Qwen3-VL-4B-Instruct,General model,6.79,63.67,75.14,86.79,90.25,76.12,72.60,2832,2026-10-22
+12,ppocrv4_server,PP-OCRv4-S,PP-OCRv4_server_det + PP-OCRv4_server_rec,OCR pipeline,8.38,35.56,49.75,69.74,77.26,54.29,25.64,2832,2026-10-22
+13,ppocrv4_mobile,PP-OCRv4-M,PP-OCRv4_mobile_det + PP-OCRv4_mobile_rec,OCR pipeline,9.86,27.97,41.21,62.39,71.19,50.80,22.64,2832,2026-10-22
+14,ppocrv2,PP-OCRv2,ch_PP-OCRv2_det_infer + ch_PP-OCRv2_rec_infer,OCR pipeline,10.83,22.92,36.02,58.40,69.03,42.24,23.36,2832,2026-10-22
+15,surya_ocr_2,Surya OCR 2,surya_ocr_2,OCR model,11.33,55.16,64.44,77.79,82.13,62.50,56.92,2832,2026-10-22
+16,hunyuanocr,HunyuanOCR,HunyuanOCR-1.5,OCR model,13.13,64.90,71.33,78.53,81.99,76.61,22.76,2832,2026-10-22
+17,paddleocrvl,PaddleOCR-VL,PaddleOCR-VL-1.6,OCR model,13.87,64.80,73.91,83.12,87.15,75.34,82.65,2832,2026-10-22
+18,fireredocr,FireRed,FireRed-OCR,OCR model,14.37,62.50,72.28,83.69,87.89,72.63,82.48,2832,2026-10-22
+19,qwen25vl_3b,Qwen2.5-VL-3B,Qwen2.5-VL-3B-Instruct,General model,19.07,61.02,70.30,81.89,86.44,72.18,86.05,2832,2026-10-22
+20,qwen3vl_2b,Qwen3-VL-2B,Qwen3-VL-2B-Instruct,General model,27.21,59.07,72.39,84.29,88.56,70.85,88.99,2832,2026-10-22
+21,gotocr,GOT-OCR,GOT-OCR-2.0,OCR model,49.17,40.54,53.67,69.74,76.20,53.10,53.10,2832,2026-10-22
+22,internvl3_5_1b,InternVL3.5-1B,internvl3_5_1b,General model,67.67,33.19,47.03,69.35,77.58,56.52,52.44,2832,2026-10-22
+23,deepseekocr,DeepSeek-OCR,DeepSeek-OCR-2,OCR model,81.91,30.12,40.29,59.85,70.20,50.00,44.45,2832,2026-10-22

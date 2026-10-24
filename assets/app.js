@@ -38,41 +38,6 @@
     "Underexposed Scene Text": "Underexposure",
   };
 
-  const profiles = [
-    ["doubao", "Doubao", "DB", "doubao.webp", "Doubao is the model family developed by ByteDance's Seed team. The listed Seed 2.1 variants are evaluated through a hosted API with full-page images and the shared CLTW transcription prompt."],
-    ["kimi", "Kimi", "K", "kimi.svg", "Kimi is developed by Moonshot AI. This profile reports the K2.8 Preview API checkpoint, evaluated with thinking disabled and full-page images under the shared CLTW transcription protocol."],
-    ["glm53", "GLM", "GL", "glm.svg", "GLM is developed by Zhipu AI, also known as Z.ai. The listed Flash API checkpoint is evaluated on full-page Chinese text using the shared transcription prompt and scoring protocol."],
-    ["glmocr", "GLM-OCR", "GL", "glmocr.svg", "GLM-OCR is Z.ai's model for reading and parsing text-rich images. CLTW evaluates its recorded local checkpoint on full-page character accuracy, page completeness and paired-view robustness."],
-    ["qwen25", "Qwen2.5-VL", "Q", "qwen25.webp", "Qwen2.5-VL is Alibaba Cloud's vision-language model family. This profile reports the 3B Instruct checkpoint, evaluated on full-page Chinese text with the shared CLTW prompt and scoring protocol."],
-    ["qwen", "Qwen", "Q", "qwen.webp", "Qwen is Alibaba Cloud's model family. The listed vision-language checkpoints receive full-page images and the shared transcription prompt; model versions and sizes are evaluated separately."],
-    ["paddleocrvl", "PaddleOCR-VL", "P", "paddleocr.webp", "PaddleOCR-VL is part of Baidu's PaddlePaddle OCR project. Its recorded local checkpoint is evaluated on complete images, with results grouped by text length, region count and capture condition."],
-    ["firered", "FireRed-OCR", "F", "firered.webp", "FireRed-OCR is developed by Xiaohongshu's Super Intelligence Team. CLTW evaluates the recorded local checkpoint using full-page images and the shared transcription prompt."],
-    ["hunyuan", "HunyuanOCR", "H", "hunyuan.webp", "HunyuanOCR is Tencent's OCR model from the Hunyuan team. CLTW evaluates the recorded local checkpoint using full-page images, including long text, complex layouts and paired capture conditions."],
-    ["ppocr", "PP-OCR", "PP", "paddleocr.webp", "PP-OCR is the text detection and recognition pipeline from Baidu's PaddleOCR project. CLTW evaluates the complete pipeline, including the organization of detected text into page reading order."],
-    ["gotocr", "GOT-OCR", "G", "gotocr.webp", "GOT-OCR 2.0 is the General OCR Theory project from a joint team at StepFun, Megvii, the University of Chinese Academy of Sciences and Tsinghua University. CLTW evaluates its recorded local checkpoint and native plain-text processor."],
-    ["deepseek", "DeepSeek-OCR", "D", "deepseek.svg", "DeepSeek-OCR is DeepSeek's model family for visual text recognition. This profile evaluates the OCR-2 checkpoint using its recorded OCR prompt and the shared full-page CLTW scoring protocol."],
-    ["intern", "InternVL", "IV", "internvl.webp", "InternVL is the vision-language model family led by Shanghai AI Laboratory's OpenGVLab with research collaborators. CLTW evaluates the listed open checkpoint on full-page Chinese transcription."],
-    ["surya", "Surya", "S", "surya.svg", "Surya is Datalab's OCR project, developed by Vikas Paruchuri and the Datalab team. The OCR 2 checkpoint is evaluated using its native full-page inference under the shared CLTW scoring protocol."],
-    ["ovis", "Ovis", "O", "ovis.webp", "Ovis is developed by the research team at Alibaba International Digital Commerce Group. CLTW evaluates the listed vision-language checkpoint with full-page images and the shared transcription prompt."],
-  ];
-  // Asset sources are the official project/company logos; each family keeps its own attribution.
-  const developers = {
-    doubao: { company: "ByteDance · Seed", project: "https://seed.bytedance.com/en/seed2_1", source: "https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/deploy/flow/ai_official_website/88329/static/image/footer_brand_logo.a2d9c12f.png", logoName: "ByteDance Seed", wide: true },
-    kimi: { company: "Moonshot AI", project: "https://www.kimi.ai/", source: "https://statics.kimi.ai/moonshot-ai/assets/static/moonshot-ai-wordmark.DeMGOuiG.svg", logoName: "Moonshot AI", wide: true, dark: true },
-    glm53: { company: "Zhipu AI · Z.ai", project: "https://www.zhipuai.cn/en/", source: "https://www.zhipuai.cn/logo-en.svg", logoName: "Zhipu AI", wide: true },
-    glmocr: { company: "Zhipu AI · Z.ai", project: "https://github.com/zai-org/GLM-OCR", source: "https://raw.githubusercontent.com/zai-org/GLM-OCR/main/resources/logo.svg", logoName: "GLM-OCR", wide: true },
-    qwen25: { company: "Alibaba Cloud · Qwen", project: "https://qwenlm.github.io/blog/qwen2.5-vl/", source: "https://qianwen-res.oss-cn-beijing.aliyuncs.com/Qwen2.5-VL/qwen2.5vl_logo.png", logoName: "Qwen2.5-VL", wide: true },
-    qwen: { company: "Alibaba Cloud · Qwen", project: "https://github.com/QwenLM/Qwen3-VL", source: "https://qianwen-res.oss-accelerate.aliyuncs.com/Qwen3-VL/qwen3vllogo.png", logoName: "Qwen3-VL", wide: true },
-    paddleocrvl: { company: "Baidu · PaddlePaddle", project: "https://github.com/PaddlePaddle/PaddleOCR", source: "https://www.paddleocr.ai/latest/version3.x/logo.jpg", logoName: "PaddleOCR", wide: true, dark: true },
-    firered: { company: "Xiaohongshu · Super Intelligence Team", project: "https://github.com/FireRedTeam/FireRed-OCR", source: "https://raw.githubusercontent.com/FireRedTeam/FireRed-OCR/main/assets/logo.png", logoName: "FireRed-OCR", wide: true },
-    hunyuan: { company: "Tencent · Hunyuan", project: "https://github.com/Tencent-Hunyuan/HunyuanOCR", source: "https://cdn-portal.hunyuan.tencent.com/public/static/logo/favicon.png", logoName: "Tencent Hunyuan" },
-    ppocr: { company: "Baidu · PaddlePaddle", project: "https://github.com/PaddlePaddle/PaddleOCR", source: "https://www.paddleocr.ai/latest/version3.x/logo.jpg", logoName: "PaddleOCR", wide: true, dark: true },
-    gotocr: { company: "StepFun · Megvii · University of Chinese Academy of Sciences · Tsinghua University", project: "https://github.com/Ucas-HaoranWei/GOT-OCR2.0", source: "https://raw.githubusercontent.com/Ucas-HaoranWei/GOT-OCR2.0/main/assets/got_logo.png", logoName: "GOT-OCR" },
-    deepseek: { company: "DeepSeek", project: "https://github.com/deepseek-ai/DeepSeek-OCR-2", source: "https://raw.githubusercontent.com/deepseek-ai/DeepSeek-OCR-2/main/assets/logo.svg", logoName: "DeepSeek", wide: true },
-    intern: { company: "Shanghai AI Laboratory · OpenGVLab", project: "https://internvl.github.io/", source: "https://www.shlab.org.cn/static/asset/2025/imgs/logo.webp", logoName: "Shanghai AI Laboratory", wide: true, dark: true },
-    surya: { company: "Datalab", project: "https://github.com/datalab-to/surya", source: "https://www.datalab.to/images/datalab-icon.svg", logoName: "Datalab" },
-    ovis: { company: "Alibaba International Digital Commerce Group", project: "https://github.com/ATH-MaaS/Ovis", source: "https://raw.githubusercontent.com/ATH-MaaS/Ovis/main/docs/ovis_logo.png", logoName: "Ovis", wide: true },
-  };
   const metricNames = {
     content_cer: "Content CER", exact: "Page Exact",
     pass1: "Pass@1%", pass3: "Pass@3%", pass5: "Pass@5%",
@@ -84,37 +49,6 @@
     if (className) element.className = className;
     if (text != null) element.textContent = text;
     return element;
-  }
-
-  function profileFor(model) {
-    const profile = profiles.find(([prefix]) => model.id.startsWith(prefix));
-    if (!profile) throw new Error(`Missing model profile: ${model.id}`);
-    const overrides = {
-      kimi_k3: {
-        bio: "Kimi is developed by Moonshot AI. This profile reports the K3 hosted API checkpoint, evaluated with thinking disabled and full-page images under the shared CLTW transcription protocol.",
-      },
-      deepseek_v41_flash: {
-        family: "DeepSeek",
-        project: "https://www.deepseek.com/",
-        bio: "DeepSeek V4.1 Flash is evaluated through the hosted API on full-page Chinese transcription. The returned checkpoint version, disabled thinking setting and shared CLTW scoring protocol are recorded with every prediction.",
-      },
-    };
-    return { family: profile[1], mark: profile[2], image: profile[3], bio: profile[4],
-      ...developers[profile[0]], ...overrides[model.id] };
-  }
-
-  function brandIdentity(model, compact = false) {
-    const profile = profileFor(model);
-    const identity = node("div", "brand-identity");
-    const logo = node("img", "brand-logo");
-    logo.src = `assets/brands/${profile.image}`;
-    logo.alt = `${profile.logoName} official logo`;
-    if (profile.wide) logo.classList.add("is-wide");
-    if (profile.dark) logo.classList.add("on-dark");
-    identity.append(logo, node("strong", "brand-family", profile.family),
-      node("span", "brand-company", profile.company));
-    if (!compact) identity.append(node("span", "brand-checkpoint", model.checkpoint));
-    return identity;
   }
 
   function sortedModels(metric = state.sort) {
@@ -193,9 +127,6 @@
 
       const name = document.createElement("td");
       const nameCell = node("div", "model-name-cell");
-      const mark = node("span", "model-mark", profileFor(model).mark);
-      mark.dataset.type = model.type;
-      mark.setAttribute("aria-hidden", "true");
       const nameText = node("div");
       const link = document.createElement("a");
       link.className = "model-link";
@@ -205,7 +136,7 @@
       id.className = "model-id";
       id.textContent = model.checkpoint;
       nameText.append(link, id);
-      nameCell.append(mark, nameText);
+      nameCell.append(nameText);
       name.append(nameCell);
 
       const type = document.createElement("td");
@@ -230,11 +161,8 @@
       tbody.append(row);
     });
 
-    const pending = state.data.dataset.excluded_revised_image_pages;
     $("#table-note").textContent = models.length
-      ? `Showing ${models.length} / ${state.data.models.length} models; correct retention (RGS) uses ${integer(state.data.dataset.rgs_common_pairs)} common pairs. ` +
-        (pending ? `${pending} pages with revised images await inference. ` : "All test pages are scored. ") +
-        "Ranks are computed across all models for the selected metric."
+      ? `${models.length} of ${state.data.models.length} models · Ranks use all models · Retention uses ${integer(state.data.dataset.rgs_common_pairs)} pairs`
       : "No matching models.";
 
     document.querySelectorAll("[data-sort]").forEach((button) => {
@@ -250,19 +178,13 @@
     const stats = $("#snapshot-stats");
     $("#leaderboard-scope").textContent =
       `${state.data.models.length} MODELS · ${integer(dataset.scored_test_pages)} PAGES EACH`;
-    $("#hero-page-count").textContent = `${integer(dataset.scored_test_pages)} PAGES`;
     stats.innerHTML = "";
     [
-      ["Scored test pages", integer(dataset.scored_test_pages)],
+      ["Field images", integer(dataset.pages)],
+      ["Capture conditions", integer(Object.keys(dataset.conditions).length)],
+      ["Test pages", integer(dataset.scored_test_pages)],
       ["Evaluated models", integer(state.data.models.length)],
-      ["Scored reference characters", integer(dataset.test_reference_characters)],
-      ["Identical-content test pairs", integer(dataset.exact_content_pairs)],
-      ["Scene images", integer(dataset.pages)],
-      ["Scene conditions", integer(Object.keys(dataset.conditions).length)],
     ].forEach(([label, value]) => addStat(stats, label, value));
-    $("#dataset-splits").replaceChildren();
-    Object.entries(dataset.splits).forEach(([split, pages]) =>
-      addStat($("#dataset-splits"), `${split[0].toUpperCase()}${split.slice(1)} pages`, integer(pages)));
   }
 
   function renderComparison() {
@@ -342,54 +264,6 @@
     });
   }
 
-  function renderHighlights() {
-    const target = $("#highlights");
-    target.innerHTML = "";
-    [["content_cer", "Lowest Content CER"], ["exact", "Highest Page Exact"], ["rgs", "Highest correct retention (RGS)"]]
-      .forEach(([metric, title]) => {
-        const model = sortedModels(metric)[0];
-        const card = node("a", "highlight");
-        card.href = modelUrl(model.id);
-        card.append(node("span", "highlight-label", title),
-          node("strong", "highlight-value", percent(modelMetric(model, metric))),
-          node("span", "highlight-name", model.name));
-        target.append(card);
-      });
-  }
-
-  function renderGallery() {
-    const gallery = $("#model-gallery");
-    gallery.innerHTML = "";
-    state.data.models.forEach((model, index) => {
-      const profile = profileFor(model);
-      const card = node("a", "model-card");
-      card.href = modelUrl(model.id);
-      card.dataset.type = model.type;
-      const art = node("div", "card-image");
-      art.append(brandIdentity(model, true), node("span", "card-code", `${String(index + 1).padStart(2, "0")} / ${profile.family}`),
-        node("span", "card-arrow", "↗"));
-      const info = node("div", "card-info");
-      const score = node("div", "card-score");
-      score.append(node("span", "", "Page Exact"), node("strong", "", percent(model.overall.metrics.exact)));
-      info.append(typeLabel(model), node("h3", "", model.name), score);
-      card.append(art, info);
-      gallery.append(card);
-    });
-    const updateButtons = () => {
-      $("#gallery-prev").disabled = gallery.scrollLeft < 2;
-      $("#gallery-next").disabled = gallery.scrollLeft + gallery.clientWidth >= gallery.scrollWidth - 2;
-    };
-    gallery.addEventListener("scroll", updateButtons, { passive: true });
-    window.addEventListener("resize", updateButtons, { passive: true });
-    ["prev", "next"].forEach((direction) => $("#gallery-" + direction).addEventListener("click", () => {
-      gallery.scrollBy({
-        left: (direction === "next" ? 1 : -1) * gallery.clientWidth * .85,
-        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-      });
-    }));
-    updateButtons();
-  }
-
   function studyTable(headers, rows, caption = "", append = false) {
     const table = node("table", "detail-table");
     if (caption) table.append(node("caption", "", caption));
@@ -427,8 +301,8 @@
     const target = $("#study-interpretation");
     const key = node("div", "study-key");
     key.append(node("strong", "", number), node("span", "", label));
-    target.replaceChildren(node("p", "eyebrow", "WHAT THE RESULT SUPPORTS"),
-      node("h3", "", title), key, ...paragraphs.map((text) => node("p", "", text)));
+    target.replaceChildren(node("h3", "", title), key,
+      ...paragraphs.map((text) => node("p", "", text)));
   }
 
   function renderResearch() {
@@ -437,12 +311,11 @@
     chart.replaceChildren();
     chart.dataset.study = state.study;
     $("#study-interpretation").dataset.study = state.study;
-    $("#study-date").textContent = `Research snapshot ${data.snapshot}`;
+    $("#study-date").textContent = data.snapshot;
     $("#study-tabs").querySelectorAll("button").forEach((button) =>
       button.setAttribute("aria-pressed", String(button.dataset.study === state.study)));
     $("#research-provenance").textContent =
-      `${data.dataset_release} · Leaderboard snapshot ${data.leaderboard_snapshot}. ` +
-      "Study values are generated from frozen aggregate files with source hashes; the research repository remains private.";
+      `Frozen results · ${data.dataset_release} · Full tables and study boundaries are available above.`;
 
     if (state.study === "training") {
       const study = data.training;
@@ -454,11 +327,10 @@
         `${arm.id} · ${arm.label}`, arm.cer_pct, 30, arm.id === "B" ? "is-selected" : "")));
       $("#study-chart-note").textContent =
         "B/C/D show the mean of all three training seeds. The original model is a single baseline.";
-      studyReading("Normal-view supervision provides a consistent in-domain gain.",
+      studyReading("Training improves recognition on CLTW.",
         (base.cer_pct - normal.cer_pct).toFixed(2) + " pp",
         "lower Content-CER after normal-view training", [
-          `${integer(study.training_runs)} training runs and ${integer(study.new_predictions)} new predictions are recorded. Formal arms share ${study.source_groups} sources, ${study.presentations} presentations and ${study.steps} training steps.`,
-          `Adding real degradation increases Page Exact by ${(real.exact_pct - normal.exact_pct).toFixed(2)} percentage points, while Content-CER increases by ${(real.cer_pct - normal.cer_pct).toFixed(2)} points.`,
+          `Three seeds per trained arm; ${study.source_groups} sources and ${study.steps} steps per arm. Adding real degradation raises Page Exact by ${(real.exact_pct - normal.exact_pct).toFixed(2)} pp but also raises character error rate by ${(real.cer_pct - normal.cer_pct).toFixed(2)} pp.`,
         ]);
       studyTable(["Condition", "Content-CER", "Seed CER range", "Page Exact", "Seed Exact range"],
         study.arms.map((arm) => [
@@ -477,7 +349,7 @@
       $("#study-scope").textContent =
         `${study.model} · ${study.pages} full images · ${integer(study.predictions)} complete outputs`;
       chart.append(node("h3", "", "Official recognition F1 ↑"),
-        node("p", "study-axis-label", "Balances missed and extra text · Mean over pages · Shared 0–100% scale"));
+        node("p", "study-axis-label", "Balances missed and extra text · Mean over pages"));
       study.cohorts.forEach((cohort) => {
         const group = node("div", "study-transfer-group");
         group.append(node("h4", "", `${cohort.label} · ${cohort.pages} pages${cohort.primary ? " · Primary test" : ""}`));
@@ -491,10 +363,8 @@
       studyReading("The matched-budget primary test failed.",
         change.delta_f1_pp.toFixed(2) + " pp",
         "CC-OCR F1 change: CLTW-trained model versus original", [
-          `The prespecified test requires B to improve over both A and E, with positive lower 95% interval bounds and all three seed directions positive. The recorded gate is ${study.primary_gate}.`,
-          `CC-OCR B−A is ${interval(change)} pp; B−E is ${interval(primary.comparisons.B_vs_E)} pp. B has lower mean F1 on all three datasets.`,
-          `B/E share ${study.sources} sources, ${study.presentations} presentations and ${study.steps} steps. Supervised text tokens: ${integer(study.supervised_tokens.B)} / ${integer(study.supervised_tokens.E)}; gap ${study.relative_token_gap_pct.toFixed(4)}%. Verified training/test image and pixel overlap: zero.`,
-          `The ${study.precision.pages}-page, one-seed supplement changes both CPU execution and decoder precision. It remains exploratory; the failed primary result is retained.`,
+          `CLTW training has lower mean recognition F1 on all three external datasets. On the primary CC-OCR test, B−A is ${interval(change)} pp and B−E is ${interval(primary.comparisons.B_vs_E)} pp.`,
+          `Both training sets use ${study.sources} sources, ${study.steps} steps and three seeds. This study does not establish a transfer advantage for CLTW.`,
         ]);
       studyTable(["Dataset / pages", "A F1", "B F1", "E F1", "B−A / 95% interval (pp)", "B−E / 95% interval (pp)"],
         study.cohorts.map((cohort) => [
@@ -521,46 +391,6 @@
         `${study.scope} Formal inference uses 4-bit decoder weights and a ${integer(study.generation_limit)}-token generation limit. ` +
         "Intervals use 5,000 paired page/source resamples, conditional on fixed training seeds. CC-OCR includes 99 Chinese pages and one English page; unknown parent-document grouping is not covered by these intervals. References have not been independently relabeled. " +
         "The 2026-10-22 CLTW experiment uses a different 104,008-token training budget.";
-    } else if (state.study === "transfer") {
-      const study = data.transfer;
-      const development = data.development;
-      const pooled = study.cohorts.find((cohort) => cohort.id === "combined_lsvt");
-      $("#study-scope").textContent = `${integer(study.source_groups)} sources · Chinese text regions · 256-token limit`;
-      chart.append(node("h3", "", "External region character error rate ↓"),
-        node("p", "study-axis-label", "Original model / CLTW-trained model · Different scoring scope from the leaderboard"));
-      study.cohorts.filter((cohort) => cohort.cohort !== "line").forEach((cohort) => {
-        const group = node("div", "study-transfer-group");
-        group.append(node("h4", "", `${cohort.dataset} · ${cohort.cohort === "confirm" ? "Source-disjoint follow-up" : "Pooled cohorts"} · ${cohort.sources} sources`),
-          studyBar("Original", cohort.raw_cer_pct, 50, "is-baseline"),
-          studyBar("CLTW-trained", cohort.trained_cer_pct, 50, "is-selected"));
-        chart.append(group);
-      });
-      $("#study-chart-note").textContent = "Published boxes locate one Chinese text region per source. All three trained seeds are retained.";
-      studyReading("Transfer gains are concentrated in a few long erroneous outputs.",
-        (100 * pooled.capped_source_gain_fraction).toFixed(1) + "%",
-        `of pooled LSVT edit reduction comes from ${pooled.capped_sources} capped sources`, [
-          "Pooled LSVT improves cumulative CER, while region exact accuracy changes from " +
-            pooled.raw_exact_pct.toFixed(2) + "% to " + pooled.trained_exact_pct.toFixed(2) + "%.",
-          "The source-disjoint LSVT follow-up interval crosses zero. ArT pooled CER increases. The separate full-image matched-budget study is complete and its primary test failed.",
-          `Development rereading screened ${integer(development.screened_outputs)} outputs: ${development.triggered_outputs} triggered across ${development.triggered_sources} sources, ${development.accepted_outputs} replacements accepted, none exact. ArT matches direct abstention; the LSVT advantage over deduplication is 0.05 pp with an interval touching zero.`,
-        ]);
-      studyTable(["Dataset / cohort", "Sources", "Original CER", "Trained CER", "Change / 95% interval (pp)", "Original → trained exact"],
-        study.cohorts.map((cohort) => [
-          `${cohort.dataset} / ${{line: "Exploratory", confirm: "Follow-up", combined: "Pooled"}[cohort.cohort]}`,
-          cohort.sources, cohort.raw_cer_pct.toFixed(2) + "%", cohort.trained_cer_pct.toFixed(2) + "%",
-          `${cohort.delta_cer_pp.toFixed(2)} [${cohort.ci95_pp.map((v) => v.toFixed(2)).join(", ")}]`,
-          `${cohort.raw_exact_pct.toFixed(2)}% → ${cohort.trained_exact_pct.toFixed(2)}%`,
-        ]));
-      studyTable(["Dataset / sources", "25% weight CER", "Change / 95% interval (pp)", "B + reread CER", "B + dedup CER", "Reread coverage"],
-        development.cohorts.map((cohort) => [
-          `${cohort.dataset} / ${cohort.sources}`, cohort.selected_cer_pct.toFixed(2) + "%",
-          `${cohort.selected_delta_cer_pp.toFixed(2)} [${cohort.selected_ci95_pp.map((v) => v.toFixed(2)).join(", ")}]`,
-          cohort.trained_reread_cer_pct.toFixed(2) + "%", cohort.trained_dedup_cer_pct.toFixed(2) + "%",
-          cohort.reread_coverage_pct.toFixed(4) + "%",
-        ]), "Development follow-up · Weight strength chosen on 100 CLTW validation sources; zero new training steps", true);
-      $("#study-boundary").textContent =
-        `${study.scope} ${study.normalization} Intervals use 5,000 paired source resamples, conditional on three fixed training seeds. ` +
-        "Development rereading replays measured reads after prompt changes on inspected sources; accepted replacements have remaining text errors.";
     } else {
       const study = data.loop_case;
       $("#study-scope").textContent = `${study.model} · External table · 4-bit weights (NF4)`;
@@ -587,7 +417,7 @@
       };
       $("#study-chart-note").textContent =
         `A visually audited case from CC-OCR table photos. Output reached ${integer(study.generated_tokens)} generated tokens.`;
-      studyReading("Natural loops also appear in an independent text-decoder family.",
+      studyReading("A header is repeated beyond the visible text.",
         integer(study.output_occurrences) + " repeats",
         `for a header with ${study.visible_occurrences} visible occurrences`, [
           "Deduplication removes the repeated continuation but leaves missing page content. Reading the pixels again is needed to recover it.",
@@ -640,148 +470,25 @@
     }));
   }
 
-  function initializeMotion() {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    document.documentElement.classList.add("js-motion");
-    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }
-    }), { threshold: .08 });
-    document.querySelectorAll(".section-heading, .comparison-panel, .highlights, .research-grid").forEach((target) => {
-      target.classList.add("reveal");
-      observer.observe(target);
-    });
-  }
-
   async function initializeScenes() {
     const response = await fetch("data/scenes.json");
     if (!response.ok) throw new Error("Dataset scene images are unavailable");
     const scenes = await response.json();
-    const background = $("#hero-background");
-    const foreground = $("#hero-scene-images");
-    let index = 0;
-    let paused = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let visible = true;
-    let timer;
-    const backgroundImages = [];
-    const foregroundImages = [];
-    scenes.forEach((scene, i) => {
-      const backdrop = node("img", "hero-image" + (i === 0 ? " is-active" : ""));
-      backdrop.src = scene.src;
-      backdrop.alt = "";
-      const image = node("img", "scene-image" + (i === 0 ? " is-active" : ""));
+    $("#scene-grid").replaceChildren(...scenes.map((scene) => {
+      const figure = node("figure", "scene-preview");
+      const link = node("a");
+      link.href = scene.src;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.title = scene.page_id;
+      const image = node("img");
       image.src = scene.src;
       image.alt = `CLTW scene example: ${scene.label}`;
-      backgroundImages.push(backdrop);
-      foregroundImages.push(image);
-    });
-    background.replaceChildren(...backgroundImages);
-    foreground.replaceChildren(...foregroundImages);
-    const update = () => {
-      $("#scene-label").textContent = scenes[index].label;
-      $("#scene-counter").textContent = `${String(index + 1).padStart(2, "0")} / ${String(scenes.length).padStart(2, "0")}`;
-      $("#scene-pause").textContent = paused ? "Play" : "Pause";
-      $("#scene-pause").setAttribute("aria-pressed", String(paused));
-      $("#hero-example").title = `CLTW dataset example: ${scenes[index].label}`;
-      $("#hero-example").dataset.pageId = scenes[index].page_id;
-    };
-    const advance = () => {
-      const next = (index + 1) % scenes.length;
-      if (!foregroundImages[next].complete || !foregroundImages[next].naturalWidth) return;
-      backgroundImages[index].classList.remove("is-active");
-      foregroundImages[index].classList.remove("is-active");
-      index = next;
-      backgroundImages[index].classList.add("is-active");
-      foregroundImages[index].classList.add("is-active");
-      update();
-    };
-    const schedule = () => {
-      clearInterval(timer);
-      if (!paused && visible && !document.hidden) timer = setInterval(advance, 8500);
-    };
-    $("#scene-next").addEventListener("click", () => { advance(); schedule(); });
-    $("#scene-pause").addEventListener("click", () => { paused = !paused; update(); schedule(); });
-    document.addEventListener("visibilitychange", schedule);
-    new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; schedule(); })
-      .observe($(".hero"));
-    update();
-    schedule();
-  }
-
-  function renderReliabilityChart() {
-    const chart = $("#reliability-chart");
-    chart.innerHTML = "";
-    [...state.data.models]
-      .sort((left, right) => (
-        right.overall.metrics.pass5 - left.overall.metrics.pass5
-      ))
-      .forEach((model) => {
-        const row = document.createElement("a");
-        row.className = "reliability-row";
-        row.dataset.type = model.type;
-        row.href = modelUrl(model.id);
-        row.setAttribute(
-          "aria-label",
-          `${model.name}, ${metricNames.pass5} ${percent(model.overall.metrics.pass5)}`,
-        );
-
-        const label = document.createElement("span");
-        label.className = "reliability-label";
-        label.textContent = model.name;
-
-        const track = document.createElement("span");
-        track.className = "reliability-track";
-        const fill = document.createElement("span");
-        fill.className = "reliability-fill";
-        fill.style.width = `${100 * model.overall.metrics.pass5}%`;
-        track.append(fill);
-
-        const value = document.createElement("span");
-        value.className = "reliability-value";
-        value.textContent = percent(model.overall.metrics.pass5);
-        row.append(label, track, value);
-        chart.append(row);
-      });
-  }
-
-  function renderRgsChart() {
-    const chart = $("#rgs-chart");
-    chart.innerHTML = "";
-    [...state.data.models]
-      .sort((left, right) => (
-        right.rgs.all_conditions.rgs - left.rgs.all_conditions.rgs
-      ))
-      .forEach((model) => {
-        const metric = model.rgs.all_conditions;
-        const row = document.createElement("a");
-        row.className = "reliability-row";
-        row.dataset.type = model.type;
-        row.href = modelUrl(model.id);
-        row.title = `95% CI ${percent(metric.ci95[0])} to ${percent(metric.ci95[1])}`;
-        row.setAttribute(
-          "aria-label",
-          `${model.name}, ${metricNames.rgs} ${percent(metric.rgs)}, 95% confidence interval ${percent(metric.ci95[0])} to ${percent(metric.ci95[1])}`,
-        );
-
-        const label = document.createElement("span");
-        label.className = "reliability-label";
-        label.textContent = model.name;
-
-        const track = document.createElement("span");
-        track.className = "reliability-track";
-        const fill = document.createElement("span");
-        fill.className = "reliability-fill";
-        fill.style.width = `${100 * metric.rgs}%`;
-        track.append(fill);
-
-        const value = document.createElement("span");
-        value.className = "reliability-value";
-        value.textContent = percent(metric.rgs);
-        row.append(label, track, value);
-        chart.append(row);
-      });
+      image.loading = "lazy";
+      link.append(image);
+      figure.append(link, node("figcaption", "", scene.label));
+      return figure;
+    }));
   }
 
   function renderConfiguration() {
@@ -1098,8 +805,6 @@
     });
     initializeImageViewer();
     renderExample();
-    $("#release-label").textContent = `${state.cases.dataset_release} · Evaluation snapshot ${state.data.snapshot} · ${state.data.models.length} checkpoints`;
-    $("#site-citation").textContent = `@misc{cltw_leaderboard_2026,\n  title = {CLTW Model Leaderboard},\n  year = {2026},\n  url = {https://laoshan-song.github.io/cltw-leaderboard/},\n  note = {${state.cases.dataset_release}; evaluation snapshot ${state.data.snapshot}}\n}`;
   }
 
   function metricBar(value) {
@@ -1183,27 +888,10 @@
     $("#model-checkpoint").textContent = model.checkpoint;
     $("#model-prompt").textContent = model.prompt;
     $(".skip-link").href = "#model-view";
-    const profile = profileFor(model);
     const ordered = sortedModels("content_cer");
     const rank = ordered.findIndex((item) => item.id === model.id);
     $("#model-rank").textContent = `Content CER rank ${rank + 1} / ${ordered.length}`;
     $("#model-type").dataset.type = model.type;
-    $("#model-art").dataset.type = model.type;
-    $("#model-bio").textContent = profile.bio;
-    $("#model-identity").replaceChildren(...brandIdentity(model).children);
-    $("#art-family").textContent = profile.logoName;
-    $("#model-source-links").replaceChildren(...[
-      ["Official project ↗", profile.project], ["Logo source ↗", profile.source],
-    ].map(([text, href]) => {
-      const link = node("a", "", text);
-      link.href = href;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      return link;
-    }));
-    $("#model-tags").replaceChildren(...[
-      typeNames[model.type], "Full-image input", `${integer(model.overall.pages)} frozen test pages`,
-    ].map((text) => node("span", "", text)));
     const navigation = $("#profile-navigation");
     navigation.innerHTML = "";
     [[rank - 1, "← Previous model"], [rank + 1, "Next model →"]].forEach(([i, title]) => {
@@ -1280,13 +968,9 @@
     $("#table-details").addEventListener("click", (event) => {
       const detailed = event.currentTarget.getAttribute("aria-pressed") !== "true";
       event.currentTarget.setAttribute("aria-pressed", String(detailed));
-      event.currentTarget.textContent = detailed ? "Hide detailed metrics −" : "Show detailed metrics ＋";
+      event.currentTarget.textContent = detailed ? "Fewer metrics −" : "More metrics ＋";
       $(".leaderboard-table").dataset.detailed = String(detailed);
       if (!detailed && ["pass1", "pass3", "tail"].includes(state.sort)) { state.sort = "content_cer"; renderLeaderboard(); }
-    });
-    $("#copy-citation").addEventListener("click", async (event) => {
-      try { await navigator.clipboard.writeText($("#site-citation").textContent); event.target.textContent = "Copied"; }
-      catch { event.target.textContent = "Select the citation above to copy"; }
     });
     const issue = new URL($("#submission-link").href);
     issue.searchParams.set("title", "Model evaluation request: [checkpoint]");
@@ -1337,22 +1021,16 @@
     const modelId = new URLSearchParams(window.location.search).get("model");
     if (modelId) {
       renderModel(modelId);
-      initializeMotion();
       return;
     }
     renderSnapshot();
-    renderRgsChart();
-    renderReliabilityChart();
     renderConfiguration();
     state.selected = new Set(state.data.models.map((model) => model.id));
     renderComparisonPicker();
     renderComparison();
     renderSceneMatrix();
-    renderHighlights();
-    renderGallery();
     bindControls();
     renderLeaderboard();
-    initializeMotion();
     await initializeScenes();
     await initializeExamples();
     await initializeResearch();
