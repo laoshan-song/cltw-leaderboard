@@ -15,7 +15,7 @@
     exampleModel: null,
     showDiff: true,
     research: null,
-    study: "training",
+    stageEvidence: null,
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -412,17 +412,6 @@
     else $("#study-table").replaceChildren(table);
   }
 
-  function studyBar(label, value, maximum, variant = "") {
-    const row = node("div", `study-bar ${variant}`);
-    row.append(node("span", "study-bar-label", label));
-    const track = node("div", "study-bar-track");
-    const fill = node("span", "study-bar-fill");
-    fill.style.width = `${Math.max(0, Math.min(100, 100 * value / maximum))}%`;
-    track.append(fill);
-    row.append(track, node("span", "study-bar-value", value.toFixed(2) + "%"));
-    return row;
-  }
-
   function studyReading(title, number, label, paragraphs) {
     const target = $("#study-interpretation");
     const key = node("div", "study-key");
@@ -431,178 +420,255 @@
       node("h3", "", title), key, ...paragraphs.map((text) => node("p", "", text)));
   }
 
+  function rawReply(title, text, hash, note = "") {
+    const block = node("article", "raw-reply");
+    const header = node("div", "reply-heading");
+    const expand = node("button", "", "Expand text ↗");
+    expand.type = "button";
+    expand.setAttribute("aria-expanded", "false");
+    expand.addEventListener("click", () => {
+      const expanded = block.classList.toggle("is-open");
+      expand.setAttribute("aria-expanded", String(expanded));
+      expand.textContent = expanded ? "Compact text ↑" : "Expand text ↗";
+    });
+    header.append(node("h4", "", title), expand);
+    const reply = node("pre", "reply-text", text);
+    reply.lang = "zh-CN";
+    reply.tabIndex = 0;
+    reply.dataset.sha256 = hash;
+    reply.setAttribute("aria-label", title);
+    block.append(header, reply);
+    if (note) block.append(node("p", "reply-note", note));
+    return block;
+  }
+
+  function qualityText(quality) {
+    if (!quality) return "Future target unavailable; text quality is not scored.";
+    return `${quality.correct_chars}/${quality.reference_chars} correct · ` +
+      `${quality.deletions} missed · ${quality.substitutions} wrong · ${quality.insertions} extra` +
+      (quality.exact ? " · Exact text" : "");
+  }
+
+  function replyNote(arm) {
+    return `${arm.repeated ? "Severe repetition" : "No severe repetition"} · ` +
+      `${arm.cap ? "Output limit" : arm.eos ? "Ended on its own" : "No end signal"}. ` +
+      qualityText(arm.quality);
+  }
+
+  function renderStageEvidence() {
+    const study = state.research.stage_intervention;
+    const evidence = state.stageEvidence;
+    const target = $("#stage-evidence");
+    const selector = node("div", "stage-selector");
+    selector.append(node("span", "", `PAIRED SOURCE · ${evidence.cases.length} cases`));
+    const choices = node("div", "segments case-options");
+    choices.setAttribute("aria-label", "Paired source");
+    let selectedCase = evidence.cases[0].id;
+    evidence.cases.forEach((entry) => {
+      const button = node("button", "", entry.label);
+      button.type = "button";
+      button.dataset.source = entry.id;
+      button.addEventListener("click", () => { selectedCase = entry.id; renderCase(); });
+      choices.append(button);
+    });
+    const condition = node("p", "case-condition");
+    selector.append(choices, condition);
+    const photos = node("div", "evidence-pair");
+    const viewers = {};
+    ["normal", "degraded"].forEach((view) => {
+      const figure = node("figure", "evidence-photo");
+      const tools = node("div", "evidence-image-tools");
+      tools.append(node("strong", "", view === "normal" ? "Normal paired image" : "Degraded input image"));
+      const controls = {};
+      [["out", "−", "Zoom out"], ["scale", "100%", ""], ["in", "+", "Zoom in"], ["reset", "Fit", "Reset image zoom"]]
+        .forEach(([key, label, aria]) => {
+          const control = node(key === "scale" ? "span" : "button", "", label);
+          if (aria) { control.type = "button"; control.setAttribute("aria-label", `${aria}: ${view} image`); }
+          controls[key] = control;
+          tools.append(control);
+        });
+      const viewport = node("div", "image-viewport evidence-viewport");
+      viewport.tabIndex = 0;
+      viewport.setAttribute("aria-label", `${view} image. Drag to pan, scroll to zoom, or use plus and minus keys.`);
+      const image = node("img");
+      image.draggable = false;
+      viewport.append(image);
+      const caption = node("figcaption");
+      const original = node("a", "", "Open original image ↗");
+      original.target = "_blank";
+      original.rel = "noopener noreferrer";
+      caption.append(node("span", "", "Drag to pan · Scroll or pinch to zoom"), original);
+      figure.append(tools, viewport, caption);
+      photos.append(figure);
+      viewers[view] = { image, original };
+      initializeZoom(viewport, image, controls);
+    });
+    const baselines = node("div", "evidence-pair baseline-replies");
+    const reference = node("details", "evidence-reference");
+    const stageHeading = node("h3", "evidence-subtitle", "Intervene at a repetition stage");
+    const instruction = node("p", "evidence-instruction",
+      "Both branches start from the identical real generated prefix below. Compare their complete newly generated text.");
+    const tabs = node("div", "segments stage-tabs");
+    tabs.setAttribute("aria-label", "Repetition stage");
+    const continuation = node("div", "stage-continuation");
+    let copies = 1;
+    const buttons = new Map();
+    study.settings.copies.forEach((value) => {
+      const button = node("button", "", `After ${value} ${value === 1 ? "copy" : "copies"}`);
+      button.type = "button";
+      button.addEventListener("click", () => { copies = value; renderStage(); });
+      buttons.set(value, button);
+      tabs.append(button);
+    });
+    const renderStage = () => {
+      const entry = evidence.cases.find((row) => row.id === selectedCase);
+      const stage = entry.stages.find((row) => row.copies === copies);
+      buttons.forEach((button, value) => button.setAttribute("aria-pressed", String(value === copies)));
+      continuation.dataset.copies = copies;
+      continuation.replaceChildren();
+      if (!stage) {
+        const unavailable = study.cases.find((row) => row.id === entry.id)
+          .unavailable_stages.find((row) => row.copies === copies);
+        continuation.append(node("p", "stage-unavailable", unavailable
+          ? `Not run: ${unavailable.prefix_tokens} prefix tokens exceed the fixed ${study.settings.prefix_limit}-token limit.`
+          : "This stage was not run."));
+        return;
+      }
+      const prefix = rawReply(`Shared generated prefix · ${stage.prefix_tokens} tokens`,
+        stage.prefix_text, stage.prefix_text_sha256);
+      prefix.classList.add("shared-prefix");
+      const branches = node("div", "evidence-pair continuation-replies");
+      ["degraded", "normal"].forEach((view) => {
+        const arm = stage.arms[view];
+        const reply = rawReply(view === "degraded" ? "Keep degraded image · continuation" : "Swap to normal image · continuation",
+          arm.text, arm.text_sha256, replyNote(arm));
+        reply.dataset.view = view;
+        reply.classList.add(arm.repeated ? "is-repeated" : arm.quality?.exact ? "is-exact" : "is-stopped");
+        branches.append(reply);
+      });
+      const future = node("details", "evidence-reference");
+      future.append(node("summary", "", "Reference future text used for scoring"));
+      if (stage.future_reference === null) future.append(node("p", "reply-note",
+        "A reliable future-reference anchor is unavailable. These replies contribute only to repetition counts."));
+      else {
+        const text = node("pre", "reply-text", stage.future_reference);
+        text.lang = "zh-CN";
+        future.append(text);
+      }
+      continuation.append(prefix, branches, future);
+    };
+    const renderCase = () => {
+      const entry = evidence.cases.find((row) => row.id === selectedCase);
+      target.dataset.source = entry.id;
+      choices.querySelectorAll("button").forEach((button) =>
+        button.setAttribute("aria-pressed", String(button.dataset.source === entry.id)));
+      condition.textContent = `${conditionNames[entry.condition] || entry.condition} · ` +
+        (entry.role === "loop_reaches_cap" ? "Original repetition reached the output limit" : "Original repeated output ended on its own");
+      baselines.replaceChildren();
+      ["normal", "degraded"].forEach((view) => {
+        const photo = entry.images[view], arm = entry.baseline[view];
+        viewers[view].image.src = photo.path;
+        viewers[view].image.alt = `${entry.label}: actual ${view} experiment input`;
+        viewers[view].original.href = photo.path;
+        viewers[view].image.dataset.sha256 = photo.sha256;
+        const reply = rawReply(`${view === "normal" ? "Normal" : "Degraded"} image · full reply from the start`,
+          arm.text, arm.text_sha256, replyNote(arm));
+        reply.dataset.view = view;
+        baselines.append(reply);
+      });
+      reference.replaceChildren(node("summary", "", "Whole-page reference text"));
+      const text = node("pre", "reply-text", entry.reference);
+      text.lang = "zh-CN";
+      text.dataset.sha256 = entry.reference_sha256;
+      reference.append(text);
+      renderStage();
+    };
+    target.replaceChildren(selector, photos, baselines, reference, stageHeading, instruction, tabs, continuation,
+      node("p", "evidence-text-policy", "All replies retain the recorded repetitions, spacing and line breaks. Scroll inside a reply or expand it to read the complete text."));
+    renderCase();
+  }
+
   function renderResearch() {
     const data = state.research;
     const chart = $("#study-chart");
     chart.replaceChildren();
-    chart.dataset.study = state.study;
-    $("#study-interpretation").dataset.study = state.study;
     $("#study-date").textContent = `Research snapshot ${data.snapshot}`;
-    $("#study-tabs").querySelectorAll("button").forEach((button) =>
-      button.setAttribute("aria-pressed", String(button.dataset.study === state.study)));
     $("#research-provenance").textContent =
       `${data.dataset_release} · Leaderboard snapshot ${data.leaderboard_snapshot}. ` +
-      "Study values are generated from frozen aggregate files with source hashes; the research repository remains private.";
+      "Images are byte-identical experiment inputs. Replies and summary values are verified against source hashes.";
 
-    if (state.study === "training") {
-      const study = data.training;
-      const [base, normal, real] = study.arms;
-      $("#study-scope").textContent = `${study.model} · ${integer(study.test_pages)} CLTW test pages`;
-      chart.append(node("h3", "", "Content character error rate ↓"),
-        node("p", "study-axis-label", "Same test set · Percentage of reference characters"));
-      study.arms.forEach((arm) => chart.append(studyBar(
-        `${arm.id} · ${arm.label}`, arm.cer_pct, 30, arm.id === "B" ? "is-selected" : "")));
-      $("#study-chart-note").textContent =
-        "B/C/D show the mean of all three training seeds. The original model is a single baseline.";
-      studyReading("Normal-view supervision provides a consistent in-domain gain.",
-        (base.cer_pct - normal.cer_pct).toFixed(2) + " pp",
-        "lower Content-CER after normal-view training", [
-          `${integer(study.training_runs)} training runs and ${integer(study.new_predictions)} new predictions are recorded. Formal arms share ${study.source_groups} sources, ${study.presentations} presentations and ${study.steps} training steps.`,
-          `Adding real degradation increases Page Exact by ${(real.exact_pct - normal.exact_pct).toFixed(2)} percentage points, while Content-CER increases by ${(real.cer_pct - normal.cer_pct).toFixed(2)} points.`,
-        ]);
-      studyTable(["Condition", "Content-CER", "Seed CER range", "Page Exact", "Seed Exact range"],
-        study.arms.map((arm) => [
-          `${arm.id} · ${arm.label}`, arm.cer_pct.toFixed(2) + "%",
-          arm.id === "A" ? "Single baseline" : arm.cer_seed_range_pct.map((v) => v.toFixed(2) + "%").join(" – "),
-          arm.exact_pct.toFixed(2) + "%",
-          arm.id === "A" ? "Single baseline" : arm.exact_seed_range_pct.map((v) => v.toFixed(2) + "%").join(" – "),
-        ]));
-      $("#study-boundary").textContent =
-        `${study.scope} ${study.range_note} CLTW reference text has not undergone complete independent double annotation.`;
-    } else if (state.study === "matched") {
-      const study = data.matched_training;
-      const primary = study.cohorts.find((cohort) => cohort.primary);
-      const change = primary.comparisons.B_vs_A;
-      const interval = (row) => `${row.delta_f1_pp.toFixed(3)} [${row.ci95_pp.map((v) => v.toFixed(3)).join(", ")}]`;
+    {
+      const study = data.stage_intervention;
+      const spotlight = study.spotlight;
+      const ratio = (a, b) => `${a}/${b}`;
       $("#study-scope").textContent =
-        `${study.model} · ${study.pages} full images · ${integer(study.predictions)} complete outputs`;
-      chart.append(node("h3", "", "Official recognition F1 ↑"),
-        node("p", "study-axis-label", "Balances missed and extra text · Mean over pages · Shared 0–100% scale"));
-      study.cohorts.forEach((cohort) => {
-        const group = node("div", "study-transfer-group");
-        group.append(node("h4", "", `${cohort.label} · ${cohort.pages} pages${cohort.primary ? " · Primary test" : ""}`));
-        cohort.arms.forEach((arm) => group.append(studyBar(
-          `${arm.id} · ${{A: "Original", B: "CLTW", E: "Public data"}[arm.id]}`,
-          arm.f1_pct, 100, arm.id === "B" ? "is-selected" : arm.id === "E" ? "is-control" : "is-baseline")));
-        chart.append(group);
+        `${study.model} · 16-bit weights · ${spotlight.sources} selected pairs / ${study.totals.examined_pairs} examined`;
+      chart.append(node("h3", "", "Can a readable image restore the continuation?"),
+        node("p", "study-axis-label", "Same generated history · Replace the degraded view with its normal paired view"));
+      study.groups.forEach((group) => {
+        const block = node("div", "stage-group");
+        block.append(node("h4", "", group.role === "loop_reaches_cap"
+          ? `${group.sources} sources · Original repetition reached the output limit`
+          : `${group.sources} source · Original repetition ended on its own`));
+        const table = node("table", "stage-counts");
+        const caption = node("caption", "sr-only", "Image intervention by repetition stage");
+        const head = node("thead");
+        const header = node("tr");
+        header.append(node("th", "", "Cut after"));
+        group.stages.forEach((row) => header.append(node("th", "",
+          `${row.copies} ${row.copies === 1 ? "copy" : "copies"}`)));
+        head.append(header);
+        const body = node("tbody");
+        [
+          ["No severe repeat", "swapped_no_repeat", "positions", "stage-stopped"],
+          ["Exact future text", "swapped_exact", "scorable_positions", "stage-exact"],
+        ].forEach(([label, value, denominator, variant]) => {
+          const row = node("tr", variant);
+          row.append(node("th", "", label));
+          group.stages.forEach((stage) => row.append(node("td", "",
+            ratio(stage[value], stage[denominator]))));
+          body.append(row);
+        });
+        table.append(caption, head, body);
+        block.append(table);
+        chart.append(block);
       });
       $("#study-chart-note").textContent =
-        `B/E are means of three training seeds. E uses ${study.public_training_sources.lsvt} LSVT and ${study.public_training_sources.art} ArT training sources; CC-OCR is external to both.`;
-      studyReading("The matched-budget primary test failed.",
-        change.delta_f1_pp.toFixed(2) + " pp",
-        "CC-OCR F1 change: CLTW-trained model versus original", [
-          `The prespecified test requires B to improve over both A and E, with positive lower 95% interval bounds and all three seed directions positive. The recorded gate is ${study.primary_gate}.`,
-          `CC-OCR B−A is ${interval(change)} pp; B−E is ${interval(primary.comparisons.B_vs_E)} pp. B has lower mean F1 on all three datasets.`,
-          `B/E share ${study.sources} sources, ${study.presentations} presentations and ${study.steps} steps. Supervised text tokens: ${integer(study.supervised_tokens.B)} / ${integer(study.supervised_tokens.E)}; gap ${study.relative_token_gap_pct.toFixed(4)}%. Verified training/test image and pixel overlap: zero.`,
-          `The ${study.precision.pages}-page, one-seed supplement changes both CPU execution and decoder precision. It remains exploratory; the failed primary result is retained.`,
+        "Counts are paired source observations at each stage. Severe repetition means at least five abnormal consecutive copies in the newly generated text. Exactness requires no missed, wrong or extra characters.";
+      studyReading("Stopping repeated generation often leaves text errors.",
+        ratio(spotlight.strict_exact_after_stop, spotlight.stopped_scorable),
+        "positions without severe repetition have exact future text", [
+          `The ${spotlight.sources} selected sources meet a normal-view character error rate of at most 5%, end on their own and have no severe repetition. Selection uses from-the-start outputs and retains all intervention outcomes.`,
+          `Keeping the degraded image continues severe repetition at all ${spotlight.positions} selected cuts. Swapping to the normal image avoids severe repetition at ${spotlight.swapped_no_repeat} cuts; ${spotlight.strict_exact_after_stop} has exact future text and ${spotlight.stopped_scorable - spotlight.strict_exact_after_stop} still have text errors.`,
+          "Responses differ by source and stage. A fifth-copy intervention can still stop repetition in one source; these cases do not establish a universal failure threshold.",
+          `The six batches contain ${study.totals.continuation_calls} continuation calls, including schedule controls, and ${study.totals.new_whole_page_calls} new whole-page reads. Token-by-token replay matches the complete same-image continuation; character distances and repetition detection were independently recomputed.`,
         ]);
-      studyTable(["Dataset / pages", "A F1", "B F1", "E F1", "B−A / 95% interval (pp)", "B−E / 95% interval (pp)"],
-        study.cohorts.map((cohort) => [
-          `${cohort.label} / ${cohort.pages}${cohort.primary ? " · Primary" : ""}`,
-          ...cohort.arms.map((arm) => arm.f1_pct.toFixed(3) + "%"),
-          interval(cohort.comparisons.B_vs_A), interval(cohort.comparisons.B_vs_E),
-        ]));
-      studyTable(["Dataset", "Comparison", "Seed 20261031", "Seed 20261032", "Seed 20261033"],
-        study.cohorts.flatMap((cohort) => Object.entries(cohort.comparisons).map(([key, row]) => [
-          cohort.label, key.replaceAll("_", " "),
-          ...["31", "32", "33"].map((seed) => row.seed_delta_f1_pp[seed].toFixed(3) + " pp"),
-        ])), "All training seeds · F1 changes", true);
-      studyTable(["Supplement", "Comparison", "F1 change / 95% interval (pp)", "Scope"],
-        Object.entries(study.precision.comparisons).map(([key, row]) => [
-          `${study.precision.pages} CC-OCR pages / ${study.precision.predictions} outputs`,
-          key.replaceAll("_", " "), interval(row), "One seed; CPU execution and float32 decoder",
-        ]), "Exploratory execution and precision sensitivity", true);
-      studyTable(["Dataset", "B−A F1 / 95% interval (pp)", "Page Exact change", "Scope"],
-        study.previous_transfer_recheck.cohorts.map((cohort) => [
-          cohort.dataset, interval(cohort), cohort.delta_exact_pp.toFixed(3) + " pp",
-          "Historical full weights; two recorded seeds; 104,008-token training budget",
-        ]), "Retrospective full-weight recheck · 512 pages / 5,120 outputs", true);
+      studyTable(["Source / condition", "Normal page: correct / reference", "Missed / wrong / extra", "Normal page exact", "Original degraded output"],
+        study.cases.map((entry) => {
+          const quality = entry.baseline.normal.quality;
+          return [`${entry.label} / ${entry.condition}`,
+            ratio(quality.correct_chars, quality.reference_chars),
+            `${quality.deletions} / ${quality.substitutions} / ${quality.insertions}`,
+            quality.exact ? "Yes" : "No",
+            entry.role === "loop_reaches_cap" ? "Repeated to limit" : "Repeated, then ended"];
+        }), "From-the-start baselines · Whole-page targets");
+      studyTable(["Source", "Copies at cut", "Keep degraded image", "Swap: severe repeat", "Swap: correct / future target", "Missed / wrong / extra", "Swap: exact", "Swap: ending"],
+        study.cases.flatMap((entry) => entry.stages.map((stage) => {
+          const arm = stage.normal;
+          const quality = arm.quality;
+          return [entry.label, stage.copies,
+            stage.degraded.cap ? "Repeated to limit" : "Repeated, then ended",
+            arm.repeated ? "Yes" : "No",
+            quality ? ratio(quality.correct_chars, quality.reference_chars) : "Unavailable",
+            quality ? `${quality.deletions} / ${quality.substitutions} / ${quality.insertions}` : "Unavailable",
+            quality ? quality.exact ? "Yes" : "No" : "Unavailable",
+            arm.cap ? "Output limit" : arm.eos ? "Ended on its own" : "No end signal"];
+        })), "Fixed-history continuations · Anchored future suffix targets", true);
       $("#study-boundary").textContent =
-        `${study.scope} Formal inference uses 4-bit decoder weights and a ${integer(study.generation_limit)}-token generation limit. ` +
-        "Intervals use 5,000 paired page/source resamples, conditional on fixed training seeds. CC-OCR includes 99 Chinese pages and one English page; unknown parent-document grouping is not covered by these intervals. References have not been independently relabeled. " +
-        "The 2026-10-22 CLTW experiment uses a different 104,008-token training budget.";
-    } else if (state.study === "transfer") {
-      const study = data.transfer;
-      const development = data.development;
-      const pooled = study.cohorts.find((cohort) => cohort.id === "combined_lsvt");
-      $("#study-scope").textContent = `${integer(study.source_groups)} sources · Chinese text regions · 256-token limit`;
-      chart.append(node("h3", "", "External region character error rate ↓"),
-        node("p", "study-axis-label", "Original model / CLTW-trained model · Different scoring scope from the leaderboard"));
-      study.cohorts.filter((cohort) => cohort.cohort !== "line").forEach((cohort) => {
-        const group = node("div", "study-transfer-group");
-        group.append(node("h4", "", `${cohort.dataset} · ${cohort.cohort === "confirm" ? "Source-disjoint follow-up" : "Pooled cohorts"} · ${cohort.sources} sources`),
-          studyBar("Original", cohort.raw_cer_pct, 50, "is-baseline"),
-          studyBar("CLTW-trained", cohort.trained_cer_pct, 50, "is-selected"));
-        chart.append(group);
-      });
-      $("#study-chart-note").textContent = "Published boxes locate one Chinese text region per source. All three trained seeds are retained.";
-      studyReading("Transfer gains are concentrated in a few long erroneous outputs.",
-        (100 * pooled.capped_source_gain_fraction).toFixed(1) + "%",
-        `of pooled LSVT edit reduction comes from ${pooled.capped_sources} capped sources`, [
-          "Pooled LSVT improves cumulative CER, while region exact accuracy changes from " +
-            pooled.raw_exact_pct.toFixed(2) + "% to " + pooled.trained_exact_pct.toFixed(2) + "%.",
-          "The source-disjoint LSVT follow-up interval crosses zero. ArT pooled CER increases. The separate full-image matched-budget study is complete and its primary test failed.",
-          `Development rereading screened ${integer(development.screened_outputs)} outputs: ${development.triggered_outputs} triggered across ${development.triggered_sources} sources, ${development.accepted_outputs} replacements accepted, none exact. ArT matches direct abstention; the LSVT advantage over deduplication is 0.05 pp with an interval touching zero.`,
-        ]);
-      studyTable(["Dataset / cohort", "Sources", "Original CER", "Trained CER", "Change / 95% interval (pp)", "Original → trained exact"],
-        study.cohorts.map((cohort) => [
-          `${cohort.dataset} / ${{line: "Exploratory", confirm: "Follow-up", combined: "Pooled"}[cohort.cohort]}`,
-          cohort.sources, cohort.raw_cer_pct.toFixed(2) + "%", cohort.trained_cer_pct.toFixed(2) + "%",
-          `${cohort.delta_cer_pp.toFixed(2)} [${cohort.ci95_pp.map((v) => v.toFixed(2)).join(", ")}]`,
-          `${cohort.raw_exact_pct.toFixed(2)}% → ${cohort.trained_exact_pct.toFixed(2)}%`,
-        ]));
-      studyTable(["Dataset / sources", "25% weight CER", "Change / 95% interval (pp)", "B + reread CER", "B + dedup CER", "Reread coverage"],
-        development.cohorts.map((cohort) => [
-          `${cohort.dataset} / ${cohort.sources}`, cohort.selected_cer_pct.toFixed(2) + "%",
-          `${cohort.selected_delta_cer_pp.toFixed(2)} [${cohort.selected_ci95_pp.map((v) => v.toFixed(2)).join(", ")}]`,
-          cohort.trained_reread_cer_pct.toFixed(2) + "%", cohort.trained_dedup_cer_pct.toFixed(2) + "%",
-          cohort.reread_coverage_pct.toFixed(4) + "%",
-        ]), "Development follow-up · Weight strength chosen on 100 CLTW validation sources; zero new training steps", true);
-      $("#study-boundary").textContent =
-        `${study.scope} ${study.normalization} Intervals use 5,000 paired source resamples, conditional on three fixed training seeds. ` +
-        "Development rereading replays measured reads after prompt changes on inspected sources; accepted replacements have remaining text errors.";
-    } else {
-      const study = data.loop_case;
-      $("#study-scope").textContent = `${study.model} · External table · 4-bit weights (NF4)`;
-      chart.append(node("h3", "", "One header. Excessive continuation."),
-        node("p", "study-axis-label", "Occurrences counted in the image and model output"));
-      [
-        ["Visible in the image", study.visible_occurrences, "is-baseline"],
-        ["Repeated in the output", study.output_occurrences, "is-loop"],
-      ].forEach(([label, value, variant]) => {
-        const row = node("div", `study-count ${variant}`);
-        const track = node("div", "study-bar-track");
-        const fill = node("span", "study-bar-fill");
-        fill.style.width = `${100 * value / study.output_occurrences}%`;
-        track.append(fill);
-        row.append(node("span", "", label), node("strong", "", integer(value)), track);
-        chart.append(row);
-      });
-      const methodNames = {
-        raw: "Original Hunyuan output", iterative_deduplicate: "Iterative deduplication",
-        extended_deduplicate: "Extended deduplication", PP_mobile: "Ordinary PP-OCR mobile",
-        physical_confidence_GOT: "Visual-evidence GOT rereading",
-        four_line_chunk_PP_fallback: "Four-line chunks + PP fallback",
-        fresh_full_GOT: "Fresh full-page GOT",
-      };
-      $("#study-chart-note").textContent =
-        `A visually audited case from CC-OCR table photos. Output reached ${integer(study.generated_tokens)} generated tokens.`;
-      studyReading("Natural loops also appear in an independent text-decoder family.",
-        integer(study.output_occurrences) + " repeats",
-        `for a header with ${study.visible_occurrences} visible occurrences`, [
-          "Deduplication removes the repeated continuation but leaves missing page content. Reading the pixels again is needed to recover it.",
-          "Ordinary OCR is the strongest recovery control on this case: " +
-            study.methods.PP_mobile.content_cer_pct.toFixed(2) + "% CER versus " +
-            study.methods.physical_confidence_GOT.content_cer_pct.toFixed(2) + "% for the rereading candidate.",
-        ]);
-      studyTable(["Same-case method", "Character error rate", "Edits", "Page exact"],
-        Object.entries(study.methods).map(([method, result]) => [
-          methodNames[method], result.content_cer_pct.toFixed(2) + "%",
-          integer(result.edits), result.page_exact ? "Yes" : "No",
-        ]));
-      $("#study-boundary").textContent =
-        `${study.scope} Complete-cohort recovery evidence remains ${data.cross_model.full_cohort_gate}; ` +
-        `${data.cross_model.pending_stages} stages are incomplete in this frozen snapshot.`;
+        `${study.scope} G0285 cuts at three/five copies exceed the 256-token prefix limit and were not run. ` +
+        "Z0094 has no reliable future-reference anchor; its four cuts contribute only to repetition counts. " +
+        "The cache is rebuilt for the new image with fixed history. References determine offline cut positions and scoring; they may omit visible text. " +
+        "This experiment does not measure internal attention or establish an automatic recovery method.";
     }
   }
 
@@ -611,12 +677,10 @@
       const response = await fetch("data/research.json", { cache: "no-store" });
       if (!response.ok) throw new Error(`Research data HTTP ${response.status}`);
       state.research = await response.json();
-      $("#study-tabs").addEventListener("click", (event) => {
-        const button = event.target.closest("button[data-study]");
-        if (!button) return;
-        state.study = button.dataset.study;
-        renderResearch();
-      });
+      const evidence = await fetch("data/stage-evidence.json", { cache: "no-store" });
+      if (!evidence.ok) throw new Error(`Real replies HTTP ${evidence.status}`);
+      state.stageEvidence = await evidence.json();
+      renderStageEvidence();
       renderResearch();
     } catch (error) {
       $("#study-scope").textContent = "Study data temporarily unavailable";
@@ -950,13 +1014,13 @@
       : "Transcribed text with line breaks. Thinking and HTML wrappers are removed for reading; original outputs are included in the download.";
   }
 
-  function initializeImageViewer() {
-    const viewport = $("#image-viewport"), image = $("#example-image");
+  function initializeZoom(viewport, image, controls) {
     let scale = 1, x = 0, y = 0;
     const pointers = new Map();
     let pinchDistance = 0;
     const apply = () => {
       const width = viewport.clientWidth, height = viewport.clientHeight;
+      if (!width || !height) return;
       const ratio = (image.naturalWidth || width) / (image.naturalHeight || height);
       const fitWidth = Math.min(width, height * ratio), fitHeight = fitWidth / ratio;
       const limitX = Math.max(0, (fitWidth * scale - width) / 2);
@@ -964,9 +1028,9 @@
       x = Math.max(-limitX, Math.min(limitX, x));
       y = Math.max(-limitY, Math.min(limitY, y));
       image.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-      $("#image-scale").textContent = `${Math.round(scale * 100)}%`;
-      $("#image-out").disabled = scale <= 1;
-      $("#image-in").disabled = scale >= 8;
+      controls.scale.textContent = `${Math.round(scale * 100)}%`;
+      controls.out.disabled = scale <= 1;
+      controls.in.disabled = scale >= 8;
     };
     const reset = () => { scale = 1; x = y = 0; apply(); };
     const zoom = (factor, px = 0, py = 0) => {
@@ -978,9 +1042,9 @@
     };
     image.addEventListener("load", reset);
     new ResizeObserver(apply).observe(viewport);
-    $("#image-in").addEventListener("click", () => zoom(1.35));
-    $("#image-out").addEventListener("click", () => zoom(1 / 1.35));
-    $("#image-reset").addEventListener("click", reset);
+    controls.in.addEventListener("click", () => zoom(1.35));
+    controls.out.addEventListener("click", () => zoom(1 / 1.35));
+    controls.reset.addEventListener("click", reset);
     viewport.addEventListener("wheel", (event) => {
       event.preventDefault();
       const rect = viewport.getBoundingClientRect();
@@ -1023,6 +1087,15 @@
       if (!pointers.size) viewport.classList.remove("is-dragging");
     };
     ["pointerup", "pointercancel", "lostpointercapture"].forEach((name) => viewport.addEventListener(name, release));
+    apply();
+    return apply;
+  }
+
+  function initializeImageViewer() {
+    const viewport = $("#image-viewport"), image = $("#example-image");
+    const apply = initializeZoom(viewport, image, {
+      scale: $("#image-scale"), out: $("#image-out"), in: $("#image-in"), reset: $("#image-reset"),
+    });
     const expand = $("#image-expand"), browser = $("#example-browser");
     const setExpanded = (expanded) => {
       browser.classList.toggle("is-expanded", expanded);

@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f4ed">
-  <meta name="description" content="CLTW: a real scene Chinese page benchmark with normal and degraded views, controlled training studies, reproducible model results and visually audited failure evidence.">
+  <meta name="description" content="CLTW: a real scene Chinese page benchmark with paired normal and degraded images, complete stage intervention replies and reproducible model results.">
   <title>CLTW — Dataset, Findings &amp; Model Benchmark</title>
   <link rel="icon" href="data:,">
   <link rel="preload" as="image" href="assets/images/scene-01.webp">
-  <link rel="stylesheet" href="assets/styles.css?v=20261024b">
+  <link rel="stylesheet" href="assets/styles.css?v=20261029b">
 </head>
 <body>
   <a class="skip-link" href="#home-view">Skip to main content</a>
@@ -39,7 +39,7 @@
           <h1 id="snapshot-title">CLTW<span class="hero-title-dot">.</span></h1>
           <p class="hero-subtitle">Full-page OCR. Real-world evidence.</p>
           <p class="hero-paper">A Paired Benchmark for Reliable Full-Page Chinese Long-Text Recognition in the Wild</p>
-          <p class="hero-description">14,183 real scene pages. Normal and degraded views.<br>Measure complete text recognition, study training value and inspect where models fail.</p>
+          <p class="hero-description">14,183 real scene pages. Normal and degraded views.<br>Measure complete text recognition and inspect repeated generation through images and real replies.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#leaderboard">View leaderboard <span aria-hidden="true">↗</span></a>
             <a class="button button-ghost" href="#examples">Explore real examples <span aria-hidden="true">↓</span></a>
@@ -66,17 +66,12 @@
     <section class="section evidence-section" id="findings" aria-labelledby="findings-title">
       <div class="section-inner">
         <div class="section-heading">
-          <div><p class="eyebrow">THE DATASET CONTRIBUTION</p><h2 id="findings-title">What does CLTW reveal?</h2><p class="section-description">Controlled training, external transfer and an independently observed generation failure. Inspect each study in its own scope.</p></div>
-          <a class="text-link" href="data/research.json" download="cltw-research-snapshot.json">Download study summary ↓</a>
-        </div>
-        <div class="study-tabs segments" id="study-tabs" aria-label="Research study">
-          <button type="button" data-study="training" aria-pressed="true">Training value</button>
-          <button type="button" data-study="matched" aria-pressed="false">Matched budget</button>
-          <button type="button" data-study="transfer" aria-pressed="false">External transfer</button>
-          <button type="button" data-study="loop" aria-pressed="false">Loop evidence</button>
+          <div><p class="eyebrow">PAIRED IMAGE INTERVENTION</p><h2 id="findings-title">What does CLTW reveal?</h2><p class="section-description">See the actual images and complete model replies. After the same generated history, keep the degraded image or replace it with the normal paired view.</p></div>
+          <a class="text-link" href="data/stage-evidence.json" download="cltw-stage-evidence.json">Download all real replies ↓</a>
         </div>
         <div class="study-panel">
           <div class="study-topline"><span id="study-scope"></span><span id="study-date"></span></div>
+          <div class="stage-evidence" id="stage-evidence"></div>
           <div class="study-grid">
             <figure class="study-figure"><div id="study-chart"></div><figcaption id="study-chart-note"></figcaption></figure>
             <div class="study-interpretation" id="study-interpretation" aria-live="polite"></div>
@@ -386,6 +381,6 @@
       <a class="text-link" href="data/benchmark.json" download="cltw-benchmark.json">Download full results JSON ↓</a>
     </div>
   </footer>
-  <script src="assets/app.js?v=20261024b" defer></script>
+  <script src="assets/app.js?v=20261029b" defer></script>
 </body>
 </html>
