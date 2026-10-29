@@ -8,7 +8,7 @@
   <title>CLTW — Dataset, Findings &amp; Model Benchmark</title>
   <link rel="icon" href="data:,">
   <link rel="preload" as="image" href="assets/images/scene-01.webp">
-  <link rel="stylesheet" href="assets/styles.css?v=20261029b">
+  <link rel="stylesheet" href="assets/styles.css?v=20261029c">
 </head>
 <body>
   <a class="skip-link" href="#home-view">Skip to main content</a>
@@ -19,7 +19,7 @@
         <strong>CLTW</strong><span class="brand-caption">RESEARCH BENCHMARK</span>
       </a>
       <nav aria-label="Main navigation">
-        <a href="./#findings">Findings</a>
+        <a href="./#findings">Hallucinations</a>
         <a href="./#leaderboard">Leaderboard</a>
         <a href="./#conditions">Scenes</a>
         <a href="./#examples">Examples</a>
@@ -44,7 +44,7 @@
             <a class="button button-primary" href="#leaderboard">View leaderboard <span aria-hidden="true">↗</span></a>
             <a class="button button-ghost" href="#examples">Explore real examples <span aria-hidden="true">↓</span></a>
           </div>
-          <div class="hero-resource-links"><a href="#findings">Research findings</a><a href="#research">Dataset overview</a><a href="#configuration">Protocol</a><a href="#submission">Submit a model ↗</a></div>
+          <div class="hero-resource-links"><a href="#findings">Loop hallucinations</a><a href="#research">Dataset overview</a><a href="#configuration">Protocol</a><a href="#submission">Submit a model ↗</a></div>
         </div>
         <figure class="hero-example" id="hero-example">
           <div class="scene-images" id="hero-scene-images"><img class="scene-image is-active" src="assets/images/scene-01.webp" alt="CLTW dataset example: special material"></div>
@@ -63,26 +63,6 @@
       </div>
     </div>
 
-    <section class="section evidence-section" id="findings" aria-labelledby="findings-title">
-      <div class="section-inner">
-        <div class="section-heading">
-          <div><p class="eyebrow">PAIRED IMAGE INTERVENTION</p><h2 id="findings-title">What does CLTW reveal?</h2><p class="section-description">See the actual images and complete model replies. After the same generated history, keep the degraded image or replace it with the normal paired view.</p></div>
-          <a class="text-link" href="data/stage-evidence.json" download="cltw-stage-evidence.json">Download all real replies ↓</a>
-        </div>
-        <div class="study-panel">
-          <div class="study-topline"><span id="study-scope"></span><span id="study-date"></span></div>
-          <div class="stage-evidence" id="stage-evidence"></div>
-          <div class="study-grid">
-            <figure class="study-figure"><div id="study-chart"></div><figcaption id="study-chart-note"></figcaption></figure>
-            <div class="study-interpretation" id="study-interpretation" aria-live="polite"></div>
-          </div>
-          <details class="study-details"><summary>Inspect all values and comparison conditions <span aria-hidden="true">＋</span></summary><div class="study-table" id="study-table"></div></details>
-          <p class="study-boundary" id="study-boundary"></p>
-        </div>
-        <p class="table-note" id="research-provenance"></p>
-      </div>
-    </section>
-
     <section class="section comparison-section" id="compare" aria-labelledby="compare-title">
       <div class="section-inner">
         <div class="section-heading">
@@ -97,7 +77,6 @@
                 <option value="exact">Page Exact ↑</option>
                 <option value="rgs">Correct retention ↑</option>
                 <option value="content_cer">Content CER ↓</option>
-                <option value="pass5">Pass@5% ↑</option>
               </select>
             </label>
             <div class="segments view-switch" id="view-switch" aria-label="Chart view">
@@ -169,7 +148,6 @@
                 <th scope="col"><button type="button" data-sort="exact" title="Proportion of pages transcribed exactly under content normalization">Page Exact ↑</button></th>
                 <th class="extra-metric" scope="col"><button type="button" data-sort="pass1" title="Proportion of pages with character error rate at most 1%">Pass@1% ↑</button></th>
                 <th class="extra-metric" scope="col"><button type="button" data-sort="pass3" title="Proportion of pages with character error rate at most 3%">Pass@3% ↑</button></th>
-                <th scope="col"><button type="button" data-sort="pass5" title="Proportion of pages with character error rate at most 5%">Pass@5% ↑</button></th>
                 <th scope="col"><button type="button" data-sort="rgs" title="Among same-content normal views read exactly, the proportion whose degraded views remain exact">Retention ↑</button></th>
                 <th class="extra-metric" scope="col"><button type="button" data-sort="tail" title="Share of all character edit errors contributed by the worst 1% of pages">Worst 1% ↓</button></th>
               </tr>
@@ -180,7 +158,7 @@
         <p class="table-note" id="table-note" aria-live="polite"></p>
         <div class="metric-guide" aria-label="Metric definitions">
           <p><strong>Character accuracy</strong> Content CER counts character edits under content normalization. Latin letters and sentence punctuation are excluded. Lower is better.</p>
-          <p><strong>Page completeness</strong> Page Exact requires an exact match under content normalization. Pass@5% counts pages with a content character error rate of at most 5%.</p>
+          <p><strong>Page completeness</strong> Page Exact requires the whole page to match under content normalization.</p>
           <p><strong>Paired robustness</strong> Correct retention (RGS) measures how often a normal view read exactly remains exact under real degradation.</p>
         </div>
         <details class="reliability-details" id="rgs">
@@ -189,10 +167,6 @@
             <article class="chart-card">
               <h3>Correct retention</h3><p class="metric-description">The fraction of exact normal views whose same-content degraded views remain exact.</p>
               <div class="reliability-chart" id="rgs-chart"></div>
-            </article>
-            <article class="chart-card">
-              <h3>Pass@5%</h3><p class="metric-description">The fraction of pages with a character error rate of at most 5%.</p>
-              <div class="reliability-chart" id="reliability-chart"></div>
             </article>
           </div>
         </details>
@@ -244,10 +218,32 @@
       </div>
     </section>
 
+    <section class="section evidence-section" id="findings" aria-labelledby="findings-title">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div><p class="eyebrow"><span class="section-number">05 /</span> ERROR EXPLORATION · LOOP HALLUCINATIONS</p><h2 id="findings-title">When repetition takes over.</h2><p class="section-description">A model repeats the same passage instead of reading onward. Switch between repetition stages to see the real text: yellow marks the loop passage, green matches the reference. Compare keeping the degraded image with swapping to its normal paired view.</p></div>
+          <a class="text-link" href="data/stage-evidence.json" download="cltw-stage-evidence.json">Download all real replies ↓</a>
+        </div>
+        <div class="study-panel">
+          <div class="study-topline"><span id="study-scope"></span><span id="study-date"></span></div>
+          <div class="stage-evidence" id="stage-evidence"></div>
+          <details class="study-summary"><summary>Experiment summary and scope <span aria-hidden="true">＋</span></summary>
+            <div class="study-grid">
+              <figure class="study-figure"><div id="study-chart"></div><figcaption id="study-chart-note"></figcaption></figure>
+              <div class="study-interpretation" id="study-interpretation" aria-live="polite"></div>
+            </div>
+            <p class="study-boundary" id="study-boundary"></p>
+          </details>
+          <details class="study-details"><summary>Inspect all values and comparison conditions <span aria-hidden="true">＋</span></summary><div class="study-table" id="study-table"></div></details>
+        </div>
+        <p class="table-note" id="research-provenance"></p>
+      </div>
+    </section>
+
     <section class="section models-section" id="models" aria-labelledby="models-title">
       <div class="section-inner">
         <div class="section-heading">
-          <div><p class="eyebrow"><span class="section-number">05 /</span> MEET THE MODELS</p><h2 id="models-title">Models &amp; research teams.</h2><p class="section-description">Explore each model family, its developer and its CLTW evaluation profile.</p></div>
+          <div><p class="eyebrow"><span class="section-number">06 /</span> MEET THE MODELS</p><h2 id="models-title">Models &amp; research teams.</h2><p class="section-description">Explore each model family, its developer and its CLTW evaluation profile.</p></div>
           <div class="gallery-controls"><button type="button" id="gallery-prev" aria-label="Previous models">←</button><button type="button" id="gallery-next" aria-label="Next models">→</button></div>
         </div>
         <div class="model-gallery" id="model-gallery" aria-label="Model profiles"></div>
@@ -256,7 +252,7 @@
 
     <section class="section research-section" id="research" aria-labelledby="paper-title">
       <div class="section-inner research-grid">
-        <div class="research-label"><p class="eyebrow"><span class="section-number">06 /</span> THE DATASET</p><span class="paper-symbol" aria-hidden="true">CL<br>TW.</span></div>
+        <div class="research-label"><p class="eyebrow"><span class="section-number">07 /</span> THE DATASET</p><span class="paper-symbol" aria-hidden="true">CL<br>TW.</span></div>
         <div class="research-copy">
           <h2 id="paper-title">CLTW: A Paired Benchmark for Reliable Full-Page Chinese Long-Text Recognition in the Wild</h2>
           <p>CLTW preserves complete Chinese text on real-world signs, exhibits and other text-bearing surfaces. Normal and degraded views of the same content support evaluation of page completeness and robustness to physical capture conditions. This companion leaderboard provides checkpoint-specific results and evaluation configurations.</p>
@@ -270,7 +266,7 @@
 
     <section class="section resources-section" id="resources" aria-labelledby="resources-title">
       <div class="section-inner">
-        <div class="section-heading"><div><p class="eyebrow"><span class="section-number">07 /</span> RESEARCH RESOURCES</p><h2 id="resources-title">Inspect. Reproduce. Contribute.</h2><p class="section-description" id="release-label"></p></div></div>
+        <div class="section-heading"><div><p class="eyebrow"><span class="section-number">08 /</span> RESEARCH RESOURCES</p><h2 id="resources-title">Inspect. Reproduce. Contribute.</h2><p class="section-description" id="release-label"></p></div></div>
         <div class="resource-grid">
           <a href="#configuration"><span>01 / PROTOCOL</span><h3>How scores are computed <span>↗</span></h3><p>Input rules, text normalization, confidence intervals and recorded prompt exceptions.</p></a>
           <a href="#leaderboard"><span>02 / RESULTS</span><h3>Browse the results table <span>↗</span></h3><p>Compare all 23 models and open their scores, configurations and recorded examples.</p></a>
@@ -381,6 +377,6 @@
       <a class="text-link" href="data/benchmark.json" download="cltw-benchmark.json">Download full results JSON ↓</a>
     </div>
   </footer>
-  <script src="assets/app.js?v=20261029b" defer></script>
+  <script src="assets/app.js?v=20261029c" defer></script>
 </body>
 </html>

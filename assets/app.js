@@ -216,7 +216,6 @@
         ["exact", false],
         ["pass1", false],
         ["pass3", false],
-        ["pass5", false],
         ["rgs", false],
         ["tail", false],
       ].map(([key, primary]) => {
@@ -420,7 +419,25 @@
       node("h3", "", title), key, ...paragraphs.map((text) => node("p", "", text)));
   }
 
-  function rawReply(title, text, hash, note = "") {
+  function textMeter(display, compact = false) {
+    const meter = node(compact ? "span" : "div", compact ? "text-meter is-compact" : "text-meter");
+    const track = node("span", "text-meter-track");
+    const counts = display.counts;
+    const total = counts.match + counts.loop + counts.other;
+    ["match", "loop", "other"].forEach((tag) => {
+      const fill = node("span", `meter-${tag}`);
+      fill.style.width = `${total ? 100 * counts[tag] / total : 0}%`;
+      track.append(fill);
+    });
+    track.setAttribute("role", "img");
+    track.setAttribute("aria-label", `${counts.match} reference-matched characters, ${counts.loop} loop characters, ${counts.other} other characters`);
+    meter.append(track);
+    if (!compact) meter.append(node("span", "text-meter-counts",
+      `${counts.match} reference match · ${counts.loop} loop · ${counts.other} other`));
+    return meter;
+  }
+
+  function rawReply(title, text, hash, note = "", display = null) {
     const block = node("article", "raw-reply");
     const header = node("div", "reply-heading");
     const expand = node("button", "", "Expand text ↗");
@@ -432,12 +449,24 @@
       expand.textContent = expanded ? "Compact text ↑" : "Expand text ↗";
     });
     header.append(node("h4", "", title), expand);
-    const reply = node("pre", "reply-text", text);
+    const reply = node("pre", "reply-text");
+    if (display) {
+      const chars = Array.from(text);
+      let cursor = 0;
+      display.spans.forEach(([start, end, tag]) => {
+        if (start > cursor) reply.append(document.createTextNode(chars.slice(cursor, start).join("")));
+        reply.append(node("span", `evidence-${tag}`, chars.slice(start, end).join("")));
+        cursor = end;
+      });
+      if (cursor < chars.length) reply.append(document.createTextNode(chars.slice(cursor).join("")));
+    } else reply.textContent = text;
     reply.lang = "zh-CN";
     reply.tabIndex = 0;
     reply.dataset.sha256 = hash;
     reply.setAttribute("aria-label", title);
-    block.append(header, reply);
+    block.append(header);
+    if (display) block.append(textMeter(display));
+    block.append(reply);
     if (note) block.append(node("p", "reply-note", note));
     return block;
   }
@@ -459,6 +488,7 @@
     const study = state.research.stage_intervention;
     const evidence = state.stageEvidence;
     const target = $("#stage-evidence");
+    target.classList.add("show-highlights");
     const selector = node("div", "stage-selector");
     selector.append(node("span", "", `PAIRED SOURCE · ${evidence.cases.length} cases`));
     const choices = node("div", "segments case-options");
@@ -473,6 +503,22 @@
     });
     const condition = node("p", "case-condition");
     selector.append(choices, condition);
+    const legend = node("div", "evidence-legend");
+    [["loop", "Loop passage"], ["match", "Reference match"], ["other", "Other / unscored"]]
+      .forEach(([tag, label]) => {
+        const item = node("span");
+        item.append(node("i", `legend-${tag}`), document.createTextNode(label));
+        legend.append(item);
+      });
+    const toggle = node("button", "", "Show raw text");
+    toggle.type = "button";
+    toggle.setAttribute("aria-pressed", "true");
+    toggle.addEventListener("click", () => {
+      const shown = target.classList.toggle("show-highlights");
+      toggle.setAttribute("aria-pressed", String(shown));
+      toggle.textContent = shown ? "Show raw text" : "Show color highlights";
+    });
+    legend.append(toggle);
     const photos = node("div", "evidence-pair");
     const viewers = {};
     ["normal", "degraded"].forEach((view) => {
@@ -504,17 +550,20 @@
       initializeZoom(viewport, image, controls);
     });
     const baselines = node("div", "evidence-pair baseline-replies");
+    const baselineDetails = node("details", "baseline-details");
+    baselineDetails.append(node("summary", "", "Compare the complete replies from the start"), baselines);
     const reference = node("details", "evidence-reference");
-    const stageHeading = node("h3", "evidence-subtitle", "Intervene at a repetition stage");
+    const stageHeading = node("h3", "evidence-subtitle", "How does the text change at each cut?");
     const instruction = node("p", "evidence-instruction",
-      "Both branches start from the identical real generated prefix below. Compare their complete newly generated text.");
+      "Each column is a different intervention cut. The two branches share the same generated history. Color strips show the composition of each complete continuation.");
     const tabs = node("div", "segments stage-tabs");
     tabs.setAttribute("aria-label", "Repetition stage");
     const continuation = node("div", "stage-continuation");
     let copies = 1;
     const buttons = new Map();
     study.settings.copies.forEach((value) => {
-      const button = node("button", "", `After ${value} ${value === 1 ? "copy" : "copies"}`);
+      const button = node("button");
+      button.append(node("strong", "", `After ${value} ${value === 1 ? "copy" : "copies"}`));
       button.type = "button";
       button.addEventListener("click", () => { copies = value; renderStage(); });
       buttons.set(value, button);
@@ -530,18 +579,20 @@
         const unavailable = study.cases.find((row) => row.id === entry.id)
           .unavailable_stages.find((row) => row.copies === copies);
         continuation.append(node("p", "stage-unavailable", unavailable
-          ? `Not run: ${unavailable.prefix_tokens} prefix tokens exceed the fixed ${study.settings.prefix_limit}-token limit.`
+          ? `This stage was not tested. Its generated history exceeded the experiment's preset length limit (${unavailable.prefix_tokens} vs ${study.settings.prefix_limit} tokens). Earlier cuts are available above.`
           : "This stage was not run."));
         return;
       }
       const prefix = rawReply(`Shared generated prefix · ${stage.prefix_tokens} tokens`,
-        stage.prefix_text, stage.prefix_text_sha256);
+        stage.prefix_text, stage.prefix_text_sha256,
+        `Cut after ${copies} ${copies === 1 ? "copy" : "copies"} of the selected repeated passage. Both images receive this exact history.`,
+        stage.prefix_display);
       prefix.classList.add("shared-prefix");
       const branches = node("div", "evidence-pair continuation-replies");
       ["degraded", "normal"].forEach((view) => {
         const arm = stage.arms[view];
         const reply = rawReply(view === "degraded" ? "Keep degraded image · continuation" : "Swap to normal image · continuation",
-          arm.text, arm.text_sha256, replyNote(arm));
+          arm.text, arm.text_sha256, replyNote(arm), arm.display);
         reply.dataset.view = view;
         reply.classList.add(arm.repeated ? "is-repeated" : arm.quality?.exact ? "is-exact" : "is-stopped");
         branches.append(reply);
@@ -562,6 +613,22 @@
       target.dataset.source = entry.id;
       choices.querySelectorAll("button").forEach((button) =>
         button.setAttribute("aria-pressed", String(button.dataset.source === entry.id)));
+      buttons.forEach((button, value) => {
+        const stage = entry.stages.find((row) => row.copies === value);
+        button.replaceChildren(node("strong", "", `After ${value} ${value === 1 ? "copy" : "copies"}`));
+        if (!stage) {
+          button.append(node("span", "stage-preview-status", "Not tested"));
+          return;
+        }
+        ["degraded", "normal"].forEach((view) => {
+          const preview = node("span", "stage-preview-row");
+          preview.append(node("span", "", view === "degraded" ? "Keep" : "Swap"), textMeter(stage.arms[view].display, true));
+          button.append(preview);
+        });
+        const arm = stage.arms.normal;
+        button.append(node("span", "stage-preview-status",
+          arm.repeated ? "Loop continues" : arm.quality?.exact ? "Exact future text" : "No severe loop"));
+      });
       condition.textContent = `${conditionNames[entry.condition] || entry.condition} · ` +
         (entry.role === "loop_reaches_cap" ? "Original repetition reached the output limit" : "Original repeated output ended on its own");
       baselines.replaceChildren();
@@ -572,7 +639,7 @@
         viewers[view].original.href = photo.path;
         viewers[view].image.dataset.sha256 = photo.sha256;
         const reply = rawReply(`${view === "normal" ? "Normal" : "Degraded"} image · full reply from the start`,
-          arm.text, arm.text_sha256, replyNote(arm));
+          arm.text, arm.text_sha256, replyNote(arm), arm.display);
         reply.dataset.view = view;
         baselines.append(reply);
       });
@@ -583,8 +650,9 @@
       reference.append(text);
       renderStage();
     };
-    target.replaceChildren(selector, photos, baselines, reference, stageHeading, instruction, tabs, continuation,
-      node("p", "evidence-text-policy", "All replies retain the recorded repetitions, spacing and line breaks. Scroll inside a reply or expand it to read the complete text."));
+    baselineDetails.append(reference);
+    target.replaceChildren(selector, legend, photos, stageHeading, instruction, tabs, continuation, baselineDetails,
+      node("p", "evidence-text-policy", "Color follows the actual reply at each cut. Yellow can increase at later cuts; green requires a reference match. Missing words are counted below the reply. All original repetitions, spacing and line breaks are retained."));
     renderCase();
   }
 
@@ -772,42 +840,6 @@
       .observe($(".hero"));
     update();
     schedule();
-  }
-
-  function renderReliabilityChart() {
-    const chart = $("#reliability-chart");
-    chart.innerHTML = "";
-    [...state.data.models]
-      .sort((left, right) => (
-        right.overall.metrics.pass5 - left.overall.metrics.pass5
-      ))
-      .forEach((model) => {
-        const row = document.createElement("a");
-        row.className = "reliability-row";
-        row.dataset.type = model.type;
-        row.href = modelUrl(model.id);
-        row.setAttribute(
-          "aria-label",
-          `${model.name}, ${metricNames.pass5} ${percent(model.overall.metrics.pass5)}`,
-        );
-
-        const label = document.createElement("span");
-        label.className = "reliability-label";
-        label.textContent = model.name;
-
-        const track = document.createElement("span");
-        track.className = "reliability-track";
-        const fill = document.createElement("span");
-        fill.className = "reliability-fill";
-        fill.style.width = `${100 * model.overall.metrics.pass5}%`;
-        track.append(fill);
-
-        const value = document.createElement("span");
-        value.className = "reliability-value";
-        value.textContent = percent(model.overall.metrics.pass5);
-        row.append(label, track, value);
-        chart.append(row);
-      });
   }
 
   function renderRgsChart() {
@@ -1415,7 +1447,6 @@
     }
     renderSnapshot();
     renderRgsChart();
-    renderReliabilityChart();
     renderConfiguration();
     state.selected = new Set(state.data.models.map((model) => model.id));
     renderComparisonPicker();

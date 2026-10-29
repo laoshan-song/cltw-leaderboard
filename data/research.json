@@ -1379,7 +1379,7 @@
   "scope": "Selected paired-image mechanism diagnosis; historical studies are retained in the private research archive.",
   "provenance": {
     "compiler": "evaluation/build_research.py",
-    "compiler_sha256": "c2f9e8dc9f05431b9c05058ddd8ac587fabfe05ef76de8724177fcb2a531c6a0",
+    "compiler_sha256": "d03212f6e3dd228981ee28f7b4e8bbe1ba40b6adf496048c652128c9f5991cb1",
     "private_repository": "https://github.com/laoshan-song/cltw",
     "source_sha256": {
       "experiments/mechanism/stage_intervention.json": "49e130b1fd0d1b76759ac5944b1c55abcc32c30eda4c1669b73d4ccfd1e28954",
