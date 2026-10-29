@@ -1,0 +1,2179 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-29",
+  "complete": true,
+  "model_source_pairs": 88,
+  "distinct_sources": 33,
+  "models": {
+    "qwen3vl_2b": 16,
+    "qwen3vl_4b": 16,
+    "fireredocr": 16,
+    "paddleocrvl": 16,
+    "glmocr": 16,
+    "qwen25vl_3b": 8
+  },
+  "fresh_natural_calls": 176,
+  "fresh_branch_calls": 88,
+  "strong_candidate_count": 9,
+  "showcased_new_cases": 9,
+  "selection": "Prior repetition candidates chosen before fresh inference; all frozen sources and unavailable cuts retained. Gallery selected from outcomes. Counts describe this enriched pool; cohorts have separate pairing rules.",
+  "criterion": "All four exact same-image replays; at least one 1/2/3-copy clear-image suffix has >=90% matching, <=15% character edits, natural end and no severe loop; the 5-copy suffix has <=40% matching and loops to the output limit.",
+  "cohorts": [
+    {
+      "model_source_pairs": 48,
+      "distinct_sources": 21,
+      "fresh_natural_calls": 96,
+      "fresh_branch_calls": 56,
+      "models": {
+        "qwen3vl_2b": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "fresh_loop_pairs": 4,
+          "unavailable/future_annotation_disagreement": 4,
+          "unavailable/anchor_too_far_before_loop": 4,
+          "no_fresh_loop": 4,
+          "branch_calls": 16,
+          "replay_pass": 8,
+          "four_stage_replayed_pairs": 2
+        },
+        "qwen3vl_4b": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "fresh_loop_pairs": 2,
+          "unavailable/anchor_too_far_before_loop": 4,
+          "branch_calls": 8,
+          "replay_pass": 4,
+          "four_stage_replayed_pairs": 1,
+          "no_fresh_loop": 6
+        },
+        "fireredocr": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "no_fresh_loop": 8
+        },
+        "paddleocrvl": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "no_fresh_loop": 5,
+          "fresh_loop_pairs": 3,
+          "branch_calls": 8,
+          "replay_pass": 4,
+          "four_stage_replayed_pairs": 1,
+          "unavailable/future_annotation_disagreement": 8
+        },
+        "glmocr": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "no_fresh_loop": 7,
+          "fresh_loop_pairs": 1,
+          "branch_calls": 8,
+          "replay_pass": 4,
+          "four_stage_replayed_pairs": 1
+        },
+        "qwen25vl_3b": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "no_fresh_loop": 5,
+          "fresh_loop_pairs": 3,
+          "unavailable/no_unique_future_anchor": 4,
+          "branch_calls": 16,
+          "replay_pass": 8,
+          "four_stage_replayed_pairs": 2
+        }
+      },
+      "strong_candidates": [
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-9483DA645522C881",
+          "capture_id": "z0197",
+          "early_copies": [
+            1,
+            2
+          ],
+          "early_match": [
+            0.9919354838709677,
+            0.9919354838709677
+          ],
+          "late_match": 0.13978494623655913
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-2430D86815BEDF65",
+          "capture_id": "s0338",
+          "early_copies": [
+            1
+          ],
+          "early_match": [
+            0.948051948051948
+          ],
+          "late_match": 0.2727272727272727
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-2C468EE589D000D2",
+          "capture_id": "z0239",
+          "early_copies": [
+            1
+          ],
+          "early_match": [
+            0.9519230769230769
+          ],
+          "late_match": 0.11858974358974358
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-5622E842D4A82785",
+          "capture_id": "j0064",
+          "early_copies": [
+            1
+          ],
+          "early_match": [
+            0.9879227053140096
+          ],
+          "late_match": 0.26811594202898553
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-D7ECFE689804F510",
+          "capture_id": "g0239",
+          "early_copies": [
+            1,
+            2,
+            3
+          ],
+          "early_match": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "late_match": 0.19642857142857142
+        }
+      ],
+      "source_outcomes": [
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-3CFEDD74499E51AE",
+          "source_group_id": "CLTW-SOURCE-3CFEDD74499E51AE",
+          "capture_id": "j0226",
+          "stages": [
+            {
+              "copies": 1,
+              "unavailable": "future_annotation_disagreement"
+            },
+            {
+              "copies": 2,
+              "unavailable": "future_annotation_disagreement"
+            },
+            {
+              "copies": 3,
+              "unavailable": "future_annotation_disagreement"
+            },
+            {
+              "copies": 5,
+              "unavailable": "future_annotation_disagreement"
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-FD44C6A390A2D518",
+          "source_group_id": "CLTW-SOURCE-FD44C6A390A2D518",
+          "capture_id": "s0334",
+          "stages": [
+            {
+              "copies": 1,
+              "unavailable": "anchor_too_far_before_loop"
+            },
+            {
+              "copies": 2,
+              "unavailable": "anchor_too_far_before_loop"
+            },
+            {
+              "copies": 3,
+              "unavailable": "anchor_too_far_before_loop"
+            },
+            {
+              "copies": 5,
+              "unavailable": "anchor_too_far_before_loop"
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-35B5477EE089E896",
+          "source_group_id": "CLTW-SOURCE-35B5477EE089E896",
+          "capture_id": "s0024",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-12F08199E9D28570",
+          "source_group_id": "CLTW-SOURCE-0EE7B8E15C0E2B1B",
+          "capture_id": "z038",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-88DCFC6C3D947043",
+          "source_group_id": "CLTW-SOURCE-88DCFC6C3D947043",
+          "capture_id": "12新j002",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-9483DA645522C881",
+          "source_group_id": "CLTW-SOURCE-9483DA645522C881",
+          "capture_id": "z0197",
+          "stages": [
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-9483DA645522C881",
+              "capture_id": "z0197",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 744,
+                "generated_chars": 798,
+                "correct_chars": 738,
+                "insertions": 54,
+                "deletions": 0,
+                "substitutions": 6,
+                "exact": false,
+                "cer": 0.08064516129032258,
+                "character_recall": 0.9919354838709677
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-9483DA645522C881",
+              "capture_id": "z0197",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 744,
+                "generated_chars": 771,
+                "correct_chars": 738,
+                "insertions": 27,
+                "deletions": 0,
+                "substitutions": 6,
+                "exact": false,
+                "cer": 0.04435483870967742,
+                "character_recall": 0.9919354838709677
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-9483DA645522C881",
+              "capture_id": "z0197",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 744,
+                "generated_chars": 1024,
+                "correct_chars": 104,
+                "insertions": 282,
+                "deletions": 2,
+                "substitutions": 638,
+                "exact": false,
+                "cer": 1.239247311827957,
+                "character_recall": 0.13978494623655913
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-9483DA645522C881",
+              "capture_id": "z0197",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 744,
+                "generated_chars": 1024,
+                "correct_chars": 104,
+                "insertions": 282,
+                "deletions": 2,
+                "substitutions": 638,
+                "exact": false,
+                "cer": 1.239247311827957,
+                "character_recall": 0.13978494623655913
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-2430D86815BEDF65",
+          "source_group_id": "CLTW-SOURCE-2430D86815BEDF65",
+          "capture_id": "s0338",
+          "stages": [
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-2430D86815BEDF65",
+              "capture_id": "s0338",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 77,
+                "generated_chars": 84,
+                "correct_chars": 73,
+                "insertions": 7,
+                "deletions": 0,
+                "substitutions": 4,
+                "exact": false,
+                "cer": 0.14285714285714285,
+                "character_recall": 0.948051948051948
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-2430D86815BEDF65",
+              "capture_id": "s0338",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 77,
+                "generated_chars": 669,
+                "correct_chars": 21,
+                "insertions": 592,
+                "deletions": 0,
+                "substitutions": 56,
+                "exact": false,
+                "cer": 8.415584415584416,
+                "character_recall": 0.2727272727272727
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-2430D86815BEDF65",
+              "capture_id": "s0338",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 77,
+                "generated_chars": 669,
+                "correct_chars": 21,
+                "insertions": 592,
+                "deletions": 0,
+                "substitutions": 56,
+                "exact": false,
+                "cer": 8.415584415584416,
+                "character_recall": 0.2727272727272727
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-2430D86815BEDF65",
+              "capture_id": "s0338",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 77,
+                "generated_chars": 669,
+                "correct_chars": 21,
+                "insertions": 592,
+                "deletions": 0,
+                "substitutions": 56,
+                "exact": false,
+                "cer": 8.415584415584416,
+                "character_recall": 0.2727272727272727
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-B7BE98A4015C6A35",
+          "source_group_id": "CLTW-SOURCE-B7BE98A4015C6A35",
+          "capture_id": "12j0095",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-3CFEDD74499E51AE",
+          "source_group_id": "CLTW-SOURCE-3CFEDD74499E51AE",
+          "capture_id": "j0226",
+          "stages": [
+            {
+              "copies": 1,
+              "unavailable": "anchor_too_far_before_loop"
+            },
+            {
+              "copies": 2,
+              "unavailable": "anchor_too_far_before_loop"
+            },
+            {
+              "copies": 3,
+              "unavailable": "anchor_too_far_before_loop"
+            },
+            {
+              "copies": 5,
+              "unavailable": "anchor_too_far_before_loop"
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-FD44C6A390A2D518",
+          "source_group_id": "CLTW-SOURCE-FD44C6A390A2D518",
+          "capture_id": "s0334",
+          "stages": [
+            {
+              "model": "qwen3vl_4b",
+              "pair_id": "CLTW-PAIR-FD44C6A390A2D518",
+              "capture_id": "s0334",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 91,
+                "generated_chars": 74,
+                "correct_chars": 70,
+                "insertions": 0,
+                "deletions": 17,
+                "substitutions": 4,
+                "exact": false,
+                "cer": 0.23076923076923078,
+                "character_recall": 0.7692307692307693
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_4b",
+              "pair_id": "CLTW-PAIR-FD44C6A390A2D518",
+              "capture_id": "s0334",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 91,
+                "generated_chars": 655,
+                "correct_chars": 29,
+                "insertions": 564,
+                "deletions": 0,
+                "substitutions": 62,
+                "exact": false,
+                "cer": 6.8791208791208796,
+                "character_recall": 0.31868131868131866
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_4b",
+              "pair_id": "CLTW-PAIR-FD44C6A390A2D518",
+              "capture_id": "s0334",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 91,
+                "generated_chars": 655,
+                "correct_chars": 29,
+                "insertions": 564,
+                "deletions": 0,
+                "substitutions": 62,
+                "exact": false,
+                "cer": 6.8791208791208796,
+                "character_recall": 0.31868131868131866
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_4b",
+              "pair_id": "CLTW-PAIR-FD44C6A390A2D518",
+              "capture_id": "s0334",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 91,
+                "generated_chars": 655,
+                "correct_chars": 29,
+                "insertions": 564,
+                "deletions": 0,
+                "substitutions": 62,
+                "exact": false,
+                "cer": 6.8791208791208796,
+                "character_recall": 0.31868131868131866
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-88DCFC6C3D947043",
+          "source_group_id": "CLTW-SOURCE-88DCFC6C3D947043",
+          "capture_id": "12新j002",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-2C468EE589D000D2",
+          "source_group_id": "CLTW-SOURCE-6D50AA420B02F629",
+          "capture_id": "z0239",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-615D19D988B5F73E",
+          "source_group_id": "CLTW-SOURCE-FD1146E17B255B75",
+          "capture_id": "j1011",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-823A4FA6E4468BDB",
+          "source_group_id": "CLTW-SOURCE-6A4FDB78FC4FD2DE",
+          "capture_id": "z0004",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-2D1DB4B493A87956",
+          "source_group_id": "CLTW-SOURCE-DEFD0946DA87B8E7",
+          "capture_id": "s0239",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-9483DA645522C881",
+          "source_group_id": "CLTW-SOURCE-9483DA645522C881",
+          "capture_id": "z0197",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-CFB4F63D083B487D",
+          "source_group_id": "CLTW-SOURCE-AFAC7FE92F3FADA8",
+          "capture_id": "g0313",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-2C468EE589D000D2",
+          "source_group_id": "CLTW-SOURCE-6D50AA420B02F629",
+          "capture_id": "z0239",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-B25E117C52CD808B",
+          "source_group_id": "CLTW-SOURCE-B25E117C52CD808B",
+          "capture_id": "12s0060",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-3CFEDD74499E51AE",
+          "source_group_id": "CLTW-SOURCE-3CFEDD74499E51AE",
+          "capture_id": "j0226",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-250CD1D79F17CFB1",
+          "source_group_id": "CLTW-SOURCE-250CD1D79F17CFB1",
+          "capture_id": "g0157",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-823A4FA6E4468BDB",
+          "source_group_id": "CLTW-SOURCE-6A4FDB78FC4FD2DE",
+          "capture_id": "z0004",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-FD44C6A390A2D518",
+          "source_group_id": "CLTW-SOURCE-FD44C6A390A2D518",
+          "capture_id": "s0334",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-615D19D988B5F73E",
+          "source_group_id": "CLTW-SOURCE-FD1146E17B255B75",
+          "capture_id": "j1011",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-F1C6BE7FF59E6DBE",
+          "source_group_id": "CLTW-SOURCE-F1C6BE7FF59E6DBE",
+          "capture_id": "j0050",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-B66B7B4279A3AB68",
+          "source_group_id": "CLTW-SOURCE-913D0964D407A0E8",
+          "capture_id": "j0043",
+          "stages": [
+            {
+              "model": "paddleocrvl",
+              "pair_id": "CLTW-PAIR-B66B7B4279A3AB68",
+              "capture_id": "j0043",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 67,
+                "generated_chars": 512,
+                "correct_chars": 41,
+                "insertions": 445,
+                "deletions": 0,
+                "substitutions": 26,
+                "exact": false,
+                "cer": 7.029850746268656,
+                "character_recall": 0.6119402985074627
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "paddleocrvl",
+              "pair_id": "CLTW-PAIR-B66B7B4279A3AB68",
+              "capture_id": "j0043",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 67,
+                "generated_chars": 512,
+                "correct_chars": 41,
+                "insertions": 445,
+                "deletions": 0,
+                "substitutions": 26,
+                "exact": false,
+                "cer": 7.029850746268656,
+                "character_recall": 0.6119402985074627
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "paddleocrvl",
+              "pair_id": "CLTW-PAIR-B66B7B4279A3AB68",
+              "capture_id": "j0043",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 67,
+                "generated_chars": 512,
+                "correct_chars": 41,
+                "insertions": 445,
+                "deletions": 0,
+                "substitutions": 26,
+                "exact": false,
+                "cer": 7.029850746268656,
+                "character_recall": 0.6119402985074627
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "paddleocrvl",
+              "pair_id": "CLTW-PAIR-B66B7B4279A3AB68",
+              "capture_id": "j0043",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 67,
+                "generated_chars": 512,
+                "correct_chars": 41,
+                "insertions": 445,
+                "deletions": 0,
+                "substitutions": 26,
+                "exact": false,
+                "cer": 7.029850746268656,
+                "character_recall": 0.6119402985074627
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-3CFEDD74499E51AE",
+          "source_group_id": "CLTW-SOURCE-3CFEDD74499E51AE",
+          "capture_id": "j0226",
+          "stages": [
+            {
+              "copies": 1,
+              "unavailable": "future_annotation_disagreement"
+            },
+            {
+              "copies": 2,
+              "unavailable": "future_annotation_disagreement"
+            },
+            {
+              "copies": 3,
+              "unavailable": "future_annotation_disagreement"
+            },
+            {
+              "copies": 5,
+              "unavailable": "future_annotation_disagreement"
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-D4980096105D2F40",
+          "source_group_id": "CLTW-SOURCE-D5F56F1248FC225F",
+          "capture_id": "s0006",
+          "stages": [
+            {
+              "copies": 1,
+              "unavailable": "future_annotation_disagreement"
+            },
+            {
+              "copies": 2,
+              "unavailable": "future_annotation_disagreement"
+            },
+            {
+              "copies": 3,
+              "unavailable": "future_annotation_disagreement"
+            },
+            {
+              "copies": 5,
+              "unavailable": "future_annotation_disagreement"
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-88DCFC6C3D947043",
+          "source_group_id": "CLTW-SOURCE-88DCFC6C3D947043",
+          "capture_id": "12新j002",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-FD44C6A390A2D518",
+          "source_group_id": "CLTW-SOURCE-FD44C6A390A2D518",
+          "capture_id": "s0334",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-12F08199E9D28570",
+          "source_group_id": "CLTW-SOURCE-0EE7B8E15C0E2B1B",
+          "capture_id": "z038",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-B25E117C52CD808B",
+          "source_group_id": "CLTW-SOURCE-B25E117C52CD808B",
+          "capture_id": "12s0060",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-9483DA645522C881",
+          "source_group_id": "CLTW-SOURCE-9483DA645522C881",
+          "capture_id": "z0197",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-1A19E92EA07D342C",
+          "source_group_id": "CLTW-SOURCE-1A19E92EA07D342C",
+          "capture_id": "s0266",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-B25E117C52CD808B",
+          "source_group_id": "CLTW-SOURCE-B25E117C52CD808B",
+          "capture_id": "12s0060",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-12F08199E9D28570",
+          "source_group_id": "CLTW-SOURCE-0EE7B8E15C0E2B1B",
+          "capture_id": "z038",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-823A4FA6E4468BDB",
+          "source_group_id": "CLTW-SOURCE-6A4FDB78FC4FD2DE",
+          "capture_id": "z0004",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-250CD1D79F17CFB1",
+          "source_group_id": "CLTW-SOURCE-250CD1D79F17CFB1",
+          "capture_id": "g0157",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-35B5477EE089E896",
+          "source_group_id": "CLTW-SOURCE-35B5477EE089E896",
+          "capture_id": "s0024",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-2C468EE589D000D2",
+          "source_group_id": "CLTW-SOURCE-6D50AA420B02F629",
+          "capture_id": "z0239",
+          "stages": [
+            {
+              "model": "glmocr",
+              "pair_id": "CLTW-PAIR-2C468EE589D000D2",
+              "capture_id": "z0239",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 312,
+                "generated_chars": 297,
+                "correct_chars": 297,
+                "insertions": 0,
+                "deletions": 15,
+                "substitutions": 0,
+                "exact": false,
+                "cer": 0.04807692307692308,
+                "character_recall": 0.9519230769230769
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "glmocr",
+              "pair_id": "CLTW-PAIR-2C468EE589D000D2",
+              "capture_id": "z0239",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 312,
+                "generated_chars": 699,
+                "correct_chars": 37,
+                "insertions": 387,
+                "deletions": 0,
+                "substitutions": 275,
+                "exact": false,
+                "cer": 2.121794871794872,
+                "character_recall": 0.11858974358974358
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "glmocr",
+              "pair_id": "CLTW-PAIR-2C468EE589D000D2",
+              "capture_id": "z0239",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 312,
+                "generated_chars": 699,
+                "correct_chars": 37,
+                "insertions": 387,
+                "deletions": 0,
+                "substitutions": 275,
+                "exact": false,
+                "cer": 2.121794871794872,
+                "character_recall": 0.11858974358974358
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "glmocr",
+              "pair_id": "CLTW-PAIR-2C468EE589D000D2",
+              "capture_id": "z0239",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 312,
+                "generated_chars": 699,
+                "correct_chars": 37,
+                "insertions": 387,
+                "deletions": 0,
+                "substitutions": 275,
+                "exact": false,
+                "cer": 2.121794871794872,
+                "character_recall": 0.11858974358974358
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-2D1DB4B493A87956",
+          "source_group_id": "CLTW-SOURCE-DEFD0946DA87B8E7",
+          "capture_id": "s0239",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-823A4FA6E4468BDB",
+          "source_group_id": "CLTW-SOURCE-6A4FDB78FC4FD2DE",
+          "capture_id": "z0004",
+          "stages": [
+            {
+              "copies": 1,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 2,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 3,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 5,
+              "unavailable": "no_unique_future_anchor"
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-615D19D988B5F73E",
+          "source_group_id": "CLTW-SOURCE-FD1146E17B255B75",
+          "capture_id": "j1011",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-5622E842D4A82785",
+          "source_group_id": "CLTW-SOURCE-5622E842D4A82785",
+          "capture_id": "j0064",
+          "stages": [
+            {
+              "model": "qwen25vl_3b",
+              "pair_id": "CLTW-PAIR-5622E842D4A82785",
+              "capture_id": "j0064",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 414,
+                "generated_chars": 416,
+                "correct_chars": 409,
+                "insertions": 2,
+                "deletions": 0,
+                "substitutions": 5,
+                "exact": false,
+                "cer": 0.016908212560386472,
+                "character_recall": 0.9879227053140096
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen25vl_3b",
+              "pair_id": "CLTW-PAIR-5622E842D4A82785",
+              "capture_id": "j0064",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 414,
+                "generated_chars": 663,
+                "correct_chars": 111,
+                "insertions": 249,
+                "deletions": 0,
+                "substitutions": 303,
+                "exact": false,
+                "cer": 1.3333333333333333,
+                "character_recall": 0.26811594202898553
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen25vl_3b",
+              "pair_id": "CLTW-PAIR-5622E842D4A82785",
+              "capture_id": "j0064",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 414,
+                "generated_chars": 663,
+                "correct_chars": 111,
+                "insertions": 249,
+                "deletions": 0,
+                "substitutions": 303,
+                "exact": false,
+                "cer": 1.3333333333333333,
+                "character_recall": 0.26811594202898553
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen25vl_3b",
+              "pair_id": "CLTW-PAIR-5622E842D4A82785",
+              "capture_id": "j0064",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 414,
+                "generated_chars": 663,
+                "correct_chars": 111,
+                "insertions": 249,
+                "deletions": 0,
+                "substitutions": 303,
+                "exact": false,
+                "cer": 1.3333333333333333,
+                "character_recall": 0.26811594202898553
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-1A19E92EA07D342C",
+          "source_group_id": "CLTW-SOURCE-1A19E92EA07D342C",
+          "capture_id": "s0266",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-B7BE98A4015C6A35",
+          "source_group_id": "CLTW-SOURCE-B7BE98A4015C6A35",
+          "capture_id": "12j0095",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-D7ECFE689804F510",
+          "source_group_id": "CLTW-SOURCE-D7ECFE689804F510",
+          "capture_id": "g0239",
+          "stages": [
+            {
+              "model": "qwen25vl_3b",
+              "pair_id": "CLTW-PAIR-D7ECFE689804F510",
+              "capture_id": "g0239",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 56,
+                "generated_chars": 56,
+                "correct_chars": 56,
+                "insertions": 0,
+                "deletions": 0,
+                "substitutions": 0,
+                "exact": true,
+                "cer": 0.0,
+                "character_recall": 1.0
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen25vl_3b",
+              "pair_id": "CLTW-PAIR-D7ECFE689804F510",
+              "capture_id": "g0239",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 56,
+                "generated_chars": 56,
+                "correct_chars": 56,
+                "insertions": 0,
+                "deletions": 0,
+                "substitutions": 0,
+                "exact": true,
+                "cer": 0.0,
+                "character_recall": 1.0
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen25vl_3b",
+              "pair_id": "CLTW-PAIR-D7ECFE689804F510",
+              "capture_id": "g0239",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 56,
+                "generated_chars": 56,
+                "correct_chars": 56,
+                "insertions": 0,
+                "deletions": 0,
+                "substitutions": 0,
+                "exact": true,
+                "cer": 0.0,
+                "character_recall": 1.0
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen25vl_3b",
+              "pair_id": "CLTW-PAIR-D7ECFE689804F510",
+              "capture_id": "g0239",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 56,
+                "generated_chars": 1128,
+                "correct_chars": 11,
+                "insertions": 1072,
+                "deletions": 0,
+                "substitutions": 45,
+                "exact": false,
+                "cer": 19.946428571428573,
+                "character_recall": 0.19642857142857142
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen25vl_3b",
+          "pair_id": "CLTW-PAIR-250CD1D79F17CFB1",
+          "source_group_id": "CLTW-SOURCE-250CD1D79F17CFB1",
+          "capture_id": "g0157",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        }
+      ],
+      "verification": "Record hashes, image hashes, tokenizer decoding, actual prefix IDs, exact512-decision same-image replay, independent character alignment, all exclusions and completion checked.",
+      "id": "cltw-recovery-expanded-natural-broader-v1",
+      "protocol_sha256": "9f5ef2f8874d571a850465d14c24e3ba691a0b6584b33e1f2229564d1dd27b24",
+      "archive_sha256": "40e0f10e60a0b14e53c7b50fddb96797da69da04aaa13b98520939456540a02a",
+      "pairing_rule": "New sources only; pair text similarity and normalized annotation edit similarity >=90%. Recorded pair eligibility flags retained. A unique shared pre-loop anchor and >=94% future-reference agreement are required for a branch. Original images require visual review for showcased cases."
+    },
+    {
+      "model_source_pairs": 40,
+      "distinct_sources": 12,
+      "fresh_natural_calls": 80,
+      "fresh_branch_calls": 32,
+      "models": {
+        "qwen3vl_2b": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "fresh_loop_pairs": 2,
+          "branch_calls": 16,
+          "replay_pass": 8,
+          "four_stage_replayed_pairs": 2,
+          "no_fresh_loop": 6
+        },
+        "qwen3vl_4b": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "fresh_loop_pairs": 1,
+          "unavailable/no_unique_future_anchor": 4,
+          "no_fresh_loop": 7
+        },
+        "fireredocr": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "no_fresh_loop": 6,
+          "fresh_loop_pairs": 2,
+          "branch_calls": 8,
+          "replay_pass": 4,
+          "four_stage_replayed_pairs": 1,
+          "unavailable/no_unique_future_anchor": 4
+        },
+        "paddleocrvl": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "fresh_loop_pairs": 2,
+          "branch_calls": 8,
+          "replay_pass": 4,
+          "four_stage_replayed_pairs": 1,
+          "unavailable/no_unique_future_anchor": 4,
+          "no_fresh_loop": 6
+        },
+        "glmocr": {
+          "model_source_pairs": 8,
+          "natural_calls": 16,
+          "no_fresh_loop": 8
+        }
+      },
+      "strong_candidates": [
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-10425D2C12FABCE6",
+          "capture_id": "s0375",
+          "early_copies": [
+            1,
+            2,
+            3
+          ],
+          "early_match": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "late_match": 0.25806451612903225
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-0C9F6D180AC06E67",
+          "capture_id": "g0135",
+          "early_copies": [
+            1,
+            2
+          ],
+          "early_match": [
+            0.9462025316455697,
+            0.9462025316455697
+          ],
+          "late_match": 0.16455696202531644
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-8875C0547331CE90",
+          "capture_id": "l0001",
+          "early_copies": [
+            1,
+            2
+          ],
+          "early_match": [
+            0.993103448275862,
+            0.9724137931034482
+          ],
+          "late_match": 0.041379310344827586
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-8875C0547331CE90",
+          "capture_id": "l0001",
+          "early_copies": [
+            1
+          ],
+          "early_match": [
+            1.0
+          ],
+          "late_match": 0.13013698630136986
+        }
+      ],
+      "source_outcomes": [
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-10425D2C12FABCE6",
+          "source_group_id": "CLTW-SOURCE-AD3A619143A72605",
+          "capture_id": "s0375",
+          "stages": [
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-10425D2C12FABCE6",
+              "capture_id": "s0375",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 124,
+                "generated_chars": 124,
+                "correct_chars": 124,
+                "insertions": 0,
+                "deletions": 0,
+                "substitutions": 0,
+                "exact": true,
+                "cer": 0.0,
+                "character_recall": 1.0
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-10425D2C12FABCE6",
+              "capture_id": "s0375",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 124,
+                "generated_chars": 124,
+                "correct_chars": 124,
+                "insertions": 0,
+                "deletions": 0,
+                "substitutions": 0,
+                "exact": true,
+                "cer": 0.0,
+                "character_recall": 1.0
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-10425D2C12FABCE6",
+              "capture_id": "s0375",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 124,
+                "generated_chars": 124,
+                "correct_chars": 124,
+                "insertions": 0,
+                "deletions": 0,
+                "substitutions": 0,
+                "exact": true,
+                "cer": 0.0,
+                "character_recall": 1.0
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-10425D2C12FABCE6",
+              "capture_id": "s0375",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 124,
+                "generated_chars": 782,
+                "correct_chars": 32,
+                "insertions": 658,
+                "deletions": 0,
+                "substitutions": 92,
+                "exact": false,
+                "cer": 6.048387096774194,
+                "character_recall": 0.25806451612903225
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-1E03949B3B67DB88",
+          "source_group_id": "CLTW-SOURCE-1E03949B3B67DB88",
+          "capture_id": "12新j141",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-1B8B7A5D0A56EB2B",
+          "source_group_id": "CLTW-SOURCE-1B8B7A5D0A56EB2B",
+          "capture_id": "z0174",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-62752AA49A2162BB",
+          "source_group_id": "CLTW-SOURCE-B0D67FF6589A9D1B",
+          "capture_id": "12jy0219",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-0C9F6D180AC06E67",
+          "source_group_id": "CLTW-SOURCE-F0FC2A417D6E3D44",
+          "capture_id": "g0135",
+          "stages": [
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-0C9F6D180AC06E67",
+              "capture_id": "g0135",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 316,
+                "generated_chars": 299,
+                "correct_chars": 299,
+                "insertions": 0,
+                "deletions": 17,
+                "substitutions": 0,
+                "exact": false,
+                "cer": 0.05379746835443038,
+                "character_recall": 0.9462025316455697
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-0C9F6D180AC06E67",
+              "capture_id": "g0135",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 316,
+                "generated_chars": 299,
+                "correct_chars": 299,
+                "insertions": 0,
+                "deletions": 17,
+                "substitutions": 0,
+                "exact": false,
+                "cer": 0.05379746835443038,
+                "character_recall": 0.9462025316455697
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-0C9F6D180AC06E67",
+              "capture_id": "g0135",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 316,
+                "generated_chars": 896,
+                "correct_chars": 52,
+                "insertions": 580,
+                "deletions": 0,
+                "substitutions": 264,
+                "exact": false,
+                "cer": 2.670886075949367,
+                "character_recall": 0.16455696202531644
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "qwen3vl_2b",
+              "pair_id": "CLTW-PAIR-0C9F6D180AC06E67",
+              "capture_id": "g0135",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 316,
+                "generated_chars": 896,
+                "correct_chars": 52,
+                "insertions": 580,
+                "deletions": 0,
+                "substitutions": 264,
+                "exact": false,
+                "cer": 2.670886075949367,
+                "character_recall": 0.16455696202531644
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-8875C0547331CE90",
+          "source_group_id": "CLTW-SOURCE-8875C0547331CE90",
+          "capture_id": "l0001",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-FB814544399ED54C",
+          "source_group_id": "CLTW-SOURCE-FB814544399ED54C",
+          "capture_id": "s0261",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_2b",
+          "pair_id": "CLTW-PAIR-5B58D4189FFC5103",
+          "source_group_id": "CLTW-SOURCE-5B58D4189FFC5103",
+          "capture_id": "z0096",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-6A7E46A6FBCE8C82",
+          "source_group_id": "CLTW-SOURCE-6A7E46A6FBCE8C82",
+          "capture_id": "j1014",
+          "stages": [
+            {
+              "copies": 1,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 2,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 3,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 5,
+              "unavailable": "no_unique_future_anchor"
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-8875C0547331CE90",
+          "source_group_id": "CLTW-SOURCE-8875C0547331CE90",
+          "capture_id": "l0001",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-10425D2C12FABCE6",
+          "source_group_id": "CLTW-SOURCE-AD3A619143A72605",
+          "capture_id": "s0375",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-1E03949B3B67DB88",
+          "source_group_id": "CLTW-SOURCE-1E03949B3B67DB88",
+          "capture_id": "12新j141",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-B27F3CF67ED58494",
+          "source_group_id": "CLTW-SOURCE-B27F3CF67ED58494",
+          "capture_id": "j0046",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-62752AA49A2162BB",
+          "source_group_id": "CLTW-SOURCE-B0D67FF6589A9D1B",
+          "capture_id": "12jy0219",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-5B58D4189FFC5103",
+          "source_group_id": "CLTW-SOURCE-5B58D4189FFC5103",
+          "capture_id": "z0096",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "qwen3vl_4b",
+          "pair_id": "CLTW-PAIR-55F83F62CEF0F2AB",
+          "source_group_id": "CLTW-SOURCE-55F83F62CEF0F2AB",
+          "capture_id": "j0141",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-55F83F62CEF0F2AB",
+          "source_group_id": "CLTW-SOURCE-55F83F62CEF0F2AB",
+          "capture_id": "j0141",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-FB814544399ED54C",
+          "source_group_id": "CLTW-SOURCE-FB814544399ED54C",
+          "capture_id": "s0261",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-8875C0547331CE90",
+          "source_group_id": "CLTW-SOURCE-8875C0547331CE90",
+          "capture_id": "l0001",
+          "stages": [
+            {
+              "model": "fireredocr",
+              "pair_id": "CLTW-PAIR-8875C0547331CE90",
+              "capture_id": "l0001",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 145,
+                "generated_chars": 144,
+                "correct_chars": 144,
+                "insertions": 0,
+                "deletions": 1,
+                "substitutions": 0,
+                "exact": false,
+                "cer": 0.006896551724137931,
+                "character_recall": 0.993103448275862
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "fireredocr",
+              "pair_id": "CLTW-PAIR-8875C0547331CE90",
+              "capture_id": "l0001",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 145,
+                "generated_chars": 142,
+                "correct_chars": 141,
+                "insertions": 0,
+                "deletions": 3,
+                "substitutions": 1,
+                "exact": false,
+                "cer": 0.027586206896551724,
+                "character_recall": 0.9724137931034482
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "fireredocr",
+              "pair_id": "CLTW-PAIR-8875C0547331CE90",
+              "capture_id": "l0001",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 145,
+                "generated_chars": 512,
+                "correct_chars": 6,
+                "insertions": 367,
+                "deletions": 0,
+                "substitutions": 139,
+                "exact": false,
+                "cer": 3.489655172413793,
+                "character_recall": 0.041379310344827586
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "fireredocr",
+              "pair_id": "CLTW-PAIR-8875C0547331CE90",
+              "capture_id": "l0001",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 145,
+                "generated_chars": 512,
+                "correct_chars": 6,
+                "insertions": 367,
+                "deletions": 0,
+                "substitutions": 139,
+                "exact": false,
+                "cer": 3.489655172413793,
+                "character_recall": 0.041379310344827586
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-B27F3CF67ED58494",
+          "source_group_id": "CLTW-SOURCE-B27F3CF67ED58494",
+          "capture_id": "j0046",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-2102242B9EE5762A",
+          "source_group_id": "CLTW-SOURCE-2102242B9EE5762A",
+          "capture_id": "j0053",
+          "stages": [
+            {
+              "copies": 1,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 2,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 3,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 5,
+              "unavailable": "no_unique_future_anchor"
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-10425D2C12FABCE6",
+          "source_group_id": "CLTW-SOURCE-AD3A619143A72605",
+          "capture_id": "s0375",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-62752AA49A2162BB",
+          "source_group_id": "CLTW-SOURCE-B0D67FF6589A9D1B",
+          "capture_id": "12jy0219",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "fireredocr",
+          "pair_id": "CLTW-PAIR-1E03949B3B67DB88",
+          "source_group_id": "CLTW-SOURCE-1E03949B3B67DB88",
+          "capture_id": "12新j141",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-8875C0547331CE90",
+          "source_group_id": "CLTW-SOURCE-8875C0547331CE90",
+          "capture_id": "l0001",
+          "stages": [
+            {
+              "model": "paddleocrvl",
+              "pair_id": "CLTW-PAIR-8875C0547331CE90",
+              "capture_id": "l0001",
+              "copies": 1,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 146,
+                "generated_chars": 146,
+                "correct_chars": 146,
+                "insertions": 0,
+                "deletions": 0,
+                "substitutions": 0,
+                "exact": true,
+                "cer": 0.0,
+                "character_recall": 1.0
+              },
+              "severe_loop": false,
+              "eos": true,
+              "cap": false,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "paddleocrvl",
+              "pair_id": "CLTW-PAIR-8875C0547331CE90",
+              "capture_id": "l0001",
+              "copies": 2,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 146,
+                "generated_chars": 902,
+                "correct_chars": 19,
+                "insertions": 756,
+                "deletions": 0,
+                "substitutions": 127,
+                "exact": false,
+                "cer": 6.0479452054794525,
+                "character_recall": 0.13013698630136986
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "paddleocrvl",
+              "pair_id": "CLTW-PAIR-8875C0547331CE90",
+              "capture_id": "l0001",
+              "copies": 3,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 146,
+                "generated_chars": 902,
+                "correct_chars": 19,
+                "insertions": 756,
+                "deletions": 0,
+                "substitutions": 127,
+                "exact": false,
+                "cer": 6.0479452054794525,
+                "character_recall": 0.13013698630136986
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            },
+            {
+              "model": "paddleocrvl",
+              "pair_id": "CLTW-PAIR-8875C0547331CE90",
+              "capture_id": "l0001",
+              "copies": 5,
+              "replay_pass": true,
+              "quality": {
+                "reference_chars": 146,
+                "generated_chars": 902,
+                "correct_chars": 19,
+                "insertions": 756,
+                "deletions": 0,
+                "substitutions": 127,
+                "exact": false,
+                "cer": 6.0479452054794525,
+                "character_recall": 0.13013698630136986
+              },
+              "severe_loop": true,
+              "eos": false,
+              "cap": true,
+              "unique_reference_anchor": true
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-5B58D4189FFC5103",
+          "source_group_id": "CLTW-SOURCE-5B58D4189FFC5103",
+          "capture_id": "z0096",
+          "stages": [
+            {
+              "copies": 1,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 2,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 3,
+              "unavailable": "no_unique_future_anchor"
+            },
+            {
+              "copies": 5,
+              "unavailable": "no_unique_future_anchor"
+            }
+          ],
+          "fresh_loop": true
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-1E03949B3B67DB88",
+          "source_group_id": "CLTW-SOURCE-1E03949B3B67DB88",
+          "capture_id": "12新j141",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-62752AA49A2162BB",
+          "source_group_id": "CLTW-SOURCE-B0D67FF6589A9D1B",
+          "capture_id": "12jy0219",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-FB814544399ED54C",
+          "source_group_id": "CLTW-SOURCE-FB814544399ED54C",
+          "capture_id": "s0261",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-B27F3CF67ED58494",
+          "source_group_id": "CLTW-SOURCE-B27F3CF67ED58494",
+          "capture_id": "j0046",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-6A7E46A6FBCE8C82",
+          "source_group_id": "CLTW-SOURCE-6A7E46A6FBCE8C82",
+          "capture_id": "j1014",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "paddleocrvl",
+          "pair_id": "CLTW-PAIR-1B8B7A5D0A56EB2B",
+          "source_group_id": "CLTW-SOURCE-1B8B7A5D0A56EB2B",
+          "capture_id": "z0174",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-1E03949B3B67DB88",
+          "source_group_id": "CLTW-SOURCE-1E03949B3B67DB88",
+          "capture_id": "12新j141",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-62752AA49A2162BB",
+          "source_group_id": "CLTW-SOURCE-B0D67FF6589A9D1B",
+          "capture_id": "12jy0219",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-B27F3CF67ED58494",
+          "source_group_id": "CLTW-SOURCE-B27F3CF67ED58494",
+          "capture_id": "j0046",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-6A7E46A6FBCE8C82",
+          "source_group_id": "CLTW-SOURCE-6A7E46A6FBCE8C82",
+          "capture_id": "j1014",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-55F83F62CEF0F2AB",
+          "source_group_id": "CLTW-SOURCE-55F83F62CEF0F2AB",
+          "capture_id": "j0141",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-FB814544399ED54C",
+          "source_group_id": "CLTW-SOURCE-FB814544399ED54C",
+          "capture_id": "s0261",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-2102242B9EE5762A",
+          "source_group_id": "CLTW-SOURCE-2102242B9EE5762A",
+          "capture_id": "j0053",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        },
+        {
+          "model": "glmocr",
+          "pair_id": "CLTW-PAIR-1B8B7A5D0A56EB2B",
+          "source_group_id": "CLTW-SOURCE-1B8B7A5D0A56EB2B",
+          "capture_id": "z0174",
+          "stages": [],
+          "fresh_loop": false,
+          "excluded": "no_fresh_five_copy_loop"
+        }
+      ],
+      "verification": "Record hashes, image hashes, tokenizer decoding, actual prefix IDs, exact512-decision same-image replay, independent character alignment, all exclusions and completion checked.",
+      "id": "cltw-recovery-expanded-natural-v1",
+      "protocol_sha256": "32986da54f2df34948527ee768f013da35e8165f20f796d45ca88e782798de37",
+      "archive_sha256": "25079a38482931d1a9265b05c5c59d2083fe5149d158587339121be2d3dc22e2",
+      "pairing_rule": "Identical full normal/degraded references."
+    }
+  ]
+}

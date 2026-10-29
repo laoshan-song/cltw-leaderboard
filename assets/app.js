@@ -492,7 +492,8 @@
     target.classList.add("show-highlights");
     const galleries = node("div", "segments evidence-collections");
     galleries.setAttribute("aria-label", "Evidence collection");
-    [["contrasts", "Clear stage contrasts · 3"], ["original", "Original study · 7"]].forEach(([id, label]) => {
+    [["contrasts", `Clear stage contrasts · ${state.stageContrasts.cases.length}`],
+      ["original", `Original study · ${state.stageEvidence.cases.length}`]].forEach(([id, label]) => {
       const button = node("button", "", label);
       button.type = "button";
       button.dataset.collection = id;
@@ -501,14 +502,21 @@
       galleries.append(button);
     });
     $("#study-scope").textContent = collection === "contrasts"
-      ? "3 selected stage contrasts · Model and precision shown per case"
+      ? `${evidence.cases.length} selected stage contrasts · Model and precision shown per case`
       : `${study.model} · 16-bit weights · Original ${study.spotlight.sources}-pair study`;
     $("#evidence-download").href = collection === "contrasts" ? "data/stage-contrasts.json" : "data/stage-evidence.json";
     $("#evidence-download").download = collection === "contrasts" ? "cltw-stage-contrasts.json" : "cltw-stage-evidence.json";
     const selectionNote = node("p", "evidence-selection",
       collection === "contrasts"
-        ? "Selected from existing runs for a large early-to-late change. Each case keeps its own model, precision and protocol."
+        ? evidence.selection.public_note ||
+          "Selected from recorded runs for a large early-to-late change. Each case keeps its own model, precision and protocol."
         : "Original seven-pair study. Selection used from-the-start normal-view quality; all tested intervention outcomes are retained.");
+    if (collection === "contrasts" && evidence.pool_download) {
+      const poolDownload = node("a", "", "Download all pool outcomes");
+      poolDownload.href = evidence.pool_download;
+      poolDownload.download = "cltw-recovery-pool.json";
+      selectionNote.append(document.createTextNode(" "), poolDownload);
+    }
     const selector = node("div", "stage-selector");
     selector.append(node("span", "", `PAIRED SOURCE · ${evidence.cases.length} cases`));
     const choices = node("div", "segments case-options");
@@ -518,7 +526,11 @@
       const button = node("button", "", entry.label);
       button.type = "button";
       button.dataset.source = entry.id;
-      button.addEventListener("click", () => { selectedCase = entry.id; renderCase(); });
+      button.addEventListener("click", () => {
+        selectedCase = entry.id;
+        copies = entry.contrast?.early_copies[0] ?? 2;
+        renderCase();
+      });
       choices.append(button);
     });
     const condition = node("p", "case-condition");
