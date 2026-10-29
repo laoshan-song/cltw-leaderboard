@@ -16,6 +16,7 @@
     showDiff: true,
     research: null,
     stageEvidence: null,
+    stageContrasts: null,
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -484,11 +485,30 @@
       qualityText(arm.quality);
   }
 
-  function renderStageEvidence() {
+  function renderStageEvidence(collection = "contrasts") {
     const study = state.research.stage_intervention;
-    const evidence = state.stageEvidence;
+    const evidence = collection === "contrasts" ? state.stageContrasts : state.stageEvidence;
     const target = $("#stage-evidence");
     target.classList.add("show-highlights");
+    const galleries = node("div", "segments evidence-collections");
+    galleries.setAttribute("aria-label", "Evidence collection");
+    [["contrasts", "Clear stage contrasts · 3"], ["original", "Original study · 7"]].forEach(([id, label]) => {
+      const button = node("button", "", label);
+      button.type = "button";
+      button.dataset.collection = id;
+      button.setAttribute("aria-pressed", String(collection === id));
+      button.addEventListener("click", () => renderStageEvidence(id));
+      galleries.append(button);
+    });
+    $("#study-scope").textContent = collection === "contrasts"
+      ? "3 selected stage contrasts · Model and precision shown per case"
+      : `${study.model} · 16-bit weights · Original ${study.spotlight.sources}-pair study`;
+    $("#evidence-download").href = collection === "contrasts" ? "data/stage-contrasts.json" : "data/stage-evidence.json";
+    $("#evidence-download").download = collection === "contrasts" ? "cltw-stage-contrasts.json" : "cltw-stage-evidence.json";
+    const selectionNote = node("p", "evidence-selection",
+      collection === "contrasts"
+        ? "Selected from existing runs for a large early-to-late change. Each case keeps its own model, precision and protocol."
+        : "Original seven-pair study. Selection used from-the-start normal-view quality; all tested intervention outcomes are retained.");
     const selector = node("div", "stage-selector");
     selector.append(node("span", "", `PAIRED SOURCE · ${evidence.cases.length} cases`));
     const choices = node("div", "segments case-options");
@@ -502,7 +522,9 @@
       choices.append(button);
     });
     const condition = node("p", "case-condition");
-    selector.append(choices, condition);
+    const contrast = node("div", "case-contrast");
+    const caseScope = node("p", "case-condition");
+    selector.append(choices, condition, contrast, caseScope);
     const legend = node("div", "evidence-legend");
     [["loop", "Loop passage"], ["match", "Reference match"], ["other", "Other / unscored"]]
       .forEach(([tag, label]) => {
@@ -559,9 +581,9 @@
     const tabs = node("div", "segments stage-tabs");
     tabs.setAttribute("aria-label", "Repetition stage");
     const continuation = node("div", "stage-continuation");
-    let copies = 1;
+    let copies = 2;
     const buttons = new Map();
-    study.settings.copies.forEach((value) => {
+    (evidence.settings?.copies || study.settings.copies).forEach((value) => {
       const button = node("button");
       button.append(node("strong", "", `After ${value} ${value === 1 ? "copy" : "copies"}`));
       button.type = "button";
@@ -577,7 +599,7 @@
       continuation.replaceChildren();
       if (!stage) {
         const unavailable = study.cases.find((row) => row.id === entry.id)
-          .unavailable_stages.find((row) => row.copies === copies);
+          ?.unavailable_stages.find((row) => row.copies === copies);
         continuation.append(node("p", "stage-unavailable", unavailable
           ? `This stage was not tested. Its generated history exceeded the experiment's preset length limit (${unavailable.prefix_tokens} vs ${study.settings.prefix_limit} tokens). Earlier cuts are available above.`
           : "This stage was not run."));
@@ -626,11 +648,34 @@
           button.append(preview);
         });
         const arm = stage.arms.normal;
+        if (arm.quality) {
+          const score = node("span", "stage-preview-score");
+          score.append(node("strong", "", percent(arm.quality.character_recall, 1)),
+            node("span", "", "of future reference matched after swap"));
+          button.append(score);
+        }
         button.append(node("span", "stage-preview-status",
           arm.repeated ? "Loop continues" : arm.quality?.exact ? "Exact future text" : "No severe loop"));
       });
-      condition.textContent = `${conditionNames[entry.condition] || entry.condition} · ` +
+      condition.textContent = `${entry.model || study.model} · ${entry.precision_label || "16-bit weights"} · ` +
+        `${conditionNames[entry.condition] || entry.condition} · ` +
         (entry.role === "loop_reaches_cap" ? "Original repetition reached the output limit" : "Original repeated output ended on its own");
+      caseScope.textContent = entry.scope || "";
+      contrast.replaceChildren();
+      if (entry.contrast) {
+        const early = entry.contrast.early_match_pct;
+        const range = Math.abs(early[0] - early[1]) < .05
+          ? `${early[0].toFixed(1)}%` : `${early[0].toFixed(1)}–${early[1].toFixed(1)}%`;
+        [[range, `After ${entry.contrast.early_copies.join(" / ")} copies · reads onward`, "early"],
+          [`${entry.contrast.late_match_pct.toFixed(1)}%`, "After 5 copies · repeats to output limit", "late"]]
+          .forEach(([value, label, variant], i) => {
+            if (i) contrast.append(node("span", "contrast-arrow", "→"));
+            const item = node("div", `contrast-${variant}`);
+            item.append(node("strong", "", value), node("span", "", label));
+            contrast.append(item);
+          });
+        contrast.append(node("p", "", "Matched characters / future reference characters. Counts below each reply include missing, wrong and extra text."));
+      }
       baselines.replaceChildren();
       ["normal", "degraded"].forEach((view) => {
         const photo = entry.images[view], arm = entry.baseline[view];
@@ -651,7 +696,7 @@
       renderStage();
     };
     baselineDetails.append(reference);
-    target.replaceChildren(selector, legend, photos, stageHeading, instruction, tabs, continuation, baselineDetails,
+    target.replaceChildren(galleries, selectionNote, selector, legend, photos, stageHeading, instruction, tabs, continuation, baselineDetails,
       node("p", "evidence-text-policy", "Color follows the actual reply at each cut. Yellow can increase at later cuts; green requires a reference match. Missing words are counted below the reply. All original repetitions, spacing and line breaks are retained."));
     renderCase();
   }
@@ -669,9 +714,7 @@
       const study = data.stage_intervention;
       const spotlight = study.spotlight;
       const ratio = (a, b) => `${a}/${b}`;
-      $("#study-scope").textContent =
-        `${study.model} · 16-bit weights · ${spotlight.sources} selected pairs / ${study.totals.examined_pairs} examined`;
-      chart.append(node("h3", "", "Can a readable image restore the continuation?"),
+      chart.append(node("h3", "", "Original seven-pair study"),
         node("p", "study-axis-label", "Same generated history · Replace the degraded view with its normal paired view"));
       study.groups.forEach((group) => {
         const block = node("div", "stage-group");
@@ -748,6 +791,9 @@
       const evidence = await fetch("data/stage-evidence.json", { cache: "no-store" });
       if (!evidence.ok) throw new Error(`Real replies HTTP ${evidence.status}`);
       state.stageEvidence = await evidence.json();
+      const contrasts = await fetch("data/stage-contrasts.json", { cache: "no-store" });
+      if (!contrasts.ok) throw new Error(`Stage contrasts HTTP ${contrasts.status}`);
+      state.stageContrasts = await contrasts.json();
       renderStageEvidence();
       renderResearch();
     } catch (error) {
